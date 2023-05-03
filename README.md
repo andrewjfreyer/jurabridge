@@ -12,6 +12,62 @@ This is an ESP32 Arduino project for bridging a Jura Ena Micro 90 to home automa
 
 Optionally, a second ESP32 or other controller can be used to simulate the dual throw momentary switches that power on the input board and the power control boards, respectively. 
 
+The data output from the machine can be received and presented by [Home Assistant.](https://www.home-assistant.io) 
+
+![Bridge Off](https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_off.png)
+
+
+![Bridge On](https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_on.png)
+
+
+Also, custom automations/custom recipes can be sent to the machine via MQTT with a simple JSON array format: 
+
+          Topic:              jurabridge/command
+          Message/Payload:    
+                              [
+                                ["msg", " MORNING!"],
+                                ["ready"],
+                                ["delay", 1000],
+                                ["msg", " PRE-WARM "],
+                                ["delay", 1000],
+                                ["water"],
+                                ["delay", 4000],
+                                ["pump"],
+                                ["dispense", 100],
+                                ["msg", "   WAIT"],
+                                ["interrupt"],
+                                ["ready"],
+                                ["delay", 4],
+                                ["msg", " EMPTY CUP"],
+                                ["delay", 3],
+                                ["msg", " EMPTY 5"],
+                                ["delay", 1],
+                                ["msg", " EMPTY 4"],
+                                ["delay", 1],
+                                ["msg", " EMPTY 3"],
+                                ["delay", 1],
+                                ["msg", " EMPTY 2"],
+                                ["delay", 1],
+                                ["msg", " EMPTY 1"],
+                                ["delay", 3],
+                                ["msg", " STEP 1"],
+                                ["delay", 3],
+                                ["ready"],
+                                ["espresso"],
+                                ["pump"],
+                                ["dispense", 30],
+                                ["interrupt"],
+                                ["msg", "  STEP 2"],
+                                ["delay", 2],
+                                ["ready"],
+                                ["espresso"],
+                                ["pump"],
+                                ["dispense", 30],
+                                ["interrupt"],
+                                ["msg", "    :)"],
+                              ]
+
+
 ## Hardware
 
 * ESP32 Dev Board. I used [this one.](https://www.amazon.com/gp/product/B0718T232Z/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
