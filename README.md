@@ -8,7 +8,7 @@
 
 ## Description
 
-This is an arduino project for bridging a Jura Ena Micro 90 to home automation platforms via MQTT. Main controller is an ESP32. A 3v to 5v level shifter is required between an available UART of the ESP32 to the debug/service port of the Jura. 
+This is an ESP32 Arduino project for bridging a Jura Ena Micro 90 to home automation platforms via MQTT. Main controller is an ESP32. A 3v to 5v level shifter is required between an available UART of the ESP32 to the debug/service port of the Jura. 
 
 Optionally, a second ESP32 or other controller can be used to simulate the dual throw momentary switches that power on the input board and the power control boards, respectively. 
 
