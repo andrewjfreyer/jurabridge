@@ -17,6 +17,17 @@ Optionally, a second ESP32 or other controller can be used to simulate the dual 
 
 * (Optional) 2 Channel Relay Board. I used [this one](https://www.amazon.com/gp/product/B00E0NTPP4/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1). Relays are required if you'd like to turn the machine on. 
 
+## Machine Modifications
+
+* Plumb reservoir. I [used this.](https://www.amazon.com/gp/product/B076HJZQMY/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
+
+* Create aperture through input board coverpiece to feed cable to ESP32. 
+
+* 3d printed bridge housing
+
+* Splice into momentary swich leads, close splices with 2-channel relay.
+
+
 ## Connection Diagram 
 
 *Diagram to come...*
