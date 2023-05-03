@@ -14,58 +14,57 @@ Optionally, a second ESP32 or other controller can be used to simulate the dual 
 
 The data output from the machine can be received and presented by [Home Assistant.](https://www.home-assistant.io) 
 
-<p align="center">
-  <img src="hhttps://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_on.png">
-</p>
+
+![Bridge On](https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_on.png)
 
 
 Also, custom automations/custom recipes can be sent to the machine via MQTT with a simple JSON array format: 
 
-    Topic:              jurabridge/command
-    Message/Payload:    
-                      [
-                        ["msg", " MORNING!"],
-                        ["ready"],
-                        ["delay", 1000],
-                        ["msg", " PRE-WARM "],
-                        ["delay", 1000],
-                        ["water"],
-                        ["delay", 4000],
-                        ["pump"],
-                        ["dispense", 100],
-                        ["msg", "   WAIT"],
-                        ["interrupt"],
-                        ["ready"],
-                        ["delay", 4000],
-                        ["msg", " EMPTY CUP"],
-                        ["delay", 3000],
-                        ["msg", " EMPTY 5"],
-                        ["delay", 1000],
-                        ["msg", " EMPTY 4"],
-                        ["delay", 1000],
-                        ["msg", " EMPTY 3"],
-                        ["delay", 1000],
-                        ["msg", " EMPTY 2"],
-                        ["delay", 1000],
-                        ["msg", " EMPTY 1"],
-                        ["delay", 3000],
-                        ["msg", " STEP 1"],
-                        ["delay", 3000],
-                        ["ready"],
-                        ["espresso"],
-                        ["pump"],
-                        ["dispense", 30],
-                        ["interrupt"],
-                        ["msg", "  STEP 2"],
-                        ["delay", 2000],
-                        ["ready"],
-                        ["espresso"],
-                        ["pump"],
-                        ["dispense", 30],
-                        ["interrupt"],
-                        ["msg", "    :)"],
-                        ["delay", 5000]
-                      ]
+Topic:              jurabridge/command
+Message/Payload:    
+                  [
+                    ["msg", " MORNING!"],
+                    ["ready"],
+                    ["delay", 1000],
+                    ["msg", " PRE-WARM "],
+                    ["delay", 1000],
+                    ["water"],
+                    ["delay", 4000],
+                    ["pump"],
+                    ["dispense", 100],
+                    ["msg", "   WAIT"],
+                    ["interrupt"],
+                    ["ready"],
+                    ["delay", 4000],
+                    ["msg", " EMPTY CUP"],
+                    ["delay", 3000],
+                    ["msg", " EMPTY 5"],
+                    ["delay", 1000],
+                    ["msg", " EMPTY 4"],
+                    ["delay", 1000],
+                    ["msg", " EMPTY 3"],
+                    ["delay", 1000],
+                    ["msg", " EMPTY 2"],
+                    ["delay", 1000],
+                    ["msg", " EMPTY 1"],
+                    ["delay", 3000],
+                    ["msg", " STEP 1"],
+                    ["delay", 3000],
+                    ["ready"],
+                    ["espresso"],
+                    ["pump"],
+                    ["dispense", 30],
+                    ["interrupt"],
+                    ["msg", "  STEP 2"],
+                    ["delay", 2000],
+                    ["ready"],
+                    ["espresso"],
+                    ["pump"],
+                    ["dispense", 30],
+                    ["interrupt"],
+                    ["msg", "    :)"],
+                    ["delay", 5000]
+                  ]
 
 
 ## Hardware
