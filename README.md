@@ -7,6 +7,30 @@ This is an arduino project for bridging a Jura Ena Micro 90 to home automation p
 
 Optionally, a second ESP32 or other controller can be used to simulate the dual throw momentary switches that power on the input board and the power control boards, respectively. 
 
+## Hardware
+
+* ESP32 Dev Board. I used [this one.] (https://www.amazon.com/gp/product/B0718T232Z/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
+
+* Level Shifter. I used [this one.](https://www.amazon.com/gp/product/B07LG646VS/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
+
+* Dupont connectors. I used [these](https://www.amazon.com/gp/product/B01EV70C78/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1) and [these](https://www.amazon.com/gp/product/B07DF9BJKH/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1). 
+
+* (Optional) 2 Channel Relay Board. I used [this one](https://www.amazon.com/gp/product/B00E0NTPP4/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1).
+
+## Connection Diagram 
+
+*Diagram to come...*
+
+## Software
+
+* [Arduino IDE](https://www.arduino.cc/en/software/). Note that you may have to install serial drivers. 
+
+* Board: ESP32 Dev Module
+
+## Setup 
+
+Open sketch in Arduino IDE, modify the `secrets.h` file, verify, and upload. Sketch defaults to UART 2, which on this board is Pin 16, 17. These pins couple to the Jura debug port. 
+
 ## MQTT Topics 
 
 | Topic | Description |
