@@ -9,6 +9,9 @@
 
 This is an ESP32 Arduino project for bridging a [Jura Ena Micro 90](https://us.jura.com/en/customer-care/products-support/ENA-Micro-90-MicroSilver-UL-15116) to home automation platforms via MQTT. Main controller is an ESP32. A 3v to 5v level shifter is required between an available UART of the ESP32 to the debug/service port of the Jura. 
 
+![Jura Ena Micro 90](https://github.com/andrewjfreyer/jurabridge/raw/main/images/ena90.png)
+
+
 Optionally, a two channel relay board can be used to simulate the dual throw momentary switches that power on the input board and the power control boards, respectively. I control this with a second ESP32, but the same ESP could be used too. 
 
 The data output from the machine can be received and presented by [Home Assistant.](https://www.home-assistant.io) I have created this status UI in a heavily modified [button-card](https://github.com/custom-cards/button-card). 
