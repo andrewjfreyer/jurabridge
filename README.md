@@ -20,6 +20,7 @@ The data output from the machine can be received and presented by [Home Assistan
 
 Also, custom automations/custom recipes can be sent to the machine via MQTT with a simple JSON array format: 
 
+```
 Topic:    jurabridge/command
 Payload:    
           [
@@ -66,6 +67,7 @@ Payload:
             ["delay", 5000]
           ]
 
+```
 
 ## Hardware
 
