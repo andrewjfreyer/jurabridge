@@ -29,7 +29,7 @@ Once accurate machine status information is pulled from the machine, any number 
 
 #### Double Ristretto Custom Recipe
 
-For example, here is a brew sequences I use for stronger, more traditionally extracted espresso. It  pulls two ristretto shots back to back, each at roughly 30ml. This results in a much more flavorful and properly extracted whole shot. A technique like this is viable and does not waste coffee, as each grind operation only includes 7-10g of coffee, compared against the 20-30 of a traditional espresso pull.
+Here is a brew sequence I use for stronger, more traditionally extracted espresso. It  pulls two ristretto shots back to back, each at roughly 30ml. This results in a much more flavorful and properly extracted whole shot. A technique like this is viable and does not waste coffee, as each Jura grind operation only uses 7g of coffee, compared against the ~15g of a traditional espresso pull.
 
 ```
 Topic:    jurabridge/command
