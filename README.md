@@ -5,20 +5,59 @@
 
 *The following is only provided as information documenting a project I worked on. No warranty or claim that this will work for you is made. Below is described some actions that involve modifying a Jura Ena Micro 90, which if performed will void any warranty you may have. Some of the modifications described below involve mains electricity; all appropriate cautions are expected to be and were followed. Some of the modifications are permanent and irreversible. Do not duplicate any of the following. I do not take anyresponsibility for any injuries or damage that may occur from any accident, lack of common sense or experience, or the like. Responsibility for any damages or distress resulting from reliance on any information made available here is not the responsibility of the author or other contributors. All rights are reserved.*
 
-
 ## Description
 
-This is an ESP32 Arduino project for bridging a Jura Ena Micro 90 to home automation platforms via MQTT. Main controller is an ESP32. A 3v to 5v level shifter is required between an available UART of the ESP32 to the debug/service port of the Jura. 
+This is an ESP32 Arduino project for bridging a [Jura Ena Micro 90](https://us.jura.com/en/customer-care/products-support/ENA-Micro-90-MicroSilver-UL-15116) to home automation platforms via MQTT. Main controller is an ESP32. A 3v to 5v level shifter is required between an available UART of the ESP32 to the debug/service port of the Jura. 
 
-Optionally, a second ESP32 or other controller can be used to simulate the dual throw momentary switches that power on the input board and the power control boards, respectively. 
+Optionally, a two channel relay board can be used to simulate the dual throw momentary switches that power on the input board and the power control boards, respectively. I control this with a second ESP32, but the same ESP could be used too. 
 
-The data output from the machine can be received and presented by [Home Assistant.](https://www.home-assistant.io) 
+The data output from the machine can be received and presented by [Home Assistant.](https://www.home-assistant.io) I have created this status UI in a heavily modified [button-card](https://github.com/custom-cards/button-card). 
 
+### Example UI: Bridge Off
+
+![Bridge Off](https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_off.png)
+
+
+### Example UI: Bridge On
 
 ![Bridge On](https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_on.png)
 
 
-Also, custom automations/custom recipes can be sent to the machine via MQTT with a simple JSON array format: 
+## Custom Preparations & Actions
+
+Once accurate machine status information is pulled from the machine, any number of custom recipes or custom instruction sequences can be excuted, without needing to modify EEPROM or to orchestrate a valid sequence of `FN:` commands. This ensures that the machine excutes its own in-built sequences, and there's no risk of incidentally damaging the machine with custom instructions or custom brew sequences. 
+
+#### Double Ristretto Custom Recipe
+
+For example, here is a brew sequences I use for stronger, more traditionally extracted espresso. It  pulls two ristretto shots back to back, each at roughly 30ml. This results in a much more flavorful and properly extracted whole shot. A technique like this is viable and does not waste coffee, as each grind operation only includes 7-10g of coffee, compared against the 20-30 of a traditional espresso pull.
+
+```
+Topic:    jurabridge/command
+Payload:    
+          [
+            ["msg", " MORNING!"],
+            ["delay", 1000],
+            ["msg", "  STEP 1"],
+            ["delay", 2000],
+            ["ready"],
+            ["espresso"],
+            ["pump"],
+            ["dispense", 30],
+            ["interrupt"],
+            ["msg", "  STEP 2"],
+            ["delay", 2000],
+            ["ready"],
+            ["espresso"],
+            ["pump"],
+            ["dispense", 30],
+            ["interrupt"],
+            ["msg", "    :)"],
+            ["delay", 5000]
+          ]
+
+```
+
+#### Double Ristretto with Cup Pre-warming 
 
 ```
 Topic:    jurabridge/command
