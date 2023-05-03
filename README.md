@@ -15,7 +15,7 @@ Optionally, a second ESP32 or other controller can be used to simulate the dual 
 The data output from the machine can be received and presented by [Home Assistant.](https://www.home-assistant.io) 
 
 <p align="center">
-  <img width="460" src="hhttps://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_on.png">
+  <img src="hhttps://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_on.png">
 </p>
 
 
