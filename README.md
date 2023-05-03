@@ -93,27 +93,50 @@ Open sketch in Arduino IDE, modify the `secrets.h` file, verify, and upload. Ske
 ## References
 
 https://www.youtube.com/watch?v=sNedGBSFs04 (disassembly)
+
+
 https://github.com/MayaPosch/BMaC/blob/master/esp8266/app/juraterm_module.cpp 
+
 https://forum.fhem.de/index.php?topic=45331.0
+
 https://us.jura.com/-/media/global/pdf/manuals-na/Home/ENA-Micro-90/download_manual_ena_micro90_ul.pdf
+
 https://github.com/PromyLOPh/juramote <-- HUGE HELP & INSPIRATION
+
 https://www.instructables.com/id/IoT-Enabled-Coffee-Machine/
+
 https://blog.q42.nl/hacking-the-coffee-machine-5802172b17c1/
+
 https://github.com/psct/sharespresso
+
 https://github.com/Q42/coffeehack
+
 https://hackaday.com/tag/jura/
+
 https://community.home-assistant.io/t/control-your-jura-coffee-machine/26604/65
+
 https://github.com/Jutta-Proto/protocol-cpp
+
 https://github.com/COM8/esp32-jura
+
 https://github.com/hn/jura-coffee-machine
+
 http://protocoljura.wiki-site.com/index.php/Hauptseite
+
 https://elektrotanya.com/showresult?what=jura-impressa&kategoria=coffee-machine&kat2=all
+
 https://www.elektro-franck.de/search?sSearch=15269&p=1
+
 https://www.juraprofi.de/anleitungen/Jura_ENA_Micro-9-90_A-5-7-9_Wasserlaufplan.pdf
+
 https://www.thingiverse.com/thing:5348735
+
 https://github.com/sklas/CofFi/blob/master/sketch/coffi_0.3.ino
+
 https://github.com/Q42/coffeehack/blob/master/reverse-engineering/commands.txt
+
 https://tore.tuhh.de/bitstream/11420/11433/2/Antrittsvortrag.pdf
+
 https://protocol-jura.at.ua/index/commands_for_coffeemaker/0-5 
 
 
