@@ -3154,6 +3154,7 @@ void callback(char* topic, byte* message, unsigned int length) {
           Topic:              jurabridge/command
           Message/Payload:    
                               [
+                                ["id", "DOUBLE RISTRETTO"],
                                 ["msg", " MORNING!"],
                                 ["ready"],
                                 ["delay", 1],
@@ -3221,6 +3222,11 @@ void callback(char* topic, byte* message, unsigned int length) {
         if (strcmp(command, "macchiato") == 0 ) {press_button_macchiato();}
         if (strcmp(command, "water") == 0 )     {press_button_water();}
         if (strcmp(command, "milk") == 0 )      {press_button_milk();}
+
+        // ------ NAME
+        if (strcmp(command, "id") == 0 )        {
+          custom_automation_name = instruction[1].as<String>
+        }
 
         // ------ INTERRUPT
         if (strcmp(command, "interrupt") == 0 ) {press_button_water();}
