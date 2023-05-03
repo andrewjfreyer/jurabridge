@@ -9,7 +9,7 @@ Optionally, a second ESP32 or other controller can be used to simulate the dual 
 
 ## Hardware
 
-* ESP32 Dev Board. I used [this one.] (https://www.amazon.com/gp/product/B0718T232Z/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
+* ESP32 Dev Board. I used [this one.](https://www.amazon.com/gp/product/B0718T232Z/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
 
 * Level Shifter. I used [this one.](https://www.amazon.com/gp/product/B07LG646VS/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
 
