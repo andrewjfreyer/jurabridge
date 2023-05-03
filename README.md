@@ -25,7 +25,9 @@ The data output from the machine can be received and presented by [Home Assistan
 
 ### Example UI: Bridge On
 
-![Bridge On](https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_on.png)
+<p align="center">
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_on.png" alt="BridgeOn"/>
+</p>
 
 
 ## Custom Preparations & Actions
