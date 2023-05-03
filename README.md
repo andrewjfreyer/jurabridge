@@ -19,7 +19,7 @@ The data output from the machine can be received and presented by [Home Assistan
 ### Example UI: Bridge Off
 
 <p align="center">
-  <img src="ttps://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_off.png" alt="Sublime's custom image"/>
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_off.png" alt="BridgeOff"/>
 </p>
 
 
