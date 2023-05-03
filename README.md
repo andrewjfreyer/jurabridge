@@ -90,14 +90,110 @@ Payload:
             ["delay", 1000],
             ["msg", " EMPTY 1"],
             ["delay", 3000],
-            ["msg", " STEP 1"],
+            ["msg", " STEP 1/2"],
             ["delay", 3000],
             ["ready"],
             ["espresso"],
             ["pump"],
             ["dispense", 30],
             ["interrupt"],
-            ["msg", "  STEP 2"],
+            ["msg", " STEP 2/2"],
+            ["delay", 2000],
+            ["ready"],
+            ["espresso"],
+            ["pump"],
+            ["dispense", 30],
+            ["interrupt"],
+            ["msg", "    :)"],
+            ["delay", 5000]
+          ]
+
+```
+
+#### Cup Pre-Warming 
+
+```
+Topic:    jurabridge/command
+Payload:    
+          [
+            ["msg", " MORNING!"],
+            ["ready"],
+            ["delay", 1000],
+            ["msg", " PRE-WARM "],
+            ["delay", 1000],
+            ["water"],
+            ["delay", 4000],
+            ["pump"],
+            ["dispense", 100],
+            ["msg", "   WAIT"],
+            ["interrupt"],
+            ["ready"],
+            ["delay", 4000],
+            ["msg", " EMPTY CUP"],
+            ["delay", 5000]
+          ]
+```
+
+
+#### Short Cappuccino
+
+```
+Topic:    jurabridge/command
+Payload:    
+          [
+            ["delay", 1000],
+            ["msg", " STEP 1/3"],
+            ["delay", 2000],
+            ["ready"],
+            ["milk"],
+            ["pump"],
+            ["dispense", 60],
+            ["interrupt"],
+            ["ready"],
+            ["msg", " STEP 2/3"],
+            ["delay", 2000],
+            ["ready"],
+            ["espresso"],
+            ["pump"],
+            ["dispense", 30],
+            ["interrupt"],
+            ["msg"," STEP 3/3"],
+            ["delay", 2000],
+            ["ready"],
+            ["espresso"],
+            ["pump"],
+            ["dispense", 30],
+            ["interrupt"],
+            ["msg", "    :)"],
+            ["delay", 5000]
+          ]
+
+```
+
+
+#### Short Americano 
+
+```
+Topic:    jurabridge/command
+Payload:    
+          [
+            ["delay", 1000],
+            ["msg", " STEP 1/3"],
+            ["delay", 2000],
+            ["ready"],
+            ["water"],
+            ["pump"],
+            ["dispense", 60],
+            ["interrupt"],
+            ["ready"],
+            ["msg", " STEP 2/3"],
+            ["delay", 2000],
+            ["ready"],
+            ["espresso"],
+            ["pump"],
+            ["dispense", 30],
+            ["interrupt"],
+            ["msg"," STEP 3/3"],
             ["delay", 2000],
             ["ready"],
             ["espresso"],
