@@ -1,6 +1,5 @@
 # jurabridge ☕
 
-
 # Description
 
 This is an ESP32 Arduino project for bridging a [Jura Ena Micro 90](https://us.jura.com/en/customer-care/products-support/ENA-Micro-90-MicroSilver-UL-15116) to home automation platforms via MQTT. Main controller is an ESP32. A 3v to 5v level shifter is required between an available hardware UART of the ESP32 to the debug/service port of the Jura. Don't use softwareserial, as it's painfully slow. 
@@ -23,23 +22,24 @@ Optionally, a two channel relay board can be used to simulate the dual throw mom
 
 The data output from the machine can be received and presented by [Home Assistant.](https://www.home-assistant.io) I have created this status UI in a heavily modified [button-card](https://github.com/custom-cards/button-card). 
 
+<hr/>
 
-# MQTT Topics 
+# `jurabridge` MQTT Topics of Interest
 
-## Machine & Bridge Status
+### Machine & Bridge Status
 | Topic | Description |
 | --- | --- |
 | jurabridge/power | Last will message of "off" to indicate bridge is off (not machine) |
 | jurabridge/ready | Boolean for whether system is ready or not  |
 
-## Command Structure
+### Command Structure
 
 | Topic | Description |
 | --- | --- |
 | jurabridge/command | Post a custom automation or recipe formatted as an array of command arrays |
 | jurabridge/menu | Post a message to manipulate buttons and menus |
 
-## Counters
+### Counters
 | Topic | Description |
 | --- | --- |
 | jurabridge/counts/beans  | Approximate bean hopper percentage remaining |
@@ -60,7 +60,7 @@ The data output from the machine can be received and presented by [Home Assistan
 | jurabridge/counts/tray volume | Estimated ml in tray |
 | jurabridge/counts/water tank/volume | Estimated fill percentage in reservoir |
 
-## Errors
+### Errors
 | Topic | Description |
 | --- | --- |
 | jurabridge/errors/beans | Beans hopper lid removed  |
@@ -71,12 +71,12 @@ The data output from the machine can be received and presented by [Home Assistan
 | jurabridge/errors/tray removed | Tray is removed |
 | jurabridge/errors/water | Water fill required; replace reservoir |
 
-## Command History
+### Command History
 | Topic | Description |
 | --- | --- |
 | jurabridge/history | Last automation/task completed |
 
-## Machine Part Information & Status
+### Machine Part Information & Status
 | Topic | Description |
 | --- | --- |
 | jurabridge/machine/brewgroup | Status position of brewgroup |
@@ -86,7 +86,7 @@ The data output from the machine can be received and presented by [Home Assistan
 | jurabridge/machine/last dispense | Volume of last dispense |
 | jurabridge/machine/last grind duration | Approximate duration of last grind operation |
 
-## Machine Part Information & Status
+### Machine Part Information & Status
 | Topic | Description |
 | --- | --- |
 | jurabridge/parts/ceramic valve/mode | Ceramic valve in steam or water mode / position |
@@ -103,7 +103,7 @@ The data output from the machine can be received and presented by [Home Assistan
 | jurabridge/parts/thermoblock/preheated | Thermoblock is preheated |
 | jurabridge/parts/thermoblock/temp | Temperature of thermoblock |
 
-## Current Recommendations
+### Current Recommendations
 | Topic | Description |
 | --- | --- |
 | jurabridge/recommendation | Current highest priority recommendation |
@@ -112,6 +112,7 @@ The data output from the machine can be received and presented by [Home Assistan
 | jurabridge/recommendations/rinse | Whether water rinse is recommended |
 | jurabridge/system | Narrative description of system status |
 
+<hr/>
 
 # Understanding the Jura Ena Micro 90
 
@@ -136,7 +137,7 @@ There is a copyright notice in each of these images, reserved by Jura.
 
 <hr/>
 
-# Jura Command Response Decoding
+# Jura Command/Response Decoding
 
 Jura has implemented a transfer encoding that spreads data bytes through a number of other bytes. Explained [here.](https://github.com/PromyLOPh/juramote) and [here](https://www.instructables.com/id/IoT-Enabled-Coffee-Machine/) and [here](https://github.com/oliverk71/Coffeemaker-Payment-System) and [here](http://protocol-jura.do.am).
 
