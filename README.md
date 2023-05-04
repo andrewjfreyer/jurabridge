@@ -139,16 +139,16 @@ There is a copyright notice in each of these images, reserved by Jura.
 
 # Jura Command/Response Decoding
 
-Jura has implemented a transfer encoding that spreads data bytes through a number of other bytes. Explained [here.](https://github.com/PromyLOPh/juramote) and [here](https://www.instructables.com/id/IoT-Enabled-Coffee-Machine/) and [here](https://github.com/oliverk71/Coffeemaker-Payment-System) and [here](http://protocol-jura.do.am).
+Jura has implemented a transfer encoding that spreads data bytes through a number of other bytes. Explained [here](https://github.com/PromyLOPh/juramote) and [here](https://www.instructables.com/id/IoT-Enabled-Coffee-Machine/) and [here](https://github.com/oliverk71/Coffeemaker-Payment-System) and [here](http://protocol-jura.do.am).
 
 Unfortunately, each machine has a slighly different set of commands that it responds to and encodes its sensors differently. The following are inferred from testing, review of hydraulic system topology and review of schematics of other machines. I believe that these are correct, but it's likely there are some nuances I don't appreicate or haven't figured out yet. 
 
-*Note: Spaces below are provided for legibility, but do not occur in the response from the machine.*
+*Note: spaces below are inserted for legibility, but do not occur in the response from the machine. The letters h,d,b refer to hexadecimal values, decimal values, and binary values respectively.*
 
 ### Useful Commands
 
 | Command | Response| Presumed Acronym | Description |
-| --- | --- | --- | --- |
+| --- | - | - | --- |
 | "IC:" | IC:hhhh | Input Controller (??) | Four (evidently) hexadecimal valus returned, corresponding to status of the input board|
 | "RT:####" | RT:0xhhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh | Reihentest (??) | Sixteen (evidently) hexadecimal values from EEPROM address specified at input|
 | "RR:hh" | RR:hhhh | Read RAM (??) | Possible ram values? Only some values change over time. **[Investigating; not used]** |
