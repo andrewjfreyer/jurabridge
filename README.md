@@ -163,7 +163,7 @@ Unfortunately, each machine has a slighly different set of commands that it resp
 | "MC:" | OK  | ?? | Drainage valve move to 2 position |
 | "MV:" | OK  | ?? | Drainage valve validate position; (e.g., cycle through throw of server to reposition) |
 
-#### Value Interpretation: **IC**
+### Command Response Interpretation **IC:**
 
 Received via UART as a string, so references are from left to right as indexes of the corresponding `char` array:
 
@@ -175,11 +175,9 @@ Received via UART as a string, so references are from left to right as indexes o
 | 3 | Some machine state representation; when 2, machine is can be ready; when 3 machine is moving water |
 
 
-- IC [0] Interpretation
+- **IC [0] Interpretation**
 
-  - Binary representation of hex value == four binary flags. From left to right (again, referenced as char array here; zero index on left: 
-
-     - *h* = *bbbb* = 0123
+  - Binary representation of hex value == four binary flags. From left to right (again, referenced as char array here; zero index on left; *h* = *bbbb* = 0123
 
      - [0] = bean hopper lid state; 0 = open; 1 = OK (momentary switch under vent on top of machine is closed)
 
@@ -190,22 +188,22 @@ Received via UART as a string, so references are from left to right as indexes o
      - [3] = drip tray removed; 1 = seated properly; 0 = open (momentary switch behind tray front is closed)
 
 
-##### IC [0] Interpretation
+- **IC [1] Interpretation**
 
-Binary representation of hex value == four binary flags. From left to right (again, referenced as char array here; zero index on left: 
+  - Apparently a flow meter. Value cycles through odd values when water is moving through the system. Hexidecimal 0xF appears to be the state that represents "confirmed, no flow." The value can stop changing on other values though, and does not appear to consistenty reset to 0xF after an operation has stopped. Sometimes, it will reset to 0xF immediately after flow stops, other times it will take 180 seconds to reset. This value is captured in the Arduino sketch and wrapped in a 5 second timeout. 
 
-    *h* = *bbbb* = 0123
+- **IC [2] Interpretation**
 
-    [0] = bean hopper lid state; 0 = open; 1 = OK (momentary switch under vent on top of machine is closed)
+  - Unknown, appears to be always zero. 
 
-    [1] = water tank error; 0 = OK, 1 = problem (reed switch is in presence of foating magnet in reservior)
+- **IC [3] Interpretation**
 
-    [2] = bypass doser; 0 = OK; 1 = bypass doser door open (reed switch is in presence of magnet in door)
-
-    [3] = drip tray removed; 1 = seated properly; 0 = open (momentary switch behind tray front is closed)
+  - Some input board status flag; still investigating. When value == 2, system is ready. 
 
 
-# Hardware
+<hr/>
+
+# Project Hardware
 
 * ESP32 Dev Board. I used [this one.](https://www.amazon.com/gp/product/B0718T232Z/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
 
@@ -246,7 +244,9 @@ Connect hardware UART pins to LV pins of the converter board. Corresponding HV p
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/debug_port.png" alt="Debug Port"/>
 </p>
 
-# Software
+<hr/>
+
+# Project Software
 
 * [Arduino IDE](https://www.arduino.cc/en/software/). Note that you may have to install serial drivers. 
 
@@ -264,25 +264,10 @@ Open sketch in Arduino IDE, create the `secrets.h` file with the defines set bel
 #define MQTT_USER   "user"
 ```
 
-# Receiving MQTT in Home Assistant
-
-Set up an MQTT broker, appropriately. Then subscribe to the topics of interest. Here are screenshots of my UI in a few Lovelace cards:
-
-### Example UI: Bridge Off
-
-<p align="center">
-  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_off.png" alt="BridgeOff"/>
-</p>
+<hr/>
 
 
-### Example UI: Bridge On
-
-<p align="center">
-  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_on.png" alt="BridgeOn"/>
-</p>
-
-
-## Custom Preparations & Actions
+# Custom Preparations & Actions
 
 Once accurate machine status information is pulled from the machine, any number of custom recipes or custom instruction sequences can be excuted, without needing to modify EEPROM or to orchestrate a valid sequence of `FN:` commands. This ensures that the machine excutes its own in-built sequences, and there's no risk of incidentally damaging the machine with custom instructions or custom brew sequences. 
 
@@ -465,9 +450,27 @@ Payload:
 
 ```
 
+<hr/>
+
 # Home Assistant Integration
 
-Here's a dump from a Home Assistant package yaml:
+Set up an MQTT broker, appropriately. Then subscribe to the topics of interest. Here are screenshots of my UI in a few Lovelace cards:
+
+### Example UI: Bridge Off
+
+<p align="center">
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_off.png" alt="BridgeOff"/>
+</p>
+
+
+### Example UI: Bridge On
+
+<p align="center">
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_on.png" alt="BridgeOn"/>
+</p>
+
+
+Here's a dump from a Home Assistant package yaml defining all sensors and an nubmer of buttons:
 
 ```
 #TURN ON IN THE MORNING ON FIRST MOTION FROM LIVING ROOM OR KITCHEN
