@@ -25,6 +25,60 @@ Optionally, a two channel relay board can be used to simulate the dual throw mom
 
 The data output from the machine can be received and presented by [Home Assistant.](https://www.home-assistant.io) I have created this status UI in a heavily modified [button-card](https://github.com/custom-cards/button-card). 
 
+## Arduino Setup 
+
+Open sketch in Arduino IDE, create the `secrets.h` file with the defines set below, verify, and upload. Sketch defaults to UART 2, which on this board is Pin 16, 17. These pins couple to the Jura debug port. 
+
+`secrets.h`
+
+```
+#define WIFINAME    "ssid"
+#define WIFIPASS    "ssid password"
+#define MQTTBROKER  "mqtt.broker.ip.address"
+#define MQTT_PASS   "pw"
+#define MQTT_USER   "user"
+```
+
+## Hardware
+
+* ESP32 Dev Board. I used [this one.](https://www.amazon.com/gp/product/B0718T232Z/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
+
+* Level Shifter. I used [this one.](https://www.amazon.com/gp/product/B07LG646VS/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
+
+* Dupont connectors. I used [these](https://www.amazon.com/gp/product/B01EV70C78/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1) and [these](https://www.amazon.com/gp/product/B07DF9BJKH/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1). 
+
+* (Optional) 2 Channel Relay Board. I used [this one](https://www.amazon.com/gp/product/B00E0NTPP4/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1). Relays are required if you'd like to turn the machine on. 
+
+## Machine Modifications
+
+* Plumb reservoir. I [used this.](https://www.amazon.com/gp/product/B076HJZQMY/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
+
+* Create aperture through input board coverpiece to feed cable to ESP32. 
+
+* 3d printed bridge housing
+
+* Splice into momentary swich leads, close splices with 2-channel relay.
+
+![Splice Annotation](https://github.com/andrewjfreyer/jurabridge/raw/main/images/splices_annotated.jpg)
+
+![Switch Splice Detail](https://github.com/andrewjfreyer/jurabridge/raw/main/images/lv_splice.jpg)
+
+![Power Splice Detail](https://github.com/andrewjfreyer/jurabridge/raw/main/images/hv_splice.jpg)
+
+## Connection Diagram 
+
+*Diagram to come...*
+
+## Software
+
+* [Arduino IDE](https://www.arduino.cc/en/software/). Note that you may have to install serial drivers. 
+
+* Board: ESP32 Dev Module\
+
+## Receiving MQTT in Home Assistant
+
+Set up an MQTT broker, appropriately. 
+
 ### Example UI: Bridge Off
 
 <p align="center">
@@ -220,56 +274,6 @@ Payload:
             ["delay", 5000]
           ]
 
-```
-
-## Hardware
-
-* ESP32 Dev Board. I used [this one.](https://www.amazon.com/gp/product/B0718T232Z/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
-
-* Level Shifter. I used [this one.](https://www.amazon.com/gp/product/B07LG646VS/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
-
-* Dupont connectors. I used [these](https://www.amazon.com/gp/product/B01EV70C78/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1) and [these](https://www.amazon.com/gp/product/B07DF9BJKH/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1). 
-
-* (Optional) 2 Channel Relay Board. I used [this one](https://www.amazon.com/gp/product/B00E0NTPP4/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1). Relays are required if you'd like to turn the machine on. 
-
-## Machine Modifications
-
-* Plumb reservoir. I [used this.](https://www.amazon.com/gp/product/B076HJZQMY/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
-
-* Create aperture through input board coverpiece to feed cable to ESP32. 
-
-* 3d printed bridge housing
-
-* Splice into momentary swich leads, close splices with 2-channel relay.
-
-![Splice Annotation](https://github.com/andrewjfreyer/jurabridge/raw/main/images/splices_annotated.jpg)
-
-![Switch Splice Detail](https://github.com/andrewjfreyer/jurabridge/raw/main/images/lv_splice.jpg)
-
-![Power Splice Detail](https://github.com/andrewjfreyer/jurabridge/raw/main/images/hv_splice.jpg)
-
-## Connection Diagram 
-
-*Diagram to come...*
-
-## Software
-
-* [Arduino IDE](https://www.arduino.cc/en/software/). Note that you may have to install serial drivers. 
-
-* Board: ESP32 Dev Module
-
-## Setup 
-
-Open sketch in Arduino IDE, create the `secrets.h` file with the defines set below, verify, and upload. Sketch defaults to UART 2, which on this board is Pin 16, 17. These pins couple to the Jura debug port. 
-
-`secrets.h`
-
-```
-#define WIFINAME    "ssid"
-#define WIFIPASS    "ssid password"
-#define MQTTBROKER  "mqtt.broker.ip.address"
-#define MQTT_PASS   "pw"
-#define MQTT_USER   "user"
 ```
 
 ## MQTT Topics 
