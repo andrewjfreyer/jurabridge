@@ -32,6 +32,9 @@ The data output from the machine can be received and presented by [Home Assistan
 The Ena Micro 9 schematics are available online, at [jura-parts.com](https://www.jura-parts.com/v/vspfiles/diagrams/Jura%20ENA%209%20Micro%20Diagram.pdf). These schematics are useful to understand the layout of the Ena Micro 90 and other devices that share a number of parts and overall design language with their predecesors:
 
 ### Simplified Schematic Showing Input Board + Power Board
+
+There is a copyright notice in each of these images, reserved by Jura. 
+
 <p align="center">
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/schematic_micro9.png" alt="Jura Ena Micro 9"/>
 </p>
@@ -330,9 +333,22 @@ Payload:
 
 ## MQTT Topics 
 
+### Machine & Bridge Status
+| Topic | Description |
+| --- | --- |
+| jurabridge/power | Last will message of "off" to indicate bridge is off (not machine) |
+| jurabridge/ready | Boolean for whether system is ready or not  |
+
+### Command Structure
+
 | Topic | Description |
 | --- | --- |
 | jurabridge/command | Post a custom automation or recipe formatted as an array of command arrays |
+| jurabridge/menu | Post a message to manipulate buttons and menus |
+
+### Counters
+| Topic | Description |
+| --- | --- |
 | jurabridge/counts/beans  | Approximate bean hopper percentage remaining |
 | jurabridge/counts/cappuccino | Lifetime counts of cappuccino preparations |
 | jurabridge/counts/cleans | Lifetime count of tablet clean operations |
@@ -349,7 +365,11 @@ Payload:
 | jurabridge/counts/since clean | Preparations since last clean (clean recommended at 180)  |
 | jurabridge/counts/total automations | Lifetime count total preparations  |
 | jurabridge/counts/tray volume | Estimated ml in tray |
-| jurabridge/counts/water tank/volume | Estimated fill percentage in reservoier |
+| jurabridge/counts/water tank/volume | Estimated fill percentage in reservoir |
+
+### Errors
+| Topic | Description |
+| --- | --- |
 | jurabridge/errors/beans | Beans hopper lid removed  |
 | jurabridge/errors/grounds | Grounds needs emptying |
 | jurabridge/errors/powder | Powder door / bypass doser is open |
@@ -357,14 +377,25 @@ Payload:
 | jurabridge/errors/tray overfill | Tray likely needs emptying  |
 | jurabridge/errors/tray removed | Tray is removed |
 | jurabridge/errors/water | Water fill required; replace reservoir |
+
+### Command History
+| Topic | Description |
+| --- | --- |
 | jurabridge/history | Last automation/task completed |
+
+### Machine Part Information & Status
+| Topic | Description |
+| --- | --- |
 | jurabridge/machine/brewgroup | Status position of brewgroup |
 | jurabridge/machine/custom execution | Currently executing a custom program |
 | jurabridge/machine/input board | Input board ready |
 | jurabridge/machine/input board/state | Input board state |
 | jurabridge/machine/last dispense | Volume of last dispense |
 | jurabridge/machine/last grind duration | Approximate duration of last grind operation |
-| jurabridge/menu | Post a message to manipulate buttons and menus |
+
+### Machine Part Information & Status
+| Topic | Description |
+| --- | --- |
 | jurabridge/parts/ceramic valve/mode | Ceramic valve in steam or water mode / position |
 | jurabridge/parts/ceramic valve/position | Ceramic valve position |
 | jurabridge/parts/ceramic valve/temp | Ceramic valve temperature |
@@ -378,8 +409,10 @@ Payload:
 | jurabridge/parts/thermoblock/duty | Duty cycle of thermoblock (nearly always 100%) |
 | jurabridge/parts/thermoblock/preheated | Thermoblock is preheated |
 | jurabridge/parts/thermoblock/temp | Temperature of thermoblock |
-| jurabridge/power | Last will message of "off" to indicate bridge is off (not machine) |
-| jurabridge/ready | Boolean for whether system is ready or not  |
+
+### Current Recommendations
+| Topic | Description |
+| --- | --- |
 | jurabridge/recommendation | Current highest priority recommendation |
 | jurabridge/recommendations/milk clean | Whether m-clean is recommended |
 | jurabridge/recommendations/milk rinse | Whether m-rinse is reecommended |
