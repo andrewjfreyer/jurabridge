@@ -3225,7 +3225,7 @@ void callback(char* topic, byte* message, unsigned int length) {
 
         // ------ NAME
         if (strcmp(command, "id") == 0 )        {
-          custom_automation_name = instruction[1].as<String>
+          custom_automation_name = instruction[1].as<String>();
         }
 
         // ------ INTERRUPT
