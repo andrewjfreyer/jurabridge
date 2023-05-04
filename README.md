@@ -160,7 +160,7 @@ Unfortunately, each machine has a slighly different set of commands that it resp
 | "MC:" | OK  | ?? | Drainage valve move to 2 position |
 | "MV:" | OK  | ?? | Drainage valve validate position; (e.g., cycle through throw of server to reposition) |
 
-### Value Interpretation: **IC**
+#### Value Interpretation: **IC**
 
 Received via UART as a string, so references are from left to right as indexes of the corresponding `char` array:
 
@@ -172,19 +172,19 @@ Received via UART as a string, so references are from left to right as indexes o
 | 3 | Some machine state representation; when 2, machine is can be ready; when 3 machine is moving water |
 
 
-#### IC [0] Interpretation
+##### IC [0] Interpretation
 
 Binary representation of hex value == four binary flags. From left to right (again, referenced as char array here; zero index on left: 
 
-*h* = *bbbb* = 0123
+    *h* = *bbbb* = 0123
 
-[0] = bean hopper lid state; 0 = open; 1 = OK (momentary switch under vent on top of machine is closed)
+    [0] = bean hopper lid state; 0 = open; 1 = OK (momentary switch under vent on top of machine is closed)
 
-[1] = water tank error; 0 = OK, 1 = problem (reed switch is in presence of foating magnet in reservior)
+    [1] = water tank error; 0 = OK, 1 = problem (reed switch is in presence of foating magnet in reservior)
 
-[2] = bypass doser; 0 = OK; 1 = bypass doser door open (reed switch is in presence of magnet in door)
+    [2] = bypass doser; 0 = OK; 1 = bypass doser door open (reed switch is in presence of magnet in door)
 
-[3] = drip tray removed; 1 = seated properly; 0 = open (momentary switch behind tray front is closed)
+    [3] = drip tray removed; 1 = seated properly; 0 = open (momentary switch behind tray front is closed)
 
 # Hardware
 
