@@ -158,21 +158,7 @@ Unfortunately, each machine has a slighly different set of commands that it resp
 | "MC:" | OK  | ?? | Drainage valve move to 2 position |
 | "MV:" | OK  | ?? | Drainage valve validate position; (e.g., cycle through throw of server to reposition) |
 
-## Arduino Setup 
-
-Open sketch in Arduino IDE, create the `secrets.h` file with the defines set below, verify, and upload. Sketch defaults to UART 2, which on this board is Pin 16, 17. These pins couple to the Jura debug port. 
-
-`secrets.h`
-
-```
-#define WIFINAME    "ssid"
-#define WIFIPASS    "ssid password"
-#define MQTTBROKER  "mqtt.broker.ip.address"
-#define MQTT_PASS   "pw"
-#define MQTT_USER   "user"
-```
-
-## Hardware
+# Hardware
 
 * ESP32 Dev Board. I used [this one.](https://www.amazon.com/gp/product/B0718T232Z/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
 
@@ -182,7 +168,7 @@ Open sketch in Arduino IDE, create the `secrets.h` file with the defines set bel
 
 * (Optional) 2 Channel Relay Board. I used [this one](https://www.amazon.com/gp/product/B00E0NTPP4/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1). Relays are required if you'd like to turn the machine on. 
 
-## Machine Modifications
+# Machine Modifications
 
 * Plumb reservoir. I [used this.](https://www.amazon.com/gp/product/B076HJZQMY/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
 
@@ -198,7 +184,7 @@ Open sketch in Arduino IDE, create the `secrets.h` file with the defines set bel
 
 ![Power Splice Detail](https://github.com/andrewjfreyer/jurabridge/raw/main/images/hv_splice.jpg)
 
-## Connection Diagram 
+# Connection Diagram 
 
 The ESP32 can be powered directly from the 5V rail of the Jura Ena Micro 90, but of course this means that when the machine is off so is the bridge. Separate power is also possible, but know that in this case, the ESP32 will continue to power the input board; some sensors will be readable even after the machine is "off" such as temperature sensors. Running the machine in this manner does not appear to cause damage, but whether or not this operational mode causes damage is unknown. Recommended to power the `jurabridge` from the machine itself. 
 
@@ -213,16 +199,28 @@ Connect hardware UART pins to LV pins of the converter board. Corresponding HV p
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/debug_port.png" alt="Debug Port"/>
 </p>
 
-
-## Software
+# Software
 
 * [Arduino IDE](https://www.arduino.cc/en/software/). Note that you may have to install serial drivers. 
 
 * Board: ESP32 Dev Module
 
-## Receiving MQTT in Home Assistant
+Open sketch in Arduino IDE, create the `secrets.h` file with the defines set below, verify, and upload. Sketch defaults to UART 2, which on this board is Pin 16, 17. These pins couple to the Jura debug port. 
 
-Set up an MQTT broker, appropriately. Then subscribe to the topics of interest. 
+`secrets.h`
+
+```
+#define WIFINAME    "ssid"
+#define WIFIPASS    "ssid password"
+#define MQTTBROKER  "mqtt.broker.ip.address"
+#define MQTT_PASS   "pw"
+#define MQTT_USER   "user"
+```
+
+# Receiving MQTT in Home Assistant
+
+Set up an MQTT broker, appropriately. Then subscribe to the topics of interest. Here are screenshots of my UI in a few Lovelace cards:
+
 ### Example UI: Bridge Off
 
 <p align="center">
@@ -243,7 +241,7 @@ Once accurate machine status information is pulled from the machine, any number 
 
 Any number of different sequence customizations can be made to allow the machine to produce a wide variety of other drinks. As a trivial example, different settings may be appropriate for non-dairy cappuccino than dairy cappuccino, yet the machine only has one setting. 
 
-#### Double Ristretto Custom Recipe
+### Double Ristretto Custom Recipe
 
 Here is a brew sequence I use for stronger, more traditionally extracted espresso. It  pulls two ristretto shots back to back, each at roughly 30ml. This results in a much more flavorful and properly extracted whole shot. A technique like this is viable and does not waste coffee, as each Jura grind operation only uses 7g of coffee, compared against the ~15g of a traditional espresso pull.
 
@@ -273,7 +271,7 @@ Payload:
 
 ```
 
-#### Double Ristretto with Cup Pre-warming 
+### Double Ristretto with Cup Pre-warming 
 
 ```
 Topic:    jurabridge/command
@@ -324,7 +322,7 @@ Payload:
 
 ```
 
-#### Cup Pre-Warming 
+### Cup Pre-Warming 
 
 ```
 Topic:    jurabridge/command
@@ -349,7 +347,7 @@ Payload:
 ```
 
 
-#### Short Cappuccino
+### Short Cappuccino
 
 ```
 Topic:    jurabridge/command
@@ -385,7 +383,7 @@ Payload:
 ```
 
 
-#### Short Americano 
+### Short Americano 
 
 ```
 Topic:    jurabridge/command
@@ -996,7 +994,6 @@ mqtt:
       icon: mdi:counter
 
 ```
-
 
 # References & Thanks
 
