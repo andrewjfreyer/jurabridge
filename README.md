@@ -27,6 +27,44 @@ Optionally, a two channel relay board can be used to simulate the dual throw mom
 
 The data output from the machine can be received and presented by [Home Assistant.](https://www.home-assistant.io) I have created this status UI in a heavily modified [button-card](https://github.com/custom-cards/button-card). 
 
+## Similar Machine Schematic
+
+The Ena Micro 9 schematics are available online, at [jura-parts.com](https://www.jura-parts.com/v/vspfiles/diagrams/Jura%20ENA%209%20Micro%20Diagram.pdf). These schematics are useful to understand the layout of the Ena Micro 90 and other devices that share a number of parts and overall design language with their predecesors:
+
+### Simplified Schematic Showing Input Board + Power Board
+<p align="center">
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/schematic_micro9.png" alt="Jura Ena Micro 9"/>
+</p>
+
+### Simplified Water System Schematic
+<p align="center">
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/fluidsystem_micro9.png" alt="Jura Ena Micro 9"/>
+</p>
+
+## Jura Command Response Decoding
+
+Jura has implemented a transfer encoding that spreads data bytes through a number of other bytes. Explained [here.](https://github.com/PromyLOPh/juramote) and [here](https://www.instructables.com/id/IoT-Enabled-Coffee-Machine/) and [here](https://github.com/oliverk71/Coffeemaker-Payment-System) and [here](http://protocol-jura.do.am).
+
+Unfortunately, each machine has a slighly different set of commands that it responds to and encodes its sensors differently. The following are inferred from testing, review of hydraulic system topology and review of schematics of other machines. I believe that these are correct, but it's likely there are some nuances I don't appreicate or haven't figured out yet. 
+
+*Note: Spaces below are provided for legibility, but do not occur in the response from the machine.*
+
+| Command | Response| Presumed Acronym | Description |
+| --- | --- | --- | --- |
+| "IC:" | IC:hhhh | Input Controller (??) | Four (evidently) hexadecimal valus returned, corresponding to status of the input board|
+| "RT:####" | RT:0xhhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh | Reihentest (??) | Sixteen (evidently) hexadecimal values from EEPROM address specified at input|
+| "RR:hh" | RR:hhhh | Read RAM (??) | Possible ram values? Only some values change over time. **[Investigating; not used]** |
+| "HZ:" | HZ:bbbbbbbbbbb,hhhh,hhhh,hhhh,hhhh,hhhh,d,bbbbb | Heißwasser-Zubereitung (??) | Values related to hot water and steam preparation automations|
+| "CS:" | CS:hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh  | Circuits und Systeme (??) | Sixteen (evidently) hexadecimal valus returned, corresponding digital system values and variables|
+| "FA:hh" | OK| Funktion auswählen (??) | Select a programmed operaiton of the machine to initiate (e.g., predetermined sequences of FN commands, like button presses or "brewgorup move to position") |
+| "FN:hh" | OK| Funktion (??) | Initate a mechanical function of the machine (be careful here) |  
+| "AS:" | AS:hhhh hhhh,hhhh hhhh| Analoger Sensor (??) | Analog values of sensors (e.g., resistance of thermistors) **[Investigating; not used]** |  
+| "DI:" | OK  | Drainage Init (??) |  Initialize the drainage/output valve (linear, servo-controlled, not ceramic valve) |
+| "GB:" | OK  | ?? | Disable power board, shut down machine without rinsing |
+| "MI:" | OK  | ?? | Drainage valve move to 1 position |
+| "MC:" | OK  | ?? | Drainage valve move to 2 position |
+| "MV:" | OK  | ?? | Drainage valve validate position; (e.g., cycle through throw of server to reposition) |
+
 ## Arduino Setup 
 
 Open sketch in Arduino IDE, create the `secrets.h` file with the defines set below, verify, and upload. Sketch defaults to UART 2, which on this board is Pin 16, 17. These pins couple to the Jura debug port. 
@@ -87,7 +125,7 @@ Connect hardware UART pins to LV pins of the converter board. Corresponding HV p
 
 * [Arduino IDE](https://www.arduino.cc/en/software/). Note that you may have to install serial drivers. 
 
-* Board: ESP32 Dev Module\
+* Board: ESP32 Dev Module
 
 ## Receiving MQTT in Home Assistant
 
@@ -352,7 +390,6 @@ Payload:
 ## References
 
 https://www.youtube.com/watch?v=sNedGBSFs04 (disassembly)
-
 
 https://github.com/MayaPosch/BMaC/blob/master/esp8266/app/juraterm_module.cpp 
 

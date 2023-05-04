@@ -2038,7 +2038,7 @@ bool update_as (){
 // each machine? Potentially each element here is an important
 // Example: 11011100000,027C,00DB,0000,03D5,0000,3,00000
 //-------------------------------------------------------------------------------------------------
-// HEADING:    0   3   HZ:
+// HEADING:      0   3   HZ:
 // HZ 0-10       0   11  11-BIT BITFIELD
 // HZ 11        12  4   4 ??? DOESN'T SEEM TO CHANGE -----  
 // HZ 12        17  4   4 STATE OF THE LINEAR ACTUATOR STEPPER MOTOR & OUTPUT VALVE
