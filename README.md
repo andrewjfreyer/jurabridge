@@ -163,7 +163,7 @@ Unfortunately, each machine has a slighly different set of commands that it resp
 | "MC:" | OK  | ?? | Drainage valve move to 2 position |
 | "MV:" | OK  | ?? | Drainage valve validate position; (e.g., cycle through throw of server to reposition) |
 
-### Command Response Interpretation **IC:**
+### Command Response Interpretation "**IC:**"
 
 Received via UART as a string, so references are from left to right as indexes of the corresponding `char` array:
 
@@ -200,6 +200,41 @@ Received via UART as a string, so references are from left to right as indexes o
 
   - Some input board status flag; still investigating. When value == 2, system is ready. 
 
+### Command Response Interpretation "**RT:0000:**"
+
+*THIS README SECTION UNDER CONSTRUCTION - SEE CODE*
+
+### Command Response Interpretation "**RT:0010:**"
+
+*THIS README SECTION UNDER CONSTRUCTION - SEE CODE*
+
+### Command Response Interpretation "**RT:0020:**"
+
+*THIS README SECTION UNDER CONSTRUCTION - SEE CODE*
+
+### Command Response Interpretation "**RR:XX**"
+
+*THIS README SECTION UNDER CONSTRUCTION - SEE CODE*
+
+### Command Response Interpretation "**HZ:**"
+
+*THIS README SECTION UNDER CONSTRUCTION - SEE CODE*
+
+### Command Response Interpretation "**CS:**"
+
+*THIS README SECTION UNDER CONSTRUCTION - SEE CODE*
+
+### Command Response Interpretation "**AS:**"
+
+*THIS README SECTION UNDER CONSTRUCTION - SEE CODE*
+
+### Command Interpretation "**FN:XX**"
+
+*THIS README SECTION UNDER CONSTRUCTION - SEE CODE*
+
+### Command Interpretation "**FA:XX**"
+
+*THIS README SECTION UNDER CONSTRUCTION - SEE CODE*
 
 <hr/>
 
