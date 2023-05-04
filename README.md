@@ -260,7 +260,17 @@ Payload:
 
 ## Setup 
 
-Open sketch in Arduino IDE, modify the `secrets.h` file, verify, and upload. Sketch defaults to UART 2, which on this board is Pin 16, 17. These pins couple to the Jura debug port. 
+Open sketch in Arduino IDE, create the `secrets.h` file with the defines set below, verify, and upload. Sketch defaults to UART 2, which on this board is Pin 16, 17. These pins couple to the Jura debug port. 
+
+`secrets.h`
+
+```
+#define WIFINAME    "ssid"
+#define WIFIPASS    "ssid password"
+#define MQTTBROKER  "mqtt.broker.ip.address"
+#define MQTT_PASS   "pw"
+#define MQTT_USER   "user"
+```
 
 ## MQTT Topics 
 
