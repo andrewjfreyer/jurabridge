@@ -1,5 +1,0 @@
-#define WIFINAME  	"ssid"
-#define WIFIPASS 	"ssid password"
-#define MQTTBROKER 	"mqtt.broker.ip.address"
-#define MQTT_PASS 	"pw"
-#define MQTT_USER 	"user"
