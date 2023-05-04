@@ -43,6 +43,7 @@ PubSubClient client(espClient);
 //-----------------------------------------------------------------
 // version notes
 //
+// 0.4.26 - custom execution id ; TODO: common terminology for recipe, automation, tastk wahttever
 // 0.4.25 - custom recipe work
 // 0.4.24 - remove custom hardcoded recipes, MQTT only
 // 0.4.23 - update mqtt buffer size
@@ -331,6 +332,9 @@ bool isCeramicValveHotWaterCircuit;
 bool isCeramicValveBlocking;
 bool isCeramicValveCoffeeProductCircuit;
 bool isCeramicValveUnknownPosition;
+
+//probably figure this out differently to use char arrays later
+String last_custom_id;
 
 /*
 
@@ -914,7 +918,7 @@ void jura_update(){
       if (PREFERENCES_ENABLED) preferences.putInt(PREF_NUM_WATER, water_preparations);
     }  
     if (update_grinder_operations() || first_publication) { 
-      if (MQTT_ENABLED){ mqttpub_long(grinder_operations - 7172, "jurabridge/counts/grinder");} //reset to zero
+      if (MQTT_ENABLED){ mqttpub_long(grinder_operations, "jurabridge/counts/grinder");} //reset to zero from 7172
       if (MODE_INVESTIGATION) ESP_LOGI(TAG,"Grind Operations: %d",grinder_operations);
       if (PREFERENCES_ENABLED) preferences.putInt(PREF_NUM_GRINDS, grinder_operations);
     }
@@ -1213,7 +1217,12 @@ void jura_update(){
   if ((((loop_iterator % status_update_interval) == 0 ) && update_last_task()) || first_publication) {
     if (MQTT_ENABLED){
       if (last_task == ENUM_CUSTOM){
-        mqttpub_str("CUSTOM AUTOMATION", "jurabridge/history");
+        if (last_custom_id == ""){
+          mqttpub_str("CUSTOM AUTOMATION", "jurabridge/history");  
+        }else{
+          mqttpub_str(last_custom_id.c_str(), "jurabridge/history");  
+          last_custom_id = "";
+        } 
       }else if (last_task == ENUM_START){
         mqttpub_str("START AUTOMATION", "jurabridge/history");
       }else if (last_task == ENUM_ESPRESSO){
@@ -3225,7 +3234,7 @@ void callback(char* topic, byte* message, unsigned int length) {
 
         // ------ NAME
         if (strcmp(command, "id") == 0 )        {
-          custom_automation_name = instruction[1].as<String>();
+          last_custom_id = instruction[1].as<String>();
         }
 
         // ------ INTERRUPT
