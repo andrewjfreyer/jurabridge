@@ -67,7 +67,19 @@ Open sketch in Arduino IDE, create the `secrets.h` file with the defines set bel
 
 ## Connection Diagram 
 
-*Diagram to come...*
+The ESP32 can be powered directly from the 5V rail of the Jura Ena Micro 90, but of course this means that when the machine is off so is the bridge. Separate power is also possible, but know that in this case, the ESP32 will continue to power the input board; some sensors will be readable even after the machine is "off" such as temperature sensors. Running the machine in this manner does not appear to cause damage, but whether or not this operational mode causes damage is unknown. Recommended to power the `jurabridge` from the machine itself. 
+
+Connect hardware UART pins to LV pins of the converter board. Corresponding HV pins should be connected to appropriate Tx and Rx pins of the jura debug port:
+
+<p align="center">
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/wiring.png" alt="Wiring Diagram"/>
+</p>
+
+@AussieMakerGeek has an annotated pinout [here](https://www.instructables.com/IoT-Enabled-Coffee-Machine/), reproduced (cropped & rotated) below:
+<p align="center">
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/debug_port.png" alt="Debug Port"/>
+</p>
+
 
 ## Software
 
@@ -346,9 +358,9 @@ https://forum.fhem.de/index.php?topic=45331.0
 
 https://us.jura.com/-/media/global/pdf/manuals-na/Home/ENA-Micro-90/download_manual_ena_micro90_ul.pdf
 
-https://github.com/PromyLOPh/juramote <-- HUGE HELP & INSPIRATION
+https://github.com/PromyLOPh/juramote <--  great foundational reference for Jura protocol reversing
 
-https://www.instructables.com/id/IoT-Enabled-Coffee-Machine/
+https://www.instructables.com/id/IoT-Enabled-Coffee-Machine/  <-- great inspiration for completing the project
 
 https://blog.q42.nl/hacking-the-coffee-machine-5802172b17c1/
 
