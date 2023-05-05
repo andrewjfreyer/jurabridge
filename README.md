@@ -202,6 +202,34 @@ Received via UART as a string, so references are from left to right as indexes o
 
 ### Command Response Interpretation "**RT:0000:**"
 
+This is the first word of the EEPROM at address 0000. Almost every byte is useful, but many have undiscovered purposes. Again, these are output by the machine as a string, so the indexing is from left to right, as an array of characters. Index 0 here is the left-most value output. 
+
+Specifically:
+
+```
+RT:hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh 
+   0    1    2    3    4    5    6    7    8    9    10   11   12   13   14   15
+```
+
+| Index | Type | Intepretation |
+| --- | --- | ---- |
+| 0 | 4-byte hex |  lifetime count of espresso
+| 1 | 4-byte hex |  lifetime count of double espresso **[not an option; always zero]**
+| 2 | 4-byte hex |  lifetime count of coffee
+| 3 | 4-byte hex |  lifetime count of double coffee **[not an option; always zero]**
+| 4 | 4-byte hex |  lifetime count of cappuccino
+| 5 | 4-byte hex |  lifetime count of macchiato
+| 6 | 4-byte hex |  ???
+| 7 | 4-byte hex |  lifetime count of rinse cycles
+| 8 | 4-byte hex |  lifetime count of cleaning cycles
+| 9 | 4-byte hex |  lifetime count of descaling cycles (???)
+| 10 | 4-byte hex |  ???
+| 11| 4-byte hex |  ???
+| 12 | 4-byte hex |  ???
+| 13 | 4-byte hex |  ???
+| 14 | 4-byte hex |  count of spent grounds grounds since last tray empty
+| 15 | 4-byte hex |  count preparations since last clean
+
 *THIS README SECTION UNDER CONSTRUCTION - SEE CODE*
 
 ### Command Response Interpretation "**RT:0010:**"
