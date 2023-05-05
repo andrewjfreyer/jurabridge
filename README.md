@@ -312,6 +312,19 @@ Any number of different sequence customizations can be made to allow the machine
 
 Here is a brew sequence I use for stronger, more traditionally extracted espresso. It  pulls two ristretto shots back to back, each at roughly 30ml. This results in a much more flavorful and properly extracted whole shot. A technique like this is viable and does not waste coffee, as each Jura grind operation only uses 7g of coffee, compared against the ~15g of a traditional espresso pull.
 
+It's actually quite deceptive because the Jura produces pretty good shots as is. For example, the appearance of a single 40ml pull (default for Jura) is *very* similar to opacity of a double ristretto pull at 20 - 30ml per. 
+
+<p align="center">
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/compare.png" alt="Compare Pulls"/>
+</p>
+
+At least for me, the expectation was set that "this is the best the Jura can do, and that's just fine."
+
+Thankfully, that's not the case! The double pull ristretto has a much better taste profile to my preferences, and it can be automated by the following script provided as input to  `jurabridge`. Of course, this automation could be accomplished manually by pressing "espresso" twice in a sequence, and interupting the brew process at an appropriate time (difficult, as the display only shows a progress bar) after the machine is ready. 
+
+`jurabridge` is significantly easier! 
+
+
 ```
 Topic:    jurabridge/command
 Payload:    
