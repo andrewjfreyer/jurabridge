@@ -167,7 +167,7 @@ Unfortunately, each machine has a slighly different set of commands that it resp
 
 Received via UART as a string, so references are from left to right as indexes of the corresponding `char` array:
 
-| Index | Type | Manipulation | Intepretation |
+| String Index | Type | Manipulation | Intepretation |
 | --- | --- | --- | --- |
 | 0 | 1-byte hex | Convert to binary | four bits correspond to error flags for reed switches connected to the input board |
 | 1 | 1-byte hex | Convert to binary | position output of flow meter |
@@ -209,7 +209,7 @@ RT:hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hh
    0    1    2    3    4    5    6    7    8    9    10   11   12   13   14   15
 ```
 
-| Index | Type | Manipulation | Intepretation |
+| String Index | Type | Manipulation | Intepretation |
 | --- | --- | ---- | --- |
 | 0 | 4-byte hex | Convert to decimal |  lifetime count of espresso |
 | 1 | 4-byte hex | Convert to decimal |  lifetime count of double espresso **[not an option; always zero]** |
@@ -237,7 +237,7 @@ RT:hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hh
    0    1    2    3    4    5    6    7    8    9    10   11   12   13   14   15
 ```
 
-| Index | Type | Manipulation | Intepretation |
+| String Index | Type | Manipulation | Intepretation |
 | --- | --- | ---- | --- |
 | 0 | 4-byte hex | Convert to decimal |  high pressure pump operations (preparations + milk cleaning and venturi and steam operations) |
 | 1 | 4-byte hex | ??? |  ??? |
