@@ -316,6 +316,7 @@ It's of course easy to pull two shots back to back, and to interrupt brewing (or
 
 Custom sequences/scripts can be made to allow the machine to produce a wide variety of other drinks, at higher quality. As a trivial example, different settings may be appropriate for non-dairy cappuccino than dairy cappuccino, yet the machine only has one setting. 
 
+### Double Ristretto Custom Recipe
 
 ```
 Topic:    jurabridge/command
