@@ -167,12 +167,12 @@ Unfortunately, each machine has a slighly different set of commands that it resp
 
 Received via UART as a string, so references are from left to right as indexes of the corresponding `char` array:
 
-| Index | Intepretation |
-| --- | --- |
-| 0 | four bits correspond to error flags for reed switches connected to the input board |
-| 1 | flow meter |
-| 2 | always zero?? |
-| 3 | Some machine state representation; when 2, machine is can be ready; when 3 machine is moving water |
+| Index | Type | Manipulation | Intepretation |
+| --- | --- | --- | --- |
+| 0 | 1-byte hex | Convert to binary | four bits correspond to error flags for reed switches connected to the input board |
+| 1 | 1-byte hex | Convert to binary | position output of flow meter |
+| 2 | ??? | ??? | always zero?? |
+| 3 | 1-byte hex | ??? |Some machine state representation; when 2, machine is can be ready; when 3 machine is moving water |
 
 
 - **IC [0] Interpretation**
@@ -202,47 +202,67 @@ Received via UART as a string, so references are from left to right as indexes o
 
 ### Command Response Interpretation "**RT:0000:**"
 
-This is the first word of the EEPROM at address 0000. Almost every byte is useful, but many have undiscovered purposes. Again, these are output by the machine as a string, so the indexing is from left to right, as an array of characters. Index 0 here is the left-most value output. 
-
-Specifically:
+This is the first word of the EEPROM at address 0000. Almost every byte is useful, but many have undiscovered purposes. Again, these are output by the machine as a string, so the indexing is from left to right, as an array of characters. Index 0 here is the left-most value output. Specifically:
 
 ```
 RT:hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh 
    0    1    2    3    4    5    6    7    8    9    10   11   12   13   14   15
 ```
 
-| Index | Type | Intepretation |
-| --- | --- | ---- |
-| 0 | 4-byte hex |  lifetime count of espresso
-| 1 | 4-byte hex |  lifetime count of double espresso **[not an option; always zero]**
-| 2 | 4-byte hex |  lifetime count of coffee
-| 3 | 4-byte hex |  lifetime count of double coffee **[not an option; always zero]**
-| 4 | 4-byte hex |  lifetime count of cappuccino
-| 5 | 4-byte hex |  lifetime count of macchiato
-| 6 | 4-byte hex |  ???
-| 7 | 4-byte hex |  lifetime count of rinse cycles
-| 8 | 4-byte hex |  lifetime count of cleaning cycles
-| 9 | 4-byte hex |  lifetime count of descaling cycles (???)
-| 10 | 4-byte hex |  ???
-| 11| 4-byte hex |  ???
-| 12 | 4-byte hex |  ???
-| 13 | 4-byte hex |  ???
-| 14 | 4-byte hex |  count of spent grounds grounds since last tray empty
-| 15 | 4-byte hex |  count preparations since last clean
-
-*THIS README SECTION UNDER CONSTRUCTION - SEE CODE*
+| Index | Type | Manipulation | Intepretation |
+| --- | --- | ---- | --- |
+| 0 | 4-byte hex | Convert to decimal |  lifetime count of espresso |
+| 1 | 4-byte hex | Convert to decimal |  lifetime count of double espresso **[not an option; always zero]** |
+| 2 | 4-byte hex | Convert to decimal |  lifetime count of coffee |
+| 3 | 4-byte hex | Convert to decimal |  lifetime count of double coffee **[not an option; always zero]** |
+| 4 | 4-byte hex | Convert to decimal |  lifetime count of cappuccino |
+| 5 | 4-byte hex | Convert to decimal |  lifetime count of macchiato |
+| 6 | 4-byte hex | ???|  ??? |
+| 7 | 4-byte hex | Convert to decimal |  lifetime count of rinse cycles (also referred to as low pressure pump operations) |
+| 8 | 4-byte hex | Convert to decimal |  lifetime count of cleaning cycles |
+| 9 | 4-byte hex | Convert to decimal |  lifetime count of descaling cycles (???) |
+| 10 | 4-byte hex | ???|  ??? |
+| 11| 4-byte hex | ???|  ??? |
+| 12 | 4-byte hex | ???|  ??? |
+| 13 | 4-byte hex | Convert to decimal |  ??? |
+| 14 | 4-byte hex | Convert to decimal |  count of spent grounds grounds since last tray empty |
+| 15 | 4-byte hex | Convert to decimal |  count preparations since last clean |
 
 ### Command Response Interpretation "**RT:0010:**"
 
-*THIS README SECTION UNDER CONSTRUCTION - SEE CODE*
+This is the first word of the EEPROM at address 0010. Again, almost every byte is useful, but many have undiscovered purposes. As with other outputs, these are output by the machine as a string, so the indexing is from left to right, as an array of characters. Index 0 here is the left-most value output. Specifically:
+
+```
+RT:hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh 
+   0    1    2    3    4    5    6    7    8    9    10   11   12   13   14   15
+```
+
+| Index | Type | Manipulation | Intepretation |
+| --- | --- | ---- | --- |
+| 0 | 4-byte hex | Convert to decimal |  high pressure pump operations (preparations + milk cleaning and venturi and steam operations) |
+| 1 | 4-byte hex | ??? |  ??? |
+| 2 | 4-byte hex |  ??? |  ??? |
+| 3 | 4-byte hex | Convert to decimal |  lifetime count of milk foam preparations (separate from milked coffee drinks) |
+| 4 | 4-byte hex | Convert to decimal |  lifetime count of hot water preprations |
+| 5 | 4-byte hex | Convert to decimal |  lifetime count of grinder operations | 
+| 6 | 4-byte hex | ??? |  ??? |
+| 7 | 4-byte hex | ??? |  ??? |
+| 8 | 4-byte hex | ??? |  ??? |
+| 9 | 4-byte hex | ??? |  ??? |
+| 10 | 4-byte hex | ??? |  Appears to be **90** when a filter is required **[under investigation]** | 
+| 11| 4-byte hex | Convert to decimal |  lifetime count of m-clean operations |
+| 12 | 4-byte hex | ??? |  large number that iterates by 2s for each operation |
+| 13 | 4-byte hex | ??? |  ??? |
+| 14 | 4-byte hex | ??? |  ??? |
+| 15 | 4-byte hex | ??? |  ??? |
 
 ### Command Response Interpretation "**RT:0020:**"
 
-*THIS README SECTION UNDER CONSTRUCTION - SEE CODE*
+Investigated RT:0020 through 0060, and very few values appear to regularly change; RT:0020 worth continued investigation, but others likely not. **[under investigation]** 
 
 ### Command Response Interpretation "**RR:XX**"
 
-*THIS README SECTION UNDER CONSTRUCTION - SEE CODE*
+Investigated RR:00 through FF, and very few values appear to regularly change, some change cyclically. **[under investigation]** 
 
 ### Command Response Interpretation "**HZ:**"
 
