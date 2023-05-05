@@ -304,21 +304,18 @@ Open sketch in Arduino IDE, create the `secrets.h` file with the defines set bel
 
 # Custom Preparations & Actions
 
-Once accurate machine status information is pulled from the machine, any number of custom recipes or custom instruction sequences can be excuted, without needing to modify EEPROM or to orchestrate a valid sequence of `FN:` commands. This ensures that the machine excutes its own in-built sequences, and there's no risk of incidentally damaging the machine with custom instructions or custom brew sequences. 
-
-Any number of different sequence customizations can be made to allow the machine to produce a wide variety of other drinks. As a trivial example, different settings may be appropriate for non-dairy cappuccino than dairy cappuccino, yet the machine only has one setting. 
-
-### Double Ristretto Custom Recipe
-
-Here is a brew sequence I use for stronger, more traditionally extracted espresso. It  pulls two ristretto shots back to back, each at roughly 30ml. This results in a much more flavorful and properly extracted whole shot. A technique like this is viable and does not waste coffee, as each Jura grind operation only uses 7g of coffee, compared against the ~15g of a traditional espresso pull.
-
-It's actually quite deceptive because the Jura produces pretty good shots as is. For example, the appearance of a single 40ml pull (default for Jura) is *very* similar to opacity of a double ristretto pull at 20 - 30ml per. 
+The output of the machine is actually quite misleading about the machine's capabilities. The Jura produces good enough shots as is. Take a loo the appearance of a single 40ml pull (default for Jura) is *very* similar to opacity of a double ristretto pull at 20 - 30ml per. 
 
 <p align="center">
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/compare.png" alt="Compare Pulls"/>
 </p>
 
-At least for me, the expectation was set that "this is the best the Jura can do, and that's just fine."
+At least for me, the expectation was set that "this is the best the Jura can do, and that's just fine." Here is a brew sequence I use for stronger, more traditionally extracted espresso. It  pulls two ristretto shots back to back, each at roughly 30ml. This results in a much more flavorful and properly extracted whole shot. A technique like this is viable and does not waste coffee, as each Jura grind operation only uses 7g of coffee, compared against the ~15g of a traditional espresso pull.
+
+Once accurate machine status information is pulled from the machine, any number of custom recipes or custom instruction sequences can be excuted, without needing to modify EEPROM or to orchestrate a valid sequence of `FN:` commands. This ensures that the machine excutes its own in-built sequences, and there's no risk of incidentally damaging the machine with custom instructions or custom brew sequences. 
+
+Any number of different sequence customizations can be made to allow the machine to produce a wide variety of other drinks. As a trivial example, different settings may be appropriate for non-dairy cappuccino than dairy cappuccino, yet the machine only has one setting. 
+
 
 Thankfully, that's not the case! The double pull ristretto has a much better taste profile to my preferences, and it can be automated by the following script provided as input to  `jurabridge`. Of course, this automation could be accomplished manually by pressing "espresso" twice in a sequence, and interupting the brew process at an appropriate time (difficult, as the display only shows a progress bar) after the machine is ready. 
 
