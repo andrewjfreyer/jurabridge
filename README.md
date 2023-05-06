@@ -4,7 +4,9 @@
 
 This is an ESP32 Arduino project for bridging a [Jura Ena Micro 90](https://us.jura.com/en/customer-care/products-support/ENA-Micro-90-MicroSilver-UL-15116) to home automation platforms via MQTT. Main controller is an ESP32. A 3v to 5v level shifter is required between an available hardware UART of the ESP32 to the debug/service port of the Jura. Don't use softwareserial, as it's painfully slow. 
 
-*Note: Although loosely compatible, this code is far too large to work with ESPHome; attempts to get it to work usefully with all sensors updating at reasonable intervals caused watchdog crashes.*
+<p align="center">
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/ena90.png" alt="Jura Ena Micro 90"/>
+</p>
 
 # Home Assistant Integration
 
@@ -15,11 +17,6 @@ Set up an MQTT broker, appropriately. Then subscribe to the topics of interest. 
 </p>
 
 [Here's my Home Assistant configuration (YAML package)](https://github.com/andrewjfreyer/jurabridge/wiki/Home-Assistant-Configuration)
-
-
-<p align="center">
-  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/ena90.png" alt="Jura Ena Micro 90"/>
-</p>
 
 <p align="center">
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_housed.png" alt="Jura Ena Micro 90"/>
@@ -141,11 +138,7 @@ The data output from the machine can be received and presented by [Home Assistan
 
 # Custom Preparations & Actions
 
-I've found out that the output of the machine is actually quite misleading about the machine's capabilities. The Jura produces good enough shots as is. I never thought to question the dosing volume, as the output was good enough for what I expected from a superautomatic. Since I bought the machine, my expectation was set that "this is the best the Jura can do, and that's just fine." However, somewhat surprising to me was that the Ena Micro 90 only uses ***7-10g of coffee per perparation*** - about half as much as I presumed. So, what if we just pull two shots back to back, at lower volume? Improved flavor, in my opinion, even if the shots do not look significantly different. See here: 
-
-<p align="center">
-  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/compare.png" alt="Compare Pulls"/>
-</p>
+I've found out that the output of the machine is actually quite misleading about the machine's capabilities. The Jura produces good enough shots as is. I never thought to question the dosing volume, as the output was good enough for what I expected from a superautomatic. Since I bought the machine, my expectation was set that "this is the best the Jura can do, and that's just fine." However, somewhat surprising to me was that the Ena Micro 90 only uses ***7-10g of coffee per perparation*** - about half as much as I presumed. So, what if we just pull two shots back to back, at lower volume? Improved flavor, in my opinion, even if the shots do not look significantly different.
 
 It's of course easy to pull two shots back to back, and to interrupt brewing (or to save the preparation settings at) to lower volumes. Instead, we can use `jurabridge` to automate this sequence for us. Specifically, once accurate machine status information is pulled from the machine, any number of custom recipes or custom instruction sequences can be excuted, without needing to modify EEPROM or to orchestrate a valid sequence of `FN:` commands. This ensures that the machine excutes its own in-built sequences, and there's no risk of incidentally damaging the machine with custom instructions or custom brew sequences. 
 
@@ -158,3 +151,6 @@ Custom sequences/scripts can be made to allow the machine to produce a wide vari
 ## Disclaimer
 
 *The following is only provided as information documenting a project I worked on. No warranty or claim that this will work for you is made. Below is described some actions that involve modifying a Jura Ena Micro 90, which if performed will void any warranty you may have. Some of the modifications described below involve mains electricity; all appropriate cautions are expected to be and were followed. Some of the modifications are permanent and irreversible. Do not duplicate any of the following. I do not take anyresponsibility for any injuries or damage that may occur from any accident, lack of common sense or experience, or the like. Responsibility for any damages or distress resulting from reliance on any information made available here is not the responsibility of the author or other contributors. All rights are reserved.*
+
+*Note: Although loosely compatible, this code is far too large to work with ESPHome; attempts to get it to work usefully with all sensors updating at reasonable intervals caused watchdog crashes.*
+
