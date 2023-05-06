@@ -43,47 +43,47 @@ Here's my Home Assistant [configuration (YAML package)](https://github.com/andre
 
 ### Commands
 
-| Topic | Description | Wiki |
+| Topic | Description | Details |
 | --- | --- | --- |
 | jurabridge/command | Post a custom automation or recipe formatted as an array of command arrays | [Instructions](https://github.com/andrewjfreyer/jurabridge/wiki/Custom-Recipe-Scripts) |
 | jurabridge/menu | Run through the menu structure to perform a task within the menus (e.g., rinses) | `rinse`,`mclean`,`mrinse`,`clean`,`filter` |
 
 ### Counters
-| Topic | Description |
-| --- | --- |
-| jurabridge/counts/beans  | Approximate bean hopper percentage remaining |
-| jurabridge/counts/cappuccino | Lifetime counts of cappuccino preparations |
-| jurabridge/counts/cleans | Lifetime count of tablet clean operations |
-| jurabridge/counts/coffee | Lifetime count of coffee preparations |
-| jurabridge/counts/espresso | Lifetime count of espresso preparations |
-| jurabridge/counts/grinder | Lifetime count of grinder operations |
-| jurabridge/counts/grounds | Pucks in grounds hopper  |
-| jurabridge/counts/high pressure operations | Lifetime count of high pressure pump cycles |
-| jurabridge/counts/hot water | Lifetime count of hot water preparations  |
-| jurabridge/counts/low pressure operations | Lifetime count of low pressure pump cycles |
-| jurabridge/counts/macchiato | Lifetime count of macchiato preparations  |
-| jurabridge/counts/milk clean | Lifetime count of m-clean operations  |
-| jurabridge/counts/milk foam | Lifetime count of milk foam preparations  |
-| jurabridge/counts/since clean | Preparations since last clean (clean recommended at 180)  |
-| jurabridge/counts/total automations | Lifetime count total preparations  |
-| jurabridge/counts/tray volume | Estimated ml in tray |
-| jurabridge/counts/water tank/volume | Estimated fill percentage in reservoir |
+| Topic | Type | Direct, Calculated, Inferred | Description |
+| --- |  --- | --- | --- |
+| jurabridge/counts/beans | Integer | Inferred (200g hopper volume - 8g/grind) |Approximate bean hopper percentage remaining |
+| jurabridge/counts/cappuccino  | Integer | Direct |Lifetime counts of cappuccino preparations |
+| jurabridge/counts/cleans  | Integer | Direct |Lifetime count of tablet clean operations |
+| jurabridge/counts/coffee  | Integer | Direct |Lifetime count of coffee preparations |
+| jurabridge/counts/espresso  | Integer | Direct |Lifetime count of espresso preparations |
+| jurabridge/counts/grinder  | Integer | Direct |Lifetime count of grinder operations |
+| jurabridge/counts/grounds  | Integer | Direct |Pucks in grounds hopper  |
+| jurabridge/counts/high pressure operations  | Integer | Direct |Lifetime count of high pressure pump cycles |
+| jurabridge/counts/hot water  | Integer | Direct |Lifetime count of hot water preparations  |
+| jurabridge/counts/low pressure operations  | Integer | Direct |Lifetime count of low pressure pump cycles |
+| jurabridge/counts/macchiato  | Integer | Direct |Lifetime count of macchiato preparations  |
+| jurabridge/counts/milk clean  | Integer | Direct |Lifetime count of m-clean operations  |
+| jurabridge/counts/milk foam  | Integer | Direct |Lifetime count of milk foam preparations  |
+| jurabridge/counts/since clean  | Integer | Direct |Preparations since last clean (clean recommended at 180)  |
+| jurabridge/counts/total automations  | Integer | Calculated |Lifetime count total preparations  |
+| jurabridge/counts/tray volume | Integer | Inferred (drainage per preparation + low pressure operations) | Estimated ml in tray |
+| jurabridge/counts/water tank/volume  | Integer | Inferred (1L tank - dispense volume) |Estimated fill percentage in reservoir |
 
 ### Errors
-| Topic | Description |
-| --- | --- |
-| jurabridge/errors/beans | Beans hopper lid removed  |
-| jurabridge/errors/grounds | Grounds needs emptying |
-| jurabridge/errors/powder | Powder door / bypass doser is open |
-| jurabridge/errors/reservoir low | Water fill required soon |
-| jurabridge/errors/tray overfill | Tray likely needs emptying  |
-| jurabridge/errors/tray removed | Tray is removed |
-| jurabridge/errors/water | Water fill required; replace reservoir |
+| Topic | Direct or Inferred  |Description |
+| --- | --- | --- |
+| jurabridge/errors/beans | Direct | Beans hopper lid removed  |
+| jurabridge/errors/grounds | Direct | Grounds needs emptying |
+| jurabridge/errors/powder | Direct |Powder door / bypass doser is open |
+| jurabridge/errors/reservoir low | Inferred | Water fill required soon |
+| jurabridge/errors/tray overfill | Inferred |Tray likely needs emptying  |
+| jurabridge/errors/tray removed | Direct |Tray is removed |
+| jurabridge/errors/water | Direct | Water fill required; replace reservoir |
 
 ### Command History
-| Topic | Description |
-| --- | --- |
-| jurabridge/history | Last automation/task completed |
+| Topic | Type | Description |
+| --- | --- | --- |
+| jurabridge/history | String |Last automation/task completed |
 
 ### Machine Part Information & Status
 | Topic | Description |
