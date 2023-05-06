@@ -14,7 +14,7 @@ This is an ESP32 Arduino project for bridging a [Jura Ena Micro 90](https://us.j
       </a>
 </div>
 
-The data output from the machine can be received and presented by [Home Assistant.](https://www.home-assistant.io) I have created this status UI in a heavily modified [button-card](https://github.com/custom-cards/button-card). 
+The data output from the machine can be received and presented by [Home Assistant.](https://www.home-assistant.io) I have created this status UI based on a modified fork of [button-card](https://github.com/custom-cards/button-card). 
 
 <p align="center">
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_on.png" alt="BridgeOn"/>
