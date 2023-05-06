@@ -8,6 +8,8 @@ This is an ESP32 Arduino project for bridging a [Jura Ena Micro 90](https://us.j
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/ena90.png" alt="Jura Ena Micro 90"/>
 </p>
 
+The data output from the machine can be received and presented by [Home Assistant.](https://www.home-assistant.io) I have created this status UI in a heavily modified [button-card](https://github.com/custom-cards/button-card). 
+
 <p align="center">
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_on.png" alt="BridgeOn"/>
 </p>
@@ -21,8 +23,6 @@ Here's my Home Assistant [configuration (YAML package)](https://github.com/andre
 <p align="center">
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_unhoused.png" alt="Jura Ena Micro 90"/>
 </p>
-
-The data output from the machine can be received and presented by [Home Assistant.](https://www.home-assistant.io) I have created this status UI in a heavily modified [button-card](https://github.com/custom-cards/button-card). 
 
 <hr/>
 
