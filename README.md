@@ -41,12 +41,12 @@ Here's my Home Assistant [configuration (YAML package)](https://github.com/andre
 | jurabridge/power | Last will message of "off" to indicate bridge is off (not machine) |
 | jurabridge/ready | Boolean for whether system is ready or not  |
 
-### Command Structure
+### Commands
 
-| Topic | Description |
-| --- | --- |
-| jurabridge/command | Post a custom automation or recipe formatted as an array of command arrays |
-| jurabridge/menu | Post a message to manipulate buttons and menus |
+| Topic | Description | Wiki |
+| --- | --- | --- |
+| jurabridge/command | Post a custom automation or recipe formatted as an array of command arrays | [Instructions](https://github.com/andrewjfreyer/jurabridge/wiki/Custom-Recipe-Scripts) |
+| jurabridge/menu | Run through the menu structure to perform a task within the menus (e.g., rinses) | `rinse`,`mclean`,`mrinse`,`clean`,`filter` |
 
 ### Counters
 | Topic | Description |
