@@ -10,7 +10,7 @@ This is an ESP32 Arduino project for bridging a [Jura Ena Micro 90](https://us.j
 
 <div align="center">
       <a href="https://youtu.be/6NN9Xv9Lhq4">
-         <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/youtube.png" style="width:50%;">
+         <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/youtube.png" style="width:80%;">
       </a>
 </div>
 
