@@ -27,6 +27,7 @@ The data output from the machine can be received and presented by [Home Assistan
 # `jurabridge` MQTT Topics of Interest
 
 ### Machine & Bridge Status
+
 | Topic | Description |
 | --- | --- |
 | jurabridge/power | Last will message of "off" to indicate bridge is off (not machine) |
@@ -114,36 +115,11 @@ The data output from the machine can be received and presented by [Home Assistan
 
 <hr/>
 
-# Understanding the Jura Ena Micro 90
+# Useful Wiki links
 
-Many folks have reverse engineered other Jura models, but to the best of my research, no one had documented investigations of the Ena Micro 90. 
+* [Schematics](https://github.com/andrewjfreyer/jurabridge/wiki/Schematic(s))
 
-## Similar Machine Schematic
-
-The Ena Micro 9 schematics are available online, at [jura-parts.com](https://www.jura-parts.com/v/vspfiles/diagrams/Jura%20ENA%209%20Micro%20Diagram.pdf). These schematics are useful to understand the layout of the Ena Micro 90 and other devices that share a number of parts and overall design language with their predecesors:
-
-### Simplified Schematic Showing Input Board + Power Board
-
-There is a copyright notice in each of these images, reserved by Jura. 
-
-<p align="center">
-  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/schematic_micro9.png" alt="Jura Ena Micro 9"/>
-</p>
-
-### Simplified Water System Schematic
-<p align="center">
-  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/fluidsystem_micro9.png" alt="Jura Ena Micro 9"/>
-</p>
-
-<hr/>
-
-# Jura Command/Response Decoding
-
-Jura has implemented a transfer encoding that spreads data bytes through a number of other bytes. Explained [here](https://github.com/PromyLOPh/juramote) and [here](https://www.instructables.com/id/IoT-Enabled-Coffee-Machine/) and [here](https://github.com/oliverk71/Coffeemaker-Payment-System) and [here](http://protocol-jura.do.am).
-
-Unfortunately, each machine has a slighly different set of commands that it responds to and encodes its sensors differently. The following are inferred from testing, review of hydraulic system topology and review of schematics of other machines. I believe that these are correct, but it's likely there are some nuances I don't appreicate or haven't figured out yet. 
-
-See wiki @ [Jura Ena Micro 90 Commands](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Commands)
+* [Jura Ena Micro 90 Command/Response Investigations & Interpretations](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Commands)
 
 <hr/>
 
@@ -155,23 +131,7 @@ See wiki @ [Jura Ena Micro 90 Commands](https://github.com/andrewjfreyer/jurabri
 
 * Dupont connectors. I used [these](https://www.amazon.com/gp/product/B01EV70C78/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1) and [these](https://www.amazon.com/gp/product/B07DF9BJKH/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1). 
 
-* (Optional) 2 Channel Relay Board. I used [this one](https://www.amazon.com/gp/product/B00E0NTPP4/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1). Relays are required if you'd like to turn the machine on. 
-
-# Machine Modifications
-
-* Plumb reservoir. I [used this.](https://www.amazon.com/gp/product/B076HJZQMY/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
-
-* Create aperture through input board coverpiece to feed cable to ESP32. 
-
-* 3d printed bridge housing
-
-* Splice into momentary swich leads, close splices with 2-channel relay.
-
-![Splice Annotation](https://github.com/andrewjfreyer/jurabridge/raw/main/images/splices_annotated.jpg)
-
-![Switch Splice Detail](https://github.com/andrewjfreyer/jurabridge/raw/main/images/lv_splice.jpg)
-
-![Power Splice Detail](https://github.com/andrewjfreyer/jurabridge/raw/main/images/hv_splice.jpg)
+See wiki for [optional oodifications](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Modifications)
 
 # Connection Diagram 
 
