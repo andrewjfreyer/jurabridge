@@ -2,7 +2,7 @@
 
 # Description
 
-This is an ESP32 Arduino project for bridging a [Jura Ena Micro 90](https://us.jura.com/en/customer-care/products-support/ENA-Micro-90-MicroSilver-UL-15116) to home automation platforms via MQTT. Main controller is an ESP32. A 3.3v to 5v level shifter is required between an available hardware UART of the ESP32 to the debug/service port of the Jura. Don't use `softwareserial`, as it's painfully slow. 
+This is an ESP32 Arduino project for bridging a [Jura Ena Micro 90](https://us.jura.com/en/customer-care/products-support/ENA-Micro-90-MicroSilver-UL-15116) to home automation platforms via MQTT. Main controller is an ESP32. A 3.3v to 5v level shifter is required between an available hardware UART of the ESP32 to the debug/service port of the Jura. Don't use `softwareserial`, as it's painfully slow. See here for [hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware) and [software](https://github.com/andrewjfreyer/jurabridge/wiki/software) requirements. 
 
 <p align="center">
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/ena90.png" alt="Jura Ena Micro 90"/>
