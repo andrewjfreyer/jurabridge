@@ -6,6 +6,17 @@ This is an ESP32 Arduino project for bridging a [Jura Ena Micro 90](https://us.j
 
 *Note: Although loosely compatible, this code is far too large to work with ESPHome; attempts to get it to work usefully with all sensors updating at reasonable intervals caused watchdog crashes.*
 
+# Home Assistant Integration
+
+Set up an MQTT broker, appropriately. Then subscribe to the topics of interest. Here are screenshots of my UI in a few Lovelace cards:
+
+<p align="center">
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_on.png" alt="BridgeOn"/>
+</p>
+
+[Here's my Home Assistant configuration (YAML package)](https://github.com/andrewjfreyer/jurabridge/wiki/Home-Assistant-Configuration)
+
+
 <p align="center">
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/ena90.png" alt="Jura Ena Micro 90"/>
 </p>
@@ -130,9 +141,7 @@ The data output from the machine can be received and presented by [Home Assistan
 
 # Custom Preparations & Actions
 
-I've found out that the output of the machine is actually quite misleading about the machine's capabilities. The Jura produces good enough shots as is. I never thought to question the dosing volume, as the output was good enough for what I expected from a superautomatic. Since I bought the machine, my expectation was set that "this is the best the Jura can do, and that's just fine." 
-
-However, somewhat surprising to me was that the Ena Micro 90 only uses 7-10g of coffee per perparation - about half as much as I presumed. So, what if we just pull two shots back to back, at lower volume? Improved flavor, in my opinion, even if the shots do not look significantly different. See here: 
+I've found out that the output of the machine is actually quite misleading about the machine's capabilities. The Jura produces good enough shots as is. I never thought to question the dosing volume, as the output was good enough for what I expected from a superautomatic. Since I bought the machine, my expectation was set that "this is the best the Jura can do, and that's just fine." However, somewhat surprising to me was that the Ena Micro 90 only uses ***7-10g of coffee per perparation*** - about half as much as I presumed. So, what if we just pull two shots back to back, at lower volume? Improved flavor, in my opinion, even if the shots do not look significantly different. See here: 
 
 <p align="center">
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/compare.png" alt="Compare Pulls"/>
@@ -145,25 +154,6 @@ Custom sequences/scripts can be made to allow the machine to produce a wide vari
 [Custom recipe examples.](https://github.com/andrewjfreyer/jurabridge/wiki/Custom-Recipe-Scripts)
 
 <hr/>
-
-# Home Assistant Integration
-
-Set up an MQTT broker, appropriately. Then subscribe to the topics of interest. Here are screenshots of my UI in a few Lovelace cards:
-
-### Example UI: Bridge Off
-
-<p align="center">
-  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_off.png" alt="BridgeOff"/>
-</p>
-
-### Example UI: Bridge On
-
-<p align="center">
-  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_on.png" alt="BridgeOn"/>
-</p>
-
-[Here's my Home Assistant configuration (YAML package)](https://github.com/andrewjfreyer/jurabridge/wiki/Home-Assistant-Configuration)
-
 
 ## Disclaimer
 
