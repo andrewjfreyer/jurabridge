@@ -43,6 +43,7 @@ PubSubClient client(espClient);
 //-----------------------------------------------------------------
 // version notes
 //
+// 0.4.27 - custom execution id fixes? test fix of "recommend syste4m clean" early 
 // 0.4.26 - custom execution id ; TODO: common terminology for recipe, automation, tastk wahttever
 // 0.4.25 - custom recipe work
 // 0.4.24 - remove custom hardcoded recipes, MQTT only
@@ -149,6 +150,9 @@ Something between MV and UU clears the display to blank.
 
 //hardware UART is significantly faster than software serial
 HardwareSerial JuraSerial ( 2 );
+
+//display 
+const char * jura_display [30];
 
 //for json crash detection? 
 long last_update = 0;
@@ -543,6 +547,8 @@ void setup() {
 //int for messing with the LED
 int led_iterator = 0;
 
+
+
 //main loop
 void loop() {
 
@@ -717,6 +723,7 @@ bool wait_dispense_ml ( int max_ml = 40){
 //#############################################################
 
 void custom_automation_start(){
+  last_custom_id = "";
   custom_execution = true;
   custom_execution_started = millis();
 }
@@ -1221,7 +1228,6 @@ void jura_update(){
           mqttpub_str("CUSTOM AUTOMATION", "jurabridge/history");  
         }else{
           mqttpub_str(last_custom_id.c_str(), "jurabridge/history");  
-          last_custom_id = "";
         } 
       }else if (last_task == ENUM_START){
         mqttpub_str("START AUTOMATION", "jurabridge/history");
@@ -1251,6 +1257,8 @@ void jura_update(){
   if ((((loop_iterator % status_update_interval) == 0 ) && update_recommendation_state()) || first_publication) {
     if (MQTT_ENABLED){
       //recommendations separate
+      ESP_LOGI(TAG, "Recommendation State: %d");
+
       if  (recommendation_state == ENUM_SYSTEM_RECOMMENDATION_RINSE ) {mqttpub_str("RINSE RECOMMENDED", "jurabridge/recommendation");}
       else if  (recommendation_state == ENUM_SYSTEM_RECOMMENDATION_MRINSE ) {mqttpub_str("MILK RINSE RECOMMENDED", "jurabridge/recommendation");}
       else if  (recommendation_state == ENUM_SYSTEM_RECOMMENDATION_MCLEAN ) {mqttpub_str("MILK CLEAN RECOMMENDED", "jurabridge/recommendation");}
@@ -1258,7 +1266,7 @@ void jura_update(){
       else if  (recommendation_state == ENUM_SYSTEM_RECOMMENDATION_CLEAN_SOON ) {mqttpub_str("SYSTEM CLEAN SOON", "jurabridge/recommendation");}
       else if  (recommendation_state == ENUM_SYSTEM_RECOMMENDATION_EMPTY_GROUNDS_SOON ) {mqttpub_str("EMPTY GROUNDS SOON", "jurabridge/recommendation");}
       else if  (recommendation_state == ENUM_SYSTEM_RECOMMENDATION_BEANS ) {mqttpub_str("FILL BEANS SOON", "jurabridge/recommendation");}
-      else {mqttpub_str("NOMINAL", "jurabridge/recommendation");}
+      else { mqttpub_str("NOMINAL", "jurabridge/recommendation");}
     }
   }
 
@@ -1342,6 +1350,8 @@ bool update_recommendation_state(){
     comparator = ENUM_SYSTEM_RECOMMENDATION_BEANS;  
   } else if (spent_grounds > 5){
     comparator = ENUM_SYSTEM_RECOMMENDATION_EMPTY_GROUNDS_SOON; 
+  } else{
+    comparator = ENUM_SYSTEM_RECOMMENDATION_NONE;
   }
   
   //timeout for this status update
