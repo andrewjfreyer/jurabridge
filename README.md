@@ -1,5 +1,15 @@
 # jurabridge ☕
 
+# Description
+
+This is an ESP32 Arduino project for bridging a [Jura Ena Micro 90](https://us.jura.com/en/customer-care/products-support/ENA-Micro-90-MicroSilver-UL-15116) to home automation platforms via MQTT. Main controller is an ESP32. A 3.3v to 5v level shifter is required between an available hardware UART of the ESP32 to the debug/service port of the Jura. Don't use `softwareserial`, as it's painfully slow. 
+
+See here for [hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware) and [software](https://github.com/andrewjfreyer/jurabridge/wiki/software) requirements. 
+
+<p align="center">
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/ena90.png" alt="Jura Ena Micro 90"/>
+</p>
+
 # Table of Contents
 
 * [Jura Ena Micro 90 Command/Response Investigations & Interpretations](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Commands)
@@ -21,29 +31,9 @@
 * [References](https://github.com/andrewjfreyer/jurabridge/wiki/References)
 
 
-# Description
+## Home Assistant
 
-This is an ESP32 Arduino project for bridging a [Jura Ena Micro 90](https://us.jura.com/en/customer-care/products-support/ENA-Micro-90-MicroSilver-UL-15116) to home automation platforms via MQTT. Main controller is an ESP32. A 3.3v to 5v level shifter is required between an available hardware UART of the ESP32 to the debug/service port of the Jura. Don't use `softwareserial`, as it's painfully slow. 
-
-See here for [hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware) and [software](https://github.com/andrewjfreyer/jurabridge/wiki/software) requirements. 
-
-<p align="center">
-  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/ena90.png" alt="Jura Ena Micro 90"/>
-</p>
-
-<div align="center">
-      <a href="https://youtu.be/6NN9Xv9Lhq4">
-         <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/youtube.png" style="width:80%;">
-      </a>
-</div>
-
-The data output from the machine can be received and presented by [Home Assistant.](https://www.home-assistant.io) I have created this status UI based on a modified fork of [button-card](https://github.com/custom-cards/button-card). 
-
-<p align="center">
-  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_on.png" alt="BridgeOn"/>
-</p>
-
-Here's my Home Assistant [configuration (YAML package)](https://github.com/andrewjfreyer/jurabridge/wiki/Home-Assistant-Configuration). Here is what the bridge looks like, attached to the machine after a [minor modification](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Modifications) to feed a ribbon cable to the debug port. 
+Here's my Home Assistant [configuration (YAML package)](https://github.com/andrewjfreyer/jurabridge/wiki/Home-Assistant-Configuration). Here is what the bridge looks like, attached to the machine after a few destructive [modifications](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Modifications) to feed a ribbon cable to the debug port. 
 
 <p align="center">
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_housed.png" alt="Jura Ena Micro 90"/>
@@ -51,6 +41,20 @@ Here's my Home Assistant [configuration (YAML package)](https://github.com/andre
 
 <p align="center">
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_unhoused.png" alt="Jura Ena Micro 90"/>
+</p>
+
+Here's a quick video demo showing the responsiveness of the polling:
+
+<div align="center">
+      <a href="https://youtu.be/6NN9Xv9Lhq4">
+         <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/youtube.png" style="width:80%;">
+      </a>
+</div>
+
+The data output from the machine is received and presented by [Home Assistant.](https://www.home-assistant.io) I have created this status UI based on a modified fork of [button-card](https://github.com/custom-cards/button-card). 
+
+<p align="center">
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_on.png" alt="BridgeOn"/>
 </p>
 
 <hr/>
