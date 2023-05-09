@@ -609,6 +609,18 @@ void press_button_macchiato()             {String cmd; cmd.reserve(20); cmd="FA:
 void press_button_water()                 {String cmd; cmd.reserve(20); cmd="FA:0B"; cmd2jura(cmd);}
 void press_button_milk()                  {String cmd; cmd.reserve(20); cmd="FA:0C"; cmd2jura(cmd);}
 
+/*
+
+configur??
+
+FA:0D : Configure: Grosse Tasse / Large cup
+FA:0E : Configure: Medium Tasse / Medium cup
+FA:0F : Configure: Espresso Tasse / Espesso cup
+
+https://github.com/ryanalden/esphome-jura-component/issues/4
+
+*/
+
 //functions for custom automations
 //FN = Function
 void pump_full_duty_on()                  {String cmd; cmd.reserve(20); cmd="FN:01"; cmd2jura(cmd);} //verified; but needs to be in brewing position first, else will drain into tray
@@ -1472,7 +1484,7 @@ bool update_inferred_status(){
 // EEPROM 4    15  4 BYTE HEX - DOUBLE COFFEE   // [NONE FOR ENA 90]
 // EEPROM 5    19  4 BYTE HEX - CAPPUCCINO   //
 // EEPROM 6    23  4 BYTE HEX - MACCHIATO   //
-// EEPROM 7    27  4 BYTE HEX - ???
+// EEPROM 7    27  4 BYTE HEX - ??? <-- COFFEE FROM POWDER?? https://github.com/f-fritz/esphome-jura-component/blob/master/jura_coffee.h
 // EEPROM 8    31  4 BYTE HEX - RINSE CYCLES ???
 // EEPROM 9    35  4 BYTE HEX - CLEANING CYCLES
 // EEPROM 10   39  4 BYTE HEX - ??? DESCALING CYCLES??
