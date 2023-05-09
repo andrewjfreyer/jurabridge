@@ -2131,7 +2131,7 @@ bool update_hz (){
 //               2 - RINSE NEEDED/REQUIRED (ONLY GOES TO ZERO ONCE RINSED)
 //               3 - ??? // maybe 1 when venturi is active?? MILK RELATED? (steam mode)
 //               4 - READY RE: TEMPERATURE
-//               5 - ??? // RINSE-RELATED; PUMP IS ON?? ?? <--ALWAYS ON
+//               5 - Brewgroup in init position
 //               6 - ???    maybe 0 when brewing?? << juramote; brewer on (hot water mode??)
 //               7 - ??? // NOT RINSE RELATED;
 //               8 - ??? // NOT RINSE RELATED; 
@@ -2175,8 +2175,6 @@ bool update_brewgroup_init_position (){
 //#############################################################
 //
 //  HZ - index 2
-//
-//  dispense voluem  
 //
 //#############################################################
 
@@ -2353,11 +2351,11 @@ bool update_ceramic_valve_position (){
 //               [MSB - 18] ??? duty cycle of thermoblock
 //               [MSB - 19] ??? duty cycle of thermoblock
 // CS5  6    20  4 BYTE HEX - DUTY CYCLE // PWM of the pump??; NEEDS TO BE ZERO FOR READY;
-//               [MSB - 20] 
-//               [MSB - 21] ???
-//               [MSB - 22] ???
-//               [MSB - 23] ???
-// CS6  7    24  4 BYTE HEX - DUTY CYCLE ///?? extended PWM of the pump??
+//               [MSB - 20] pump duty cycle
+//               [MSB - 21] pump duty cycle
+//               [MSB - 22] pump status
+//               [MSB - 23] grinder status (== 3)
+// CS6  7    24  4 BYTE HEX 
 // CS7  8    28  4 BYTE HEX - ???
 // CS8  9    32  4 BYTE HEX - ???
 // CS9  10   36  4 BYTE HEX - ???
@@ -2637,6 +2635,9 @@ bool update_pump_duty_cycle (){
 }
 
 bool update_pump_status(){
+  //0x  20   21   22   23
+  //0b#### #### #### ####
+  //            ^^^^ 
 
   //by observation; seems 0000 is pump off, 1111 is pump on
   long comparator = (

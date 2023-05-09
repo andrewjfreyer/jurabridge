@@ -1,5 +1,26 @@
 # jurabridge ☕
 
+# Table of Contents
+
+* [Jura Ena Micro 90 Command/Response Investigations & Interpretations](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Commands)
+
+* [MQTT Topics & Payloads](https://github.com/andrewjfreyer/jurabridge/wiki/MQTT-Topics)
+
+* [Relevant Schematics](https://github.com/andrewjfreyer/jurabridge/wiki/Schematic(s))
+
+* [Ena Micro 90 Mods](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Modifications)
+
+* [Required & Optional Hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware)
+
+* [Arduino Setup & Upload](https://github.com/andrewjfreyer/jurabridge/wiki/Software)
+
+* [Custom Preparation Scripts](https://github.com/andrewjfreyer/jurabridge/wiki/Custom-Recipe-Scripts)
+
+* [Home Assistant Configuration Example](https://github.com/andrewjfreyer/jurabridge/wiki/Home-Assistant-Configuration)
+
+* [References](https://github.com/andrewjfreyer/jurabridge/wiki/References)
+
+
 # Description
 
 This is an ESP32 Arduino project for bridging a [Jura Ena Micro 90](https://us.jura.com/en/customer-care/products-support/ENA-Micro-90-MicroSilver-UL-15116) to home automation platforms via MQTT. Main controller is an ESP32. A 3.3v to 5v level shifter is required between an available hardware UART of the ESP32 to the debug/service port of the Jura. Don't use `softwareserial`, as it's painfully slow. 
@@ -33,21 +54,6 @@ Here's my Home Assistant [configuration (YAML package)](https://github.com/andre
 </p>
 
 <hr/>
-
-# Useful Wiki Links
-
-* [MQTT Topics & Payloads](https://github.com/andrewjfreyer/jurabridge/wiki/MQTT-Topics)
-
-* [Schematics](https://github.com/andrewjfreyer/jurabridge/wiki/Schematic(s))
-
-* [Jura Ena Micro 90 Command/Response Investigations & Interpretations](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Commands)
-
-* [Required & Optional Hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware)
-
-* [Arduino Setup & Upload](https://github.com/andrewjfreyer/jurabridge/wiki/Software)
-
-* [References](https://github.com/andrewjfreyer/jurabridge/wiki/References)
-
 
 # Custom Preparations & Actions
 
