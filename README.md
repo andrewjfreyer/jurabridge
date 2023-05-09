@@ -13,7 +13,7 @@ See here for [hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardwar
 
 # Why?
 
-I saw [this](https://github.com/ryanalden/esphome-jura-component/) and thought I'd begin investigating whether some or all of the functionality would extend to the Jura ENA Micro 90. Many did, many did not, and I needed to investigate output from the machine. On thing led to another, and now we're here.   
+I saw [this](https://github.com/ryanalden/esphome-jura-component/) and thought I'd begin investigating whether some or all of the functionality would extend to the Jura ENA Micro 90. Many did, many did not. I needed to investigate and characterize a lot of the output from the machine. One thing led to another, and now we're here.  #scopecreep 
 
 
 # Table of Contents
