@@ -20,19 +20,19 @@ I saw [this](https://github.com/ryanalden/esphome-jura-component/) and other sim
 
 * [Jura ENA Micro 90 Command/Response Investigations & Interpretations](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Commands)
 
-* [MQTT Topics & Payloads](https://github.com/andrewjfreyer/jurabridge/wiki/MQTT-Topics)
-
 * [Relevant Schematics](https://github.com/andrewjfreyer/jurabridge/wiki/Schematic(s))
-
-* [Ena Micro 90 Mods](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Modifications)
 
 * [Required & Optional Hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware)
 
 * [Arduino Setup & Upload](https://github.com/andrewjfreyer/jurabridge/wiki/Software)
 
-* [Custom Preparation Scripts](https://github.com/andrewjfreyer/jurabridge/wiki/Custom-Recipe-Scripts)
+* [MQTT Topics & Payloads](https://github.com/andrewjfreyer/jurabridge/wiki/MQTT-Topics)
 
 * [Home Assistant Configuration Example](https://github.com/andrewjfreyer/jurabridge/wiki/Home-Assistant-Configuration)
+
+* [Jura ENA Micro 90 Mods](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Modifications)
+
+* [Custom Preparation Scripts](https://github.com/andrewjfreyer/jurabridge/wiki/Custom-Recipe-Scripts)
 
 * [References](https://github.com/andrewjfreyer/jurabridge/wiki/References)
 
