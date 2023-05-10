@@ -67,9 +67,15 @@ The data output from the machine is received and presented by [Home Assistant.](
 
 # Custom Preparations & Actions
 
-I've found out that the output of the machine is actually quite misleading about the machine's capabilities. The Jura produces good enough shots as is. I never thought to question the dosing volume, as the output was good enough for what I expected from a superautomatic. Since I bought the machine, my expectation was set that "this is the best the Jura can do, and that's just fine." However, somewhat surprising to me was that the ENA Micro 90 only uses ***7-10g of coffee per perparation*** - about half as much as I presumed. So, what if we just pull two shots back to back, at lower volume? Improved flavor, in my opinion, even if the shots do not look significantly different.
+I've found out that the default programming of the machine undersells/underutilizes machine's capabilities. The Jura produces good enough shots as is. I never thought to question the dosing volume, as the output was good enough for what I expected from a superautomatic. 
 
-It's of course easy to pull two shots back to back, and to interrupt brewing (or to save the preparation settings) to lower volumes. Instead, we can use `jurabridge` to automate this sequence for us. Specifically, because `jurabridge` obtains and/or infers accurate machine status information, any number of custom recipes or custom instruction sequences can be excuted, without needing to modify EEPROM or to orchestrate a valid sequence of `FN:` commands, or without waiting for unnecessary long delays and presuming machine states. This command+interrupt technique ensures that the machine excutes its own in-built sequences, and there's no risk of incidentally damaging the brewgroup with custom instructions or custom brew sequences. 
+All that to say, since I bought the machine, my expectation was set that "this is the best the Jura can do, and that's just fine." It is, after all, a superauto. We're sacrificing some quality for pushbutton convenience. However, somewhat surprising to me was that the ENA Micro 90 only uses ***7-10g of coffee per perparation*** - about half as much as I presumed. 
+
+It's of course easy to pull two shots back to back to get to a more traditional 15 - 20g per pull. But that requires that I sit and wait, read words on a display, and press buttons twice. Who has time for that. 
+
+So lets just automate it. 
+
+Here, because `jurabridge` obtains (and/or infers) accurate machine status information, any number of custom recipes or custom instruction sequences can be excuted, without needing to modify EEPROM or to orchestrate a valid sequence of `FN:` commands, or without waiting for unnecessary long delays and presuming machine state. This command+interrupt+statuswait technique ensures that the machine excutes its own in-built sequences, and there's no risk of incidentally damaging the brewgroup with custom instructions or custom brew sequences. 
 
 Custom sequences/scripts can be made to allow the machine to produce a wide variety of other drinks, at higher quality. As a trivial example, different settings may be appropriate for non-dairy cappuccino than dairy cappuccino, yet the machine only has one setting. 
 
