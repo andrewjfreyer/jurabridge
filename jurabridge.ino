@@ -21,7 +21,10 @@ PubSubClient client(espClient);
 
 //wifi definintions
 #define TAG "jurabridge"
-#define VERSION "0.4.28"
+#define VERSION "0.4.29"
+
+//is the machine plumbed?
+#define IS_PLUMBED true
 
 //for showing on the main display 
 #define CURRENT_VERSION_DISPLAY "DT: READY v4"
@@ -43,6 +46,7 @@ PubSubClient client(espClient);
 //-----------------------------------------------------------------
 // version notes
 //
+// 0.4.29 - tank volume as percentage only if not plumbed
 // 0.4.28 - bugfixes for calculated values
 // 0.4.27 - custom execution id fixes? test fix of "recommend system clean" early 
 // 0.4.26 - custom execution id ; TODO: common terminology for recipe, automation, tastk wahttever
@@ -1188,8 +1192,13 @@ void jura_update(){
       if (PREFERENCES_ENABLED) preferences.putInt(PREF_NUM_DRAINAGE_SINCE_EMPTY, drainage_since_tray_empty);
     }
     if (update_volume_since_reservoir_fill() || first_publication){
-      if (MQTT_ENABLED){ mqttpub_long(100 - (volume_since_reservoir_fill/10), "jurabridge/counts/water tank/volume");} //1L tank by default, 1000ml
-      if (PREFERENCES_ENABLED) preferences.putInt(PREF_VOL_SINCE_RESERVOIR_FILL, volume_since_reservoir_fill);
+      if (! IS_PLUMBED){
+        if (MQTT_ENABLED){ mqttpub_long(100 - (volume_since_reservoir_fill/10), "jurabridge/counts/water tank/volume");} //1L tank by default, 1000ml
+        if (PREFERENCES_ENABLED) preferences.putInt(PREF_VOL_SINCE_RESERVOIR_FILL, volume_since_reservoir_fill);
+      }else{
+        //now is a passthrough volume since last filter, effectively
+        if (MQTT_ENABLED){ mqttpub_long(volume_since_reservoir_fill), "jurabridge/counts/water tank/volume");} 
+      }
     }
     if (update_volume_since_reservoir_fill_error() || first_publication){
       if (MQTT_ENABLED){ mqttpub_str(volume_since_reservoir_fill_error ? "TRUE" : "FALSE", "jurabridge/errors/reservoir low");}
