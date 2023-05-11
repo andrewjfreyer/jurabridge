@@ -18,13 +18,19 @@ I saw [this](https://github.com/ryanalden/esphome-jura-component/) and other sim
 
 # Table of Contents
 
+## Reverse Engineering 
+
 * [Jura ENA Micro 90 Command/Response Investigations & Interpretations](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Commands)
 
 * [Relevant Schematics](https://github.com/andrewjfreyer/jurabridge/wiki/Schematic(s))
 
+## Building & Programming the `jurabridge`
+
 * [Required & Optional Hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware)
 
 * [Arduino Setup & Upload](https://github.com/andrewjfreyer/jurabridge/wiki/Software)
+
+## Using `jurabridge` for Things
 
 * [MQTT Topics & Payloads](https://github.com/andrewjfreyer/jurabridge/wiki/MQTT-Topics)
 
@@ -33,6 +39,8 @@ I saw [this](https://github.com/ryanalden/esphome-jura-component/) and other sim
 * [Jura ENA Micro 90 Mods](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Modifications)
 
 * [Custom Preparation Scripts](https://github.com/andrewjfreyer/jurabridge/wiki/Custom-Recipe-Scripts)
+
+## Acknowledgements & Further Reading
 
 * [References](https://github.com/andrewjfreyer/jurabridge/wiki/References)
 
@@ -63,6 +71,8 @@ The data output from the machine is received and presented by [Home Assistant.](
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_on.png" alt="BridgeOn"/>
 </p>
 
+*Note: Although loosely compatible, this code is far too large to work with ESPHome; attempts to get it to work usefully with all sensors updating at reasonable intervals caused watchdog crashes.*
+
 <hr/>
 
 # Custom Preparations & Actions
@@ -71,9 +81,9 @@ I've found out that the default programming of the machine undersells/underutili
 
 All that to say, since I bought the machine, my expectation was set that "this is the best the Jura can do, and that's just fine." It is, after all, a superauto. We're sacrificing some quality for pushbutton convenience. However, somewhat surprising to me was that the ENA Micro 90 only uses ***7-10g of coffee per perparation*** - about half as much as I presumed. 
 
-It's of course easy to pull two shots back to back to get to a more traditional 15 - 20g per pull. But that requires that I sit and wait, read words on a display, and press buttons twice. Who has time for that. 
+It's of course easy to pull two shots back to back to get to a more traditional 15 - 20g per pull. But that requires that I sit and wait, read words on a display, clear any errors, and press buttons twice. Who has time for that?
 
-So lets just automate it. 
+Lets just automate it. 
 
 Here, because `jurabridge` obtains (and/or infers) accurate machine status information, any number of custom recipes or custom instruction sequences can be excuted, without needing to modify EEPROM or to orchestrate a valid sequence of `FN:` commands, or without waiting for unnecessary long delays and presuming machine state. This command+interrupt+statuswait technique ensures that the machine excutes its own in-built sequences, and there's no risk of incidentally damaging the brewgroup with custom instructions or custom brew sequences. 
 
@@ -85,7 +95,4 @@ Custom sequences/scripts can be made to allow the machine to produce a wide vari
 
 ## Disclaimer
 
-*This repository is only provided as information documenting a project I worked on. No warranty or claim that this will work for you is made. I have described some actions that involve modifying a Jura ENA Micro 90, which if performed will void any warranty you may have. Some of the modifications described below involve mains electricity; all appropriate cautions are expected to be, and were, followed. Some of the modifications are permanent and irreversible without purchasing replacement parts. Do not duplicate any of the following unless you know exactly what you are doing. I do not take anyresponsibility for any frustration, spousal irritation, injuries, or damage that may occur from any accident, lack of common sense or experience, or poor planning. Responsibility for any damages or distress resulting from reliance on any information made available here is not the responsibility of the author or other contributors. All rights are reserved.*
-
-*Note: Although loosely compatible, this code is far too large to work with ESPHome; attempts to get it to work usefully with all sensors updating at reasonable intervals caused watchdog crashes.*
-
+*This repository is only provided as information documenting a project I worked on. No warranty or claim that this will work for you is made. I have described some actions that involve modifying a Jura ENA Micro 90, which if performed will void any warranty you may have. Some of the modifications described below involve mains electricity; all appropriate cautions are expected to be, and were, followed. Some of these modifications are permanent and irreversible without purchasing replacement parts. Do not duplicate any of this project unless you know exactly what you are doing. I do not take anyresponsibility for any frustration, spousal irritation, bad coffee, injuries, or damage to your machine, your home plumbing, your home, or anyone or anything that may occur from any accident, lack of common sense or experience, poor planning, or following this project word for word. Responsibility for any effect, including damages or distress, resulting from reliance on any information made available here is not the responsibility of the author or other contributors. All rights are reserved.*
