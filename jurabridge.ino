@@ -21,7 +21,7 @@ PubSubClient client(espClient);
 
 //wifi definintions
 #define TAG "jurabridge"
-#define VERSION "0.4.25"
+#define VERSION "0.4.28"
 
 //for showing on the main display 
 #define CURRENT_VERSION_DISPLAY "DT: READY v4"
@@ -43,7 +43,8 @@ PubSubClient client(espClient);
 //-----------------------------------------------------------------
 // version notes
 //
-// 0.4.27 - custom execution id fixes? test fix of "recommend syste4m clean" early 
+// 0.4.28 - bugfixes for calculated values
+// 0.4.27 - custom execution id fixes? test fix of "recommend system clean" early 
 // 0.4.26 - custom execution id ; TODO: common terminology for recipe, automation, tastk wahttever
 // 0.4.25 - custom recipe work
 // 0.4.24 - remove custom hardcoded recipes, MQTT only
@@ -547,8 +548,6 @@ void setup() {
 //int for messing with the LED
 int led_iterator = 0;
 
-
-
 //main loop
 void loop() {
 
@@ -641,8 +640,8 @@ void brewing_position()                   {String cmd; cmd.reserve(20); cmd="FN:
 void tamper_press()                       {String cmd; cmd.reserve(20); cmd="FN:0B"; cmd2jura(cmd);} //verified
 void tamper_release()                     {String cmd; cmd.reserve(20); cmd="FN:0C"; cmd2jura(cmd);} //verified
 void empty_steam_valve()                  {String cmd; cmd.reserve(20); cmd="FN:29"; cmd2jura(cmd);} //verified, be careful here as overheating is very possible
-
 */
+
 //----------------------------------------------------------------------------
 //
 //      CUSTOM AUTOMATION / RECIPE HELPER METHODS
@@ -777,6 +776,14 @@ void mqttpub_str(const char* value, const char* path){
   }  
 }
 
+long validate_long_within_range(long inlong, long lowerbound = 0, long upperbound){
+  if (inlong > upperbound){
+    return upperbound;
+  }else if (inlong < lowerbound){
+    return lowerbound; 
+  }
+  return inlong
+}
 
 // -------------------------------------------------------------------
 //
@@ -825,6 +832,7 @@ void jura_update(){
     cs_update_interval = CS_UPDATE_INTERVAL_BREWING; 
     as_update_interval = AS_UPDATE_INTERVAL_BREWING; 
   }
+
   // -------------------------------------------------------------------------------------------------
   // DATA FROM EEPROM - WORD 1
   // 64 DATA BITS + 3 TAG BITS
@@ -870,7 +878,7 @@ void jura_update(){
       if (PREFERENCES_ENABLED) preferences.putBool(PREF_MRINSE_ERR, mrinse_recommended);
     }  
     if (update_spent_grounds() || first_publication) {
-      if (MQTT_ENABLED){mqttpub_long(100 - spent_beans_by_weight / 2, "jurabridge/counts/beans");} //change to percentage
+      if (MQTT_ENABLED){mqttpub_long(validate_long_within_range(100 - spent_beans_by_weight / 2, 0, 100), "jurabridge/counts/beans");} //change to percentage
       if (MQTT_ENABLED){mqttpub_long(spent_grounds, "jurabridge/counts/grounds");}
       if (MQTT_ENABLED){mqttpub_str(spent_grounds_error ? "TRUE" : "FALSE", "jurabridge/errors/grounds");}
       if (MODE_INVESTIGATION) ESP_LOGI(TAG,"Grounds: %d",spent_grounds);
@@ -1164,7 +1172,7 @@ void jura_update(){
     if (update_hopper_cover_error() || first_publication) { // hopper cover error needs to calculate first, else the timeouts will race
       if (MQTT_ENABLED){ 
         mqttpub_str(hopper_cover_error ? "TRUE" : "FALSE", "jurabridge/errors/beans");
-        mqttpub_long(100 - spent_beans_by_weight / 2, "jurabridge/counts/beans"); //change to percentage
+        mqttpub_long(validate_long_within_range(100 - spent_beans_by_weight / 2, 0, 100), "jurabridge/counts/beans"); //change to percentage
       }
       if (MODE_INVESTIGATION) ESP_LOGI(TAG,"Beans Hopper Error: %d", hopper_cover_error);
       if (PREFERENCES_ENABLED) preferences.putBool(PREF_BEAN_ERR, hopper_cover_error);
@@ -1172,7 +1180,6 @@ void jura_update(){
     }  
     if (update_drip_tray_error() || first_publication) {
       if (MQTT_ENABLED){ mqttpub_str(drip_tray_error ? "TRUE" : "FALSE", "jurabridge/errors/tray removed");}
-
       if (MODE_INVESTIGATION) ESP_LOGI(TAG,"Drip Tray Error: %d", drip_tray_error);
       if (PREFERENCES_ENABLED) preferences.putBool(PREF_DRIP_ERR, drip_tray_error);
     } 
@@ -1187,11 +1194,9 @@ void jura_update(){
     if (update_volume_since_reservoir_fill_error() || first_publication){
       if (MQTT_ENABLED){ mqttpub_str(volume_since_reservoir_fill_error ? "TRUE" : "FALSE", "jurabridge/errors/reservoir low");}
     }
-
     if (update_overdrainage_error() || first_publication){
       if (MQTT_ENABLED){ mqttpub_str(overdrainage_error ? "TRUE" : "FALSE", "jurabridge/errors/tray overfill");}
     }
-
     if (update_water_reservoir_error() || first_publication) {
       if (MQTT_ENABLED){ mqttpub_str(water_reservoir_error ? "TRUE" : "FALSE", "jurabridge/errors/water");}
       if (MODE_INVESTIGATION)  ESP_LOGI(TAG,"Water Reservoir Error: %d", water_reservoir_error);
@@ -1270,7 +1275,6 @@ void jura_update(){
     if (MQTT_ENABLED){
       //recommendations separate
       ESP_LOGI(TAG, "Recommendation State: %d");
-
       if  (recommendation_state == ENUM_SYSTEM_RECOMMENDATION_RINSE ) {mqttpub_str("RINSE RECOMMENDED", "jurabridge/recommendation");}
       else if  (recommendation_state == ENUM_SYSTEM_RECOMMENDATION_MRINSE ) {mqttpub_str("MILK RINSE RECOMMENDED", "jurabridge/recommendation");}
       else if  (recommendation_state == ENUM_SYSTEM_RECOMMENDATION_MCLEAN ) {mqttpub_str("MILK CLEAN RECOMMENDED", "jurabridge/recommendation");}
@@ -1542,7 +1546,7 @@ bool update_rt1 (){
 //#############################################################
 
 bool update_espresso_preparations (){
-  long comparator = rt1_val[0]; 
+  long comparator = validate_long_within_range(rt1_val[0], 0, 50000);
   bool timeout = false; if ((millis() - rt1_val_last_changed[0]) > RT1_UPDATE_TIMEOUT_MS) {timeout = true;}
   if (comparator != espresso_preparations || espresso_preparations == 0 || timeout){ 
     if (espresso_preparations > 0 && (!timeout)) {
@@ -1569,7 +1573,7 @@ bool update_espresso_preparations (){
 //#############################################################
 
 bool update_coffee_preparations (){
-  long comparator =  rt1_val[2]; 
+  long comparator =  validate_long_within_range(rt1_val[2], 0, 50000); 
   bool timeout = false; if ((millis() - rt1_val_last_changed[2]) > RT1_UPDATE_TIMEOUT_MS) {timeout = true;}
   if (comparator != coffee_preparations || coffee_preparations == 0 || timeout ){ 
     if (coffee_preparations > 0 && (!timeout)) { 
@@ -1595,7 +1599,7 @@ bool update_coffee_preparations (){
 //#############################################################
 
 bool update_cappuccino_preparations (){
-  long comparator = rt1_val[4]; 
+  long comparator =validate_long_within_range( rt1_val[4], 0, 50000); 
   bool timeout = false; if ((millis() - rt1_val_last_changed[4]) > RT1_UPDATE_TIMEOUT_MS) {timeout = true;}
   if (comparator != cappuccino_preparations || cappuccino_preparations == 0 || timeout){ 
     if (cappuccino_preparations > 0 && (!timeout)) {
@@ -1624,7 +1628,7 @@ bool update_cappuccino_preparations (){
 //#############################################################
 
 bool update_macchiato_preparations (){
-  long comparator = rt1_val[5]; 
+  long comparator = validate_long_within_range(rt1_val[5], 0, 50000); 
   bool timeout = false; if ((millis() - rt1_val_last_changed[5]) > RT1_UPDATE_TIMEOUT_MS) {timeout = true;}
   if (comparator != macchiato_preparations || macchiato_preparations == 0 || timeout){
     if (macchiato_preparations > 0 && (!timeout)) { 
@@ -1653,7 +1657,7 @@ bool update_macchiato_preparations (){
 //#############################################################
 
 bool update_low_pressure_pump_operations (){
-  long comparator = rt1_val[7]; 
+  long validate_long_within_range(comparator = rt1_val[7],0, 50000); 
   bool timeout = false; if ((millis() - rt1_val_last_changed[7]) > RT1_UPDATE_TIMEOUT_MS) {timeout = true;}
   if (comparator != low_pressure_pump_operations || low_pressure_pump_operations == 0 || timeout){ 
     if (low_pressure_pump_operations > 0 && (!timeout)) { 
@@ -1680,7 +1684,7 @@ bool update_low_pressure_pump_operations (){
 //#############################################################
 
 bool update_clean_cycles (){
-  long comparator = rt1_val[8]; 
+  long comparator = validate_long_within_range(rt1_val[8],0,50000); 
   bool timeout = false; if ((millis() - rt1_val_last_changed[8]) > RT1_UPDATE_TIMEOUT_MS) {timeout = true;}
   if (comparator != clean_cycles || clean_cycles == 0 || timeout){ 
     if (clean_cycles > 0 && (!timeout)) { 
@@ -1706,7 +1710,7 @@ bool update_clean_cycles (){
 //#############################################################
 
 bool update_spent_grounds (){
-  long comparator = rt1_val[14]; // strtol(rt1_str.substring(56, 60).c_str(), NULL, 16);
+  long comparator = validate_long_within_range(rt1_val[14],0,255); // strtol(rt1_str.substring(56, 60).c_str(), NULL, 16);
   bool timeout = false; if ((millis() - rt1_val_last_changed[14]) > RT1_UPDATE_TIMEOUT_MS) {timeout = true;}
   // 8 appears to be the trigger threshold for sending an error.
   // remember: once the tray is removed for more than 5 - 10 seconds, grounds counter is 
@@ -1745,7 +1749,7 @@ bool update_spent_grounds (){
 //#############################################################
 
 bool update_preparations_since_last_clean (){
-  long comparator = rt1_val[15]; 
+  long comparator = validate_long_within_range(rt1_val[15],0,50000); //range long enough to have never cleaned th emachine;;; yuck
   bool timeout = false; if ((millis() - rt1_val_last_changed[15] ) > RT1_UPDATE_TIMEOUT_MS) {timeout = true;}
   if (comparator != preparations_since_last_clean || timeout){ 
     preparations_since_last_clean = comparator; 
@@ -1827,7 +1831,7 @@ bool update_rt2 (){
 //#############################################################
 
 bool update_high_pressure_pump_operations (){
-  long comparator = rt2_val[0]; 
+  long comparator = validate_long_within_range(rt2_val[0],0,50000); 
   bool timeout = false; if ((millis() - rt2_val_last_changed[0] ) > RT2_UPDATE_TIMEOUT_MS) {timeout = true;}
   if (comparator != high_pressure_pump_operations || timeout){ 
     high_pressure_pump_operations = comparator; 
@@ -1852,7 +1856,7 @@ bool update_high_pressure_pump_operations (){
 //#############################################################
 
 bool update_milk_foam_preparations (){
-  long comparator = rt2_val[3]; // strtol(rt2_str.substring(12, 16).c_str(), NULL, 16);
+  long comparator = validate_long_within_range(rt2_val[3],0,50000); // strtol(rt2_str.substring(12, 16).c_str(), NULL, 16);
   bool timeout = false; if ((millis() - rt2_val_last_changed[3]) > RT2_UPDATE_TIMEOUT_MS) {timeout = true;}
   if (comparator != milk_foam_preparations || timeout){
     if (milk_foam_preparations > 0 && (!timeout)) {
@@ -1877,7 +1881,7 @@ bool update_milk_foam_preparations (){
 //#############################################################
 
 bool update_water_preparations (){
-  long comparator =  rt2_val[4]; 
+  long comparator = validate_long_within_range( rt2_val[4], 0, 50000); 
   bool timeout = false; if ((millis() - rt2_val_last_changed[4]) > RT2_UPDATE_TIMEOUT_MS) {timeout = true;}
   if (comparator != water_preparations || timeout){ 
     if (water_preparations > 0 && (!timeout)) { 
@@ -1904,7 +1908,7 @@ bool update_water_preparations (){
 //#############################################################
 
 bool update_grinder_operations (){
-  long comparator =  rt2_val[5]; 
+  long comparator =  validate_long_within_range(rt2_val[5],0,50000); 
   bool timeout = false; if ((millis() - rt2_val_last_changed[5]) > RT2_UPDATE_TIMEOUT_MS) {timeout = true;}
   if (comparator != grinder_operations || timeout){ 
     grinder_operations = comparator; 
@@ -1923,7 +1927,7 @@ bool update_grinder_operations (){
 //#############################################################
 
 bool update_milk_clean_total (){
-  long comparator = rt2_val[11];
+  long comparator = validate_long_within_range(rt2_val[11],0,50000);
   bool timeout = false; if ((millis() - rt2_val_last_changed[11]) > RT2_UPDATE_TIMEOUT_MS) {timeout = true;}
   if (comparator != milk_clean_total || timeout){ 
     if (milk_clean_total > 0 && (!timeout)) {
@@ -2051,7 +2055,6 @@ bool update_as (){
   return hasChanged;
 }
 
-
 // -------------------------------------------------------------------------------------------------
 // DATA FROM HZ - Heizung Zustand = Heater State; hydraulisch? Hydrauliksystem? ?
 // 44 DATA BITS + 3 TAG BITS
@@ -2152,7 +2155,7 @@ bool update_hz (){
 //
 // -------------------------------------------------------------------------------------------------
 bool update_rinse_recommended(){
-  long comparator = hz_val[2]; //strtol(hz_str.substring(2, 3).c_str(), NULL, 2); 
+  long comparator = validate_long_within_range(hz_val[2],0,1); //strtol(hz_str.substring(2, 3).c_str(), NULL, 2);  TODO:shold probably be bool
   bool timeout = false; if ((millis() - hz_val_last_changed[2]) > HZ_UPDATE_TIMEOUT_MS) {timeout = true;}
   if (comparator != rinse_recommended || timeout){ 
     rinse_recommended = comparator; 
@@ -2163,7 +2166,7 @@ bool update_rinse_recommended(){
 }
 
 bool update_thermoblock_preheated(){
-  long comparator = hz_val[4]; 
+  long comparator = validate_long_within_range(hz_val[4],0,1); 
   bool timeout = false; if ((millis() - hz_val_last_changed[4]) > HZ_UPDATE_TIMEOUT_MS) {timeout = true;}
   if (comparator != thermoblock_preheated || timeout){ 
     thermoblock_preheated = comparator; 
@@ -2174,7 +2177,7 @@ bool update_thermoblock_preheated(){
 }
 
 bool update_brewgroup_init_position (){
-  long comparator = hz_val[5]; 
+  long comparator = validate_long_within_range(hz_val[5],0,1); 
   bool timeout = false; if ((millis() - hz_val_last_changed[5]) > HZ_UPDATE_TIMEOUT_MS) {timeout = true;} 
   if (comparator != brewgroup_init_position || timeout){ 
     brewgroup_init_position = comparator; 
@@ -2235,7 +2238,7 @@ bool update_output_valve (){
 // or whether we're pushing through the main valve)
 
 bool update_last_dispense_volume (){
-  long comparator =  hz_val[13] * 0.52845528;
+  long comparator =  validate_long_within_range(hz_val[13] * 0.52845528, 0, 500); // worth adjusting from time to time
   bool timeout = false; if ((millis() - hz_val_last_changed[13]) > HZ_UPDATE_TIMEOUT_MS) {timeout = true;} 
   if (comparator != last_dispense_volume || last_dispense_volume == 0 || timeout){ 
     //if last_dispense is reset to zero, we have started a new brew controller
@@ -2262,7 +2265,7 @@ bool update_last_dispense_volume (){
 // presumed a drop of 10% in temperature.ceramic to the spout
 
 bool update_thermoblock_temperature () {
-  long comparator =  hz_val[14] / 10.0; //strtol(hz_str.substring(27, 31).c_str(), NULL, 16) / 10.0; //based on observation
+  long comparator =  validate_long_within_range(hz_val[14] / 10.0, 0, 200); //strtol(hz_str.substring(27, 31).c_str(), NULL, 16) / 10.0; //based on observation
   bool timeout = false; if ((millis() - hz_val_last_changed[14]) > HZ_UPDATE_TIMEOUT_MS) {timeout = true;} 
   if (comparator != thermoblock_temperature || thermoblock_temperature == 0 || timeout){
     thermoblock_temperature = comparator; 
@@ -2440,7 +2443,7 @@ bool update_cs (){
 //#############################################################
 
 bool update_ceramic_valve_temperature (){
-  long comparator =  cs_val[0] / 10.0; 
+  long comparator =  validate_long_within_range(cs_val[0] / 10.0, 0, 200); 
   bool timeout = false; if ((millis() - cs_val_last_changed[16]) > CS_UPDATE_TIMEOUT_MS) {timeout = true;} 
   if (comparator != ceramic_valve_temperature || ceramic_valve_temperature == 0 || timeout){ 
     ceramic_valve_temperature = comparator; 
@@ -2621,6 +2624,12 @@ bool update_pump_duty_cycle (){
   //timeout
   bool timeout = false; if ((millis() - cs_val_last_changed[5]) > CS_UPDATE_TIMEOUT_MS) {timeout = true;} 
   bool off_timeout = millis() - pump_inactive_start > PUMP_TIMEOUT;
+
+  //default to 100% duty cycle when the pump is active
+  if (pump_active && comparator == 0){
+    //presume full-on, which is true by observation
+    comparator = 100;
+  }
 
   // duty cycle is multiple bytes??
   if (comparator != pump_duty_cycle || pump_duty_cycle == 0 || timeout){
