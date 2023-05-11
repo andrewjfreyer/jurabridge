@@ -20,32 +20,32 @@ I saw [this](https://github.com/ryanalden/esphome-jura-component/) and other sim
 
 -  Reverse Engineering 
 
-* [Jura ENA Micro 90 Command/Response Investigations & Interpretations](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Commands)
+  * [Jura ENA Micro 90 Command/Response Investigations & Interpretations](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Commands)
 
-* [Relevant Schematics](https://github.com/andrewjfreyer/jurabridge/wiki/Schematic(s))
+  * [Relevant Schematics](https://github.com/andrewjfreyer/jurabridge/wiki/Schematic(s))
 
 
 -  Building & Programming the `jurabridge`
 
-* [Required & Optional Hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware)
+  * [Required & Optional Hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware)
 
-* [Arduino Setup & Upload](https://github.com/andrewjfreyer/jurabridge/wiki/Software)
+  * [Arduino Setup & Upload](https://github.com/andrewjfreyer/jurabridge/wiki/Software)
 
 
 -  Using `jurabridge` for Things
 
-* [MQTT Topics & Payloads](https://github.com/andrewjfreyer/jurabridge/wiki/MQTT-Topics)
+  * [MQTT Topics & Payloads](https://github.com/andrewjfreyer/jurabridge/wiki/MQTT-Topics)
 
-* [Home Assistant Configuration Example](https://github.com/andrewjfreyer/jurabridge/wiki/Home-Assistant-Configuration)
+  * [Home Assistant Configuration Example](https://github.com/andrewjfreyer/jurabridge/wiki/Home-Assistant-Configuration)
 
-* [Jura ENA Micro 90 Mods](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Modifications)
+  * [Jura ENA Micro 90 Mods](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Modifications)
 
-* [Custom Preparation Scripts](https://github.com/andrewjfreyer/jurabridge/wiki/Custom-Recipe-Scripts)
+  * [Custom Preparation Scripts](https://github.com/andrewjfreyer/jurabridge/wiki/Custom-Recipe-Scripts)
 
 
 -  Acknowledgements & Further Reading
 
-* [References](https://github.com/andrewjfreyer/jurabridge/wiki/References)
+ * [References](https://github.com/andrewjfreyer/jurabridge/wiki/References)
 
 
 # Home Assistant
