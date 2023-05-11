@@ -18,34 +18,31 @@ I saw [this](https://github.com/ryanalden/esphome-jura-component/) and other sim
 
 # Table of Contents
 
--  Reverse Engineering 
+### Reverse Engineering 
 
-  * [Jura ENA Micro 90 Command/Response Investigations & Interpretations](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Commands)
+* [Jura ENA Micro 90 Command/Response Investigations & Interpretations](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Commands)
 
-  * [Relevant Schematics](https://github.com/andrewjfreyer/jurabridge/wiki/Schematic(s))
+* [Relevant Schematics](https://github.com/andrewjfreyer/jurabridge/wiki/Schematic(s))
 
+### Building & Programming the `jurabridge`
 
--  Building & Programming the `jurabridge`
+* [Required & Optional Hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware)
 
-  * [Required & Optional Hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware)
+* [Arduino Setup & Upload](https://github.com/andrewjfreyer/jurabridge/wiki/Software)
 
-  * [Arduino Setup & Upload](https://github.com/andrewjfreyer/jurabridge/wiki/Software)
+### Using `jurabridge` for Things
 
+* [MQTT Topics & Payloads](https://github.com/andrewjfreyer/jurabridge/wiki/MQTT-Topics)
 
--  Using `jurabridge` for Things
+* [Home Assistant Configuration Example](https://github.com/andrewjfreyer/jurabridge/wiki/Home-Assistant-Configuration)
 
-  * [MQTT Topics & Payloads](https://github.com/andrewjfreyer/jurabridge/wiki/MQTT-Topics)
+* [Jura ENA Micro 90 Mods](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Modifications)
 
-  * [Home Assistant Configuration Example](https://github.com/andrewjfreyer/jurabridge/wiki/Home-Assistant-Configuration)
+* [Custom Preparation Scripts](https://github.com/andrewjfreyer/jurabridge/wiki/Custom-Recipe-Scripts)
 
-  * [Jura ENA Micro 90 Mods](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Modifications)
+### Acknowledgements & Further Reading
 
-  * [Custom Preparation Scripts](https://github.com/andrewjfreyer/jurabridge/wiki/Custom-Recipe-Scripts)
-
-
--  Acknowledgements & Further Reading
-
- * [References](https://github.com/andrewjfreyer/jurabridge/wiki/References)
+* [References](https://github.com/andrewjfreyer/jurabridge/wiki/References)
 
 
 # Home Assistant
