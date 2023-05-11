@@ -30,7 +30,7 @@ I saw [this](https://github.com/ryanalden/esphome-jura-component/) and other sim
 
 * [Arduino Setup & Upload](https://github.com/andrewjfreyer/jurabridge/wiki/Software)
 
-### Using `jurabridge` for Things
+### Using `jurabridge` for Stuff
 
 * [MQTT Topics & Payloads](https://github.com/andrewjfreyer/jurabridge/wiki/MQTT-Topics)
 
