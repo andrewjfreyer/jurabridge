@@ -21,7 +21,7 @@ PubSubClient client(espClient);
 
 //wifi definintions
 #define TAG "jurabridge"
-#define VERSION "0.4.29"
+#define VERSION "0.4.5"
 
 //is the machine plumbed?
 #define IS_PLUMBED true
@@ -43,9 +43,35 @@ PubSubClient client(espClient);
 #define HZ_INVESTIGATION false
 #define AS_INVESTIGATION false
 
+// ---------------------------------
+#define HOLD_TIMEOUT 500
+#define MENU_TIMEOUT 30000
+#define MIN_PRESSTIME 100
+
+//pin locations for menu
+int button_select_pin = 21;
+bool button_select_pin_value = false;
+
+//digital 
+int secret_menu_index = 0;
+int secret_menu_index_previous = 0;
+
+#define SECRET_MENU_MAX_SIZE 10
+int current_secret_menu_size = 0;
+const char * secret_menu_script_names[SECRET_MENU_MAX_SIZE];
+
+//receive secrete menu
+#define SECRET_MENU_ENABLE true
+
 //-----------------------------------------------------------------
 // version notes
 //
+// 0.4.6 - improve speed of flow sensor timeout; add grounds counter
+// 0.4.5 - secret menu dynamically loads from MQTT!
+// 0.4.4 - mqtt secret menu; major feature update
+// -----
+// 0.4.31 - fix bug with pump active
+// 0.4.30 - secret menu testing
 // 0.4.29 - tank volume as percentage only if not plumbed
 // 0.4.28 - bugfixes for calculated values
 // 0.4.27 - custom execution id fixes? test fix of "recommend system clean" early 
@@ -249,6 +275,7 @@ unsigned long system_state_previous;
 //eeprom stats
 unsigned long grinder_operations;
 unsigned long espresso_preparations;
+unsigned long preground_preparations;
 unsigned long coffee_preparations;
 unsigned long cappuccino_preparations;
 unsigned long macchiato_preparations;
@@ -345,6 +372,11 @@ bool isCeramicValveUnknownPosition;
 //probably figure this out differently to use char arrays later
 String last_custom_id;
 
+//Secret menu stuffs
+bool secret_menu_active;
+int secret_menu_init_time;
+#define SECRET_MENU_TIMEOUT 30000
+
 /*
 
 cmd2jura
@@ -436,6 +468,9 @@ void setup() {
   JuraSerial.begin(9600,SERIAL_8N1, GPIORX, GPIOTX);
   JuraSerial.setRxTimeout(UART_TIMEOUT);
 
+  //button menu
+  pinMode(button_select_pin, INPUT_PULLUP);  
+
   //mqtt set first
   first_publication = true;
 
@@ -466,6 +501,7 @@ void setup() {
     spent_beans_by_weight = preferences.getInt( PREF_HOPPER_VOLUME, 0);
 
     //get durable properties
+    preground_preparations = preferences.getInt( PREF_NUM_PREGROUND, 0);
     grinder_operations = preferences.getInt( PREF_NUM_GRINDS, 0);
     espresso_preparations = preferences.getInt( PREF_NUM_ESPRESSO, 0);
     coffee_preparations = preferences.getInt( PREF_NUM_COFFEE, 0);
@@ -519,7 +555,6 @@ void setup() {
   //ensure we're connected to Wi-Fi
   set_display_WiFiInit();
   while (WiFi.status() != WL_CONNECTED) {
-    Serial.print('.');
     delay(1000);
   }
   Serial.println(WiFi.localIP());
@@ -534,6 +569,33 @@ void setup() {
 
   //connect to qmtt
   mqtt_reconnect();
+
+  //refresh menu
+  set_display_MENUInit();
+  mqttpub_long(0, "jurabridge/secret menu/update");
+
+  //fun shit 
+  cmd2jura("DT:         S");
+  cmd2jura("DT:        SE");
+  cmd2jura("DT:       SEC");
+  cmd2jura("DT:      SECR");
+  cmd2jura("DT:     SECRE");
+  cmd2jura("DT:    SECRET");
+  cmd2jura("DT:   SECRET ");
+  cmd2jura("DT:  SECRET M");
+  cmd2jura("DT: SECRET ME");
+  cmd2jura("DT:SECRET MEN");
+  cmd2jura("DT:ECRET MENU");
+  cmd2jura("DT:CRET MENU");
+  cmd2jura("DT:RET MENU");
+  cmd2jura("DT:ET MENU");
+  cmd2jura("DT:T MENU");
+  cmd2jura("DT: MENU");
+  cmd2jura("DT:MENU");
+  cmd2jura("DT:ENU");
+  cmd2jura("DT:NU");
+  cmd2jura("DT:U");
+  cmd2jura("DT: ");
 
   //move jura uart stuffs to core 2
   xTaskCreatePinnedToCore(
@@ -551,6 +613,7 @@ void setup() {
 
 //int for messing with the LED
 int led_iterator = 0;
+int button_presstime = 0;
 
 //main loop
 void loop() {
@@ -564,6 +627,13 @@ void loop() {
   //handle mqtt client in loop
   client.loop();
 
+  //only if we're actually interseted in the menu
+  if (SECRET_MENU_ENABLE && system_ready){
+    handle_secret_menu();
+  }else{
+    secret_menu_active = false;
+  }
+
   //light to indicate working
   led_iterator = (led_iterator + 1) % 20000;
   digitalWrite(GPIOLEDPULSE, (led_iterator < 10000) ? LOW : HIGH);
@@ -574,18 +644,14 @@ void loop() {
 //      CUSTOM DISPLAY
 //
 //----------------------------------------------------------------------------
-void set_display_automation_step_1()        {String cmd; cmd.reserve(20); cmd="DT:  STEP 1  "; cmd2jura(cmd);} 
-void set_display_automation_step_2()        {String cmd; cmd.reserve(20); cmd="DT:  STEP 2  "; cmd2jura(cmd);} 
-void set_display_automation_add_shot()      {String cmd; cmd.reserve(20); cmd="DT: ADD SHOT "; cmd2jura(cmd);} 
-void set_display_custom()                   {String cmd; cmd.reserve(20); cmd="DT:  CUSTOM  "; cmd2jura(cmd);} 
-void set_display_wait()                     {String cmd; cmd.reserve(20); cmd="DT:   WAIT   "; cmd2jura(cmd);} 
-void set_display_done()                     {String cmd; cmd.reserve(20); cmd="DT:   DONE   "; cmd2jura(cmd);} 
-void set_display_interrupt()                {String cmd; cmd.reserve(20); cmd="DT:    :(    "; cmd2jura(cmd);} 
-void set_display_bridge_ready()             {String cmd; cmd.reserve(20); cmd=CURRENT_VERSION_DISPLAY; cmd2jura(cmd);}
+void set_display_done()                   {String cmd; cmd.reserve(20); cmd="DT:    :)    "; cmd2jura(cmd);} 
+void set_display_interrupt()              {String cmd; cmd.reserve(20); cmd="DT:    :(    "; cmd2jura(cmd);} 
+void set_display_bridge_ready()           {String cmd; cmd.reserve(20); cmd=CURRENT_VERSION_DISPLAY; cmd2jura(cmd);}
 
 //Synching display
 void set_display_WiFiInit()             {String cmd; cmd.reserve(20); cmd="DT:  WIFI... "; cmd2jura(cmd);}
 void set_display_MQTTInit()             {String cmd; cmd.reserve(20); cmd="DT:  MQTT... "; cmd2jura(cmd);}
+void set_display_MENUInit()             {String cmd; cmd.reserve(20); cmd="DT:  MENU... "; cmd2jura(cmd);}
 void set_display_syncing_0()            {String cmd; cmd.reserve(20); cmd="DT:  SYNC  "; cmd2jura(cmd);}
 void set_display_syncing_1()            {String cmd; cmd.reserve(20); cmd="DT:  SYNC. "; cmd2jura(cmd);}
 void set_display_syncing_2()            {String cmd; cmd.reserve(20); cmd="DT:  SYNC.. "; cmd2jura(cmd);}
@@ -780,32 +846,24 @@ void mqttpub_str(const char* value, const char* path){
   }  
 }
 
-long validate_long_within_range(long inlong, long lowerbound = 0, long upperbound){
+long validate_long_within_range(long inlong, long lowerbound , long upperbound){
   if (inlong > upperbound){
     return upperbound;
   }else if (inlong < lowerbound){
     return lowerbound; 
   }
-  return inlong
+  return inlong;
 }
 
 // -------------------------------------------------------------------
 //
-//    MAIN JURA CHECKING LOOPS
+//    MAIN JURA CHECKING LOOPS; TODO: check 
 //
 // -------------------------------------------------------------------
 
 // secondary loop on second core
 void jura_bridge (void * parameter) {
-
-  //unnecssary animation??it's for fun. sometimes you can have fun too
-  for (int i; i < 3; i++){
-    set_display_syncing_0();  delay(200);
-    set_display_syncing_1();  delay(200);
-    set_display_syncing_2();  delay(200);
-    set_display_syncing_3();  delay(200);
-  }
-  
+ 
   //set display to ready mode
   set_display_bridge_ready();
 
@@ -826,6 +884,12 @@ void jura_update(){
     hz_update_interval = HZ_UPDATE_INTERVAL_STANDBY; 
     cs_update_interval = CS_UPDATE_INTERVAL_STANDBY; 
     as_update_interval = AS_UPDATE_INTERVAL_STANDBY; 
+
+    //check display 
+    if (secret_menu_active){
+        //block all until we're out of the menu
+        return;
+    }
 
   }else{
     rt1_update_interval = RT1_UPDATE_INTERVAL_BREWING;
@@ -860,6 +924,12 @@ void jura_update(){
       if (PREFERENCES_ENABLED) preferences.putInt(PREF_NUM_COFFEE, coffee_preparations); 
       if (MQTT_ENABLED){ mqttpub_long(coffee_preparations, "jurabridge/counts/coffee");}
       if (MODE_INVESTIGATION) ESP_LOGI(TAG,"Coffee: %d",coffee_preparations);
+    }
+    if (update_preground_preparations() || first_publication) {
+      count_changed = true;
+      if (PREFERENCES_ENABLED) preferences.putInt(PREF_NUM_PREGROUND, preground_preparations); 
+      if (MQTT_ENABLED){ mqttpub_long(preground_preparations, "jurabridge/counts/preground");}
+      if (MODE_INVESTIGATION) ESP_LOGI(TAG,"Preground: %d",preground_preparations);
     }  
     if (update_cappuccino_preparations() || first_publication) {
       count_changed = true;
@@ -913,7 +983,9 @@ void jura_update(){
     if (UNHANDLED_INVESTIGATION && EEPROM_INVESTIGATION){
       for (int i = 0; i< 16; i++){
         if (rt1_val[i] != rt1_val_prev[i] && !rt1_handled_change[i]){
-          ESP_LOGI(TAG,"  rt1[%d] %d -> %d",i,rt1_val_prev[i], rt1_val[i]);
+          if (rt1_val_prev[i] > 0){
+            ESP_LOGI(TAG,"  rt1[%d] %d -> %d",i,rt1_val_prev[i], rt1_val[i]);
+          }
         }
       }
     }
@@ -977,7 +1049,9 @@ void jura_update(){
     if (UNHANDLED_INVESTIGATION && EEPROM_INVESTIGATION){
       for (int i = 0; i< 16; i++){
         if (rt2_val[i] != rt2_val_prev[i]  && ! rt2_handled_change[i] ){
-          ESP_LOGI(TAG,"  rt2[%d] %d -> %d",i,rt2_val_prev[i], rt2_val[i]);
+          if (rt2_val_prev[i] > 0){
+            ESP_LOGI(TAG,"  rt2[%d] %d -> %d",i,rt2_val_prev[i], rt2_val[i]);
+          }        
         }
       }
     }
@@ -1197,7 +1271,7 @@ void jura_update(){
         if (PREFERENCES_ENABLED) preferences.putInt(PREF_VOL_SINCE_RESERVOIR_FILL, volume_since_reservoir_fill);
       }else{
         //now is a passthrough volume since last filter, effectively
-        if (MQTT_ENABLED){ mqttpub_long(volume_since_reservoir_fill), "jurabridge/counts/water tank/volume");} 
+        if (MQTT_ENABLED){ mqttpub_long(volume_since_reservoir_fill, "jurabridge/counts/water tank/volume");} 
       }
     }
     if (update_volume_since_reservoir_fill_error() || first_publication){
@@ -1261,6 +1335,8 @@ void jura_update(){
         mqttpub_str("ESPRESSO", "jurabridge/history");
       } else if (last_task == ENUM_CAPPUCCINO){
         mqttpub_str("CAPPUCCINO", "jurabridge/history");
+      } else if (last_task == ENUM_PREGROUND){
+        mqttpub_str("PREGROUND", "jurabridge/history");
       } else if (last_task == ENUM_COFFEE){
         mqttpub_str("COFFEE", "jurabridge/history");
       } else if (last_task == ENUM_MACCHIATO){
@@ -1283,7 +1359,6 @@ void jura_update(){
   if ((((loop_iterator % status_update_interval) == 0 ) && update_recommendation_state()) || first_publication) {
     if (MQTT_ENABLED){
       //recommendations separate
-      ESP_LOGI(TAG, "Recommendation State: %d");
       if  (recommendation_state == ENUM_SYSTEM_RECOMMENDATION_RINSE ) {mqttpub_str("RINSE RECOMMENDED", "jurabridge/recommendation");}
       else if  (recommendation_state == ENUM_SYSTEM_RECOMMENDATION_MRINSE ) {mqttpub_str("MILK RINSE RECOMMENDED", "jurabridge/recommendation");}
       else if  (recommendation_state == ENUM_SYSTEM_RECOMMENDATION_MCLEAN ) {mqttpub_str("MILK CLEAN RECOMMENDED", "jurabridge/recommendation");}
@@ -1601,6 +1676,32 @@ bool update_coffee_preparations (){
 
 //#############################################################
 //
+//  RT1 - eeprom 3rd
+//
+//   preground
+//
+//#############################################################
+
+bool update_preground_preparations (){
+  long comparator =  validate_long_within_range(rt1_val[6], 0, 50000); 
+  bool timeout = false; if ((millis() - rt1_val_last_changed[6]) > RT1_UPDATE_TIMEOUT_MS) {timeout = true;}
+  if (comparator != preground_preparations || preground_preparations == 0 || timeout ){ 
+    if (preground_preparations > 0 && (!timeout)) { 
+      drainage_since_tray_empty += DEFAULT_DRAINAGE_ML;  volume_since_reservoir_fill += last_dispense_volume;
+      last_task = ENUM_PREGROUND; 
+      if (next_counter_is_custom_automation_part) {
+        last_task = ENUM_CUSTOM; next_counter_is_custom_automation_part = false;
+      }
+    }
+    rt1_handled_change[6] = true; 
+    preground_preparations = comparator; 
+    return true; 
+  }
+  return false;
+}
+
+//#############################################################
+//
 //  RT1 - eeprom 5th
 //
 //   cappuccino
@@ -1666,7 +1767,7 @@ bool update_macchiato_preparations (){
 //#############################################################
 
 bool update_low_pressure_pump_operations (){
-  long validate_long_within_range(comparator = rt1_val[7],0, 50000); 
+  long comparator = validate_long_within_range(rt1_val[7],0, 50000); 
   bool timeout = false; if ((millis() - rt1_val_last_changed[7]) > RT1_UPDATE_TIMEOUT_MS) {timeout = true;}
   if (comparator != low_pressure_pump_operations || low_pressure_pump_operations == 0 || timeout){ 
     if (low_pressure_pump_operations > 0 && (!timeout)) { 
@@ -1787,7 +1888,7 @@ bool update_preparations_since_last_clean (){
 // EEPROM 7    28  31  4 BYTE HEX - ???
 // EEPROM 8    32  35  4 BYTE HEX - ???
 // EEPROM 9   36  39  4 BYTE HEX - ???
-// EEPROM 10   40  43  4 BYTE HEX - --- 90 dec when filter needed
+// EEPROM 10   40  43  4 BYTE HEX - ??? - thought re,ate to filter, but not related to filter... 
 // EEPROM 11   44  47  4 BYTE HEX - milk clean total
 // EEPROM 12   48  51  4 BYTE HEX - ??? <-- number
 // EEPROM 13   52  55  4 BYTE HEX - ??? 
@@ -2635,7 +2736,7 @@ bool update_pump_duty_cycle (){
   bool off_timeout = millis() - pump_inactive_start > PUMP_TIMEOUT;
 
   //default to 100% duty cycle when the pump is active
-  if (pump_active && comparator == 0){
+  if (flowing && comparator == 0){
     //presume full-on, which is true by observation
     comparator = 100;
   }
@@ -3035,7 +3136,7 @@ bool update_flow_meter_timeout (){
   //check duration here again
   long duration = (ic_val_last_changed[1] - ic_val_prev_last_changed[1]); 
   long timeout = (millis() - ic_val_last_changed[1]) ; 
-  bool timed_out =  (timeout > 5000);
+  bool timed_out =  (timeout > FLOW_SENSOR_TIMEOUT);
 
   // threshold by observation, depends on speed of sampling
   // MAY be unsuitable if future chagnes add to processing load
@@ -3118,6 +3219,7 @@ void mqtt_reconnect() {
       delay(200);
       client.subscribe("jurabridge/command");
       client.subscribe("jurabridge/menu");
+      client.subscribe("jurabridge/secret menu");
       client.subscribe("homeassistant/status");
 
       //first messages
@@ -3132,7 +3234,7 @@ void mqtt_reconnect() {
 
 //mqtt callback goes here
 void callback(char* topic, byte* message, unsigned int length) {
- 
+
   //send messageString messageTemp;
   String messageTemp; 
   for (int i = 0; i < length; i++) {
@@ -3148,11 +3250,49 @@ void callback(char* topic, byte* message, unsigned int length) {
         //home assisatnt has restarted
         //TODO: eventually, we'll do something more sophistocated here; kill the task, but not wifi?
         ESP.restart();
-      }else {
-
       }
+  //valid menu item
+  }else if (String(topic) == "jurabridge/secret menu") {
+    
+    //try to serialize string 
+    StaticJsonDocument<512> secret_menu_json_string;
+    DeserializationError json_deserialization_error = deserializeJson(secret_menu_json_string, messageTemp.c_str());
 
-  //valid command or skip? 
+    // if we failed, then we have an old format command!
+    if (json_deserialization_error) {
+      Serial.print(F("Deserialize Error: "));
+      Serial.println(json_deserialization_error.f_str());
+
+    }else{
+
+      //set the array
+      JsonArray secret_menu_items = secret_menu_json_string.as<JsonArray>();
+
+      //legit?
+      if (secret_menu_items.size() > 0){
+        success = true;
+        //clear current menu
+        current_secret_menu_size = 0;
+        for (int i = 0 ;i < SECRET_MENU_MAX_SIZE; i++){
+          secret_menu_script_names[i] = "";
+        }
+
+        //repopulate instruted menu
+        current_secret_menu_size = secret_menu_items.size() + 1;
+        for (int index = 0; index < secret_menu_items.size(); index ++){
+          if (index < SECRET_MENU_MAX_SIZE){
+            secret_menu_script_names[index] = secret_menu_items[index].as<const char*>();
+          }
+        }
+        //add exit option as last menu item
+        secret_menu_script_names[secret_menu_items.size()]  = "DT:   EXIT";
+
+        //we don't need thesmile shit here
+        set_display_bridge_ready();
+        return;
+      }
+    }
+
   }else if (String(topic) == "jurabridge/command") {
 
     //are we executing another? 
@@ -3177,118 +3317,12 @@ void callback(char* topic, byte* message, unsigned int length) {
 
       //custom 
       custom_automation_start();
-      
-      //parse as JSON array
       JsonArray array = doc.as<JsonArray>();
-      for(JsonVariant instruction : array) {
-
-        /*
-          ************************************************************************************************
-          JURA ENA 90 Command Sequence API v0.1
-
-          JSON OBJECT WITH COMMANDS IN ORDER, IN DESURED SEQUENCE
-
-          each command is an array [cmd, value]
-
-          - wait commands will halt a sequence until the specified condition is satisfied
-            once the condition is satisfied, will immediately move to the next
-            item in the sequence
-          
-          - make commands press the button as programmed in the machine
-
-          - interrupt command will press the 'water' button to interrupt a curerntly-ongong automation
-
-          ************************************************************************************************
-          MQTT Format: 
-
-          Topic:              jurabridge/command
-          Message/Payload:    
-                              [
-                                ["id", "DOUBLE RISTRETTO"],
-                                ["msg", " MORNING!"],
-                                ["ready"],
-                                ["delay", 1],
-                                ["msg", " PRE-WARM "],
-                                ["delay", 1],
-                                ["water"],
-                                ["pump"],
-                                ["dispense", 100],
-                                ["msg", "   WAIT"],
-                                ["interrupt"],
-                                ["ready"],
-                                ["delay", 4],
-                                ["msg", " EMPTY CUP"],
-                                ["delay", 3],
-                                ["msg", " EMPTY 5"],
-                                ["delay", 1],
-                                ["msg", " EMPTY 4"],
-                                ["delay", 1],
-                                ["msg", " EMPTY 3"],
-                                ["delay", 1],
-                                ["msg", " EMPTY 2"],
-                                ["delay", 1],
-                                ["msg", " EMPTY 1"],
-                                ["delay", 3],
-                                ["msg", " STEP 1"],
-                                ["delay", 3],
-                                ["ready"],
-                                ["espresso"],
-                                ["pump"],
-                                ["dispense", 30],
-                                ["interrupt"],
-                                ["msg", "  STEP 2"],
-                                ["delay", 2],
-                                ["ready"],
-                                ["espresso"],
-                                ["pump"],
-                                ["dispense", 30],
-                                ["interrupt"],
-                                ["msg", "    :)"],
-                              ]
-
-         ************************************************************************************************
-        */
-
-        //extract into comands 
-        const char* command = instruction[0];
-
-        // ------ CUSTOM DISPLAY?
-        if (strcmp(command, "msg") == 0 )       {
-          String message =  instruction[1].as<String>();
-          String prefix = "DT:";
-          cmd2jura(prefix + message);
-        } 
-
-        // ------ WAIT READY OPERATION
-        if (strcmp(command, "ready") == 0 )     {if (wait_ready()){continue;}else{success=false;break;}}
-        if (strcmp(command, "pump") == 0 )      {if (wait_pump_start()){continue;}else{success=false;break;}}
-        if (strcmp(command, "heat") == 0 )      {if (wait_thermoblock_ready()){continue;}else{success=false;break;}}
-        if (strcmp(command, "dispense") == 0 )  {if (wait_dispense_ml(instruction[1])){continue;}else{success=false;break;}}
-
-        // ------ PRESS BUTTONS
-        if (strcmp(command, "espresso") == 0 )  {press_button_espresso();}
-        if (strcmp(command, "cappucino") == 0 ) {press_button_cappuccino();}
-        if (strcmp(command, "coffee") == 0 )    {press_button_coffee();}
-        if (strcmp(command, "macchiato") == 0 ) {press_button_macchiato();}
-        if (strcmp(command, "water") == 0 )     {press_button_water();}
-        if (strcmp(command, "milk") == 0 )      {press_button_milk();}
-
-        // ------ NAME
-        if (strcmp(command, "id") == 0 )        {
-          last_custom_id = instruction[1].as<String>();
-        }
-
-        // ------ INTERRUPT
-        if (strcmp(command, "interrupt") == 0 ) {press_button_water();}
-        
-        // ------ DELAY
-        if (strcmp(command, "delay") == 0 )     {delay(instruction[1].as<unsigned int>());}
-
-      }
-      success = true;
-      
+      success = execute_custom_script(array);
       custom_automation_end();
     }
+  
+  
   //process available menu items
   }else if (String(topic) == "jurabridge/menu") {
     //open settings
@@ -3324,4 +3358,214 @@ void callback(char* topic, byte* message, unsigned int length) {
 
   //reset the display
   custom_automation_display_reset(success);
+}
+
+
+bool execute_custom_script(JsonArray array){
+  //parse as JSON array
+  for(JsonVariant instruction : array) {
+
+    /*
+      ************************************************************************************************
+      JURA ENA 90 Command Sequence API v0.1
+
+      JSON OBJECT WITH COMMANDS IN ORDER, IN DESURED SEQUENCE
+
+      each command is an array [cmd, value]
+
+      - wait commands will halt a sequence until the specified condition is satisfied
+        once the condition is satisfied, will immediately move to the next
+        item in the sequence
+      
+      - make commands press the button as programmed in the machine
+
+      - interrupt command will press the 'water' button to interrupt a curerntly-ongong automation
+
+      ************************************************************************************************
+      MQTT Format: 
+
+      Topic:              jurabridge/command
+      Message/Payload:    
+                          [
+                            ["id", "DOUBLE RISTRETTO"],
+                            ["msg", " MORNING!"],
+                            ["ready"],
+                            ["delay", 1000],
+                            ["msg", " PRE-WARM "],
+                            ["delay", 1000],
+                            ["water"],
+                            ["pump"],
+                            ["dispense", 100],
+                            ["msg", "   WAIT"],
+                            ["interrupt"],
+                            ["ready"],
+                            ["delay", 4000],
+                            ["msg", " EMPTY CUP"],
+                            ["delay", 3000],
+                            ["msg", " EMPTY 5"],
+                            ["delay", 1000],
+                            ["msg", " EMPTY 4"],
+                            ["delay", 100],
+                            ["msg", " EMPTY 3"],
+                            ["delay", 1000],
+                            ["msg", " EMPTY 2"],
+                            ["delay", 100],
+                            ["msg", " EMPTY 1"],
+                            ["delay", 3000],
+                            ["msg", " STEP 1"],
+                            ["delay", 3000],
+                            ["ready"],
+                            ["espresso"],
+                            ["pump"],
+                            ["dispense", 30],
+                            ["interrupt"],
+                            ["msg", "  STEP 2"],
+                            ["delay", 2000],
+                            ["ready"],
+                            ["espresso"],
+                            ["pump"],
+                            ["dispense", 30],
+                            ["interrupt"],
+                            ["msg", "    :)"],
+                          ]
+
+      ************************************************************************************************
+    */
+
+    //extract into comands 
+    const char* command = instruction[0];
+
+    // ------ CUSTOM DISPLAY?
+    if (strcmp(command, "msg") == 0 )       {
+      String message =  instruction[1].as<String>();
+      String prefix = "DT:";
+      cmd2jura(prefix + message);
+    } 
+
+    // ------ WAIT READY OPERATION
+    if (strcmp(command, "ready") == 0 )     {if (wait_ready()){continue;}else{return false;}}
+    if (strcmp(command, "pump") == 0 )      {if (wait_pump_start()){continue;}else{return false;}}
+    if (strcmp(command, "heat") == 0 )      {if (wait_thermoblock_ready()){continue;}else{return false;}}
+    if (strcmp(command, "dispense") == 0 )  {if (wait_dispense_ml(instruction[1])){continue;}else{return false;}}
+
+    // ------ PRESS BUTTONS
+    if (strcmp(command, "espresso") == 0 )  {press_button_espresso();}
+    if (strcmp(command, "cappucino") == 0 ) {press_button_cappuccino();}
+    if (strcmp(command, "coffee") == 0 )    {press_button_coffee();}
+    if (strcmp(command, "macchiato") == 0 ) {press_button_macchiato();}
+    if (strcmp(command, "water") == 0 )     {press_button_water();}
+    if (strcmp(command, "milk") == 0 )      {press_button_milk();}
+
+    // ------ NAME
+    if (strcmp(command, "id") == 0 )        {
+      last_custom_id = instruction[1].as<String>();
+    }
+
+    // ------ INTERRUPT
+    if (strcmp(command, "interrupt") == 0 ) {press_button_water();}
+    
+    // ------ DELAY
+    if (strcmp(command, "delay") == 0 )     {delay(instruction[1].as<unsigned int>());}
+
+  }
+}
+
+bool held = false;
+int button_wait() {
+  //read values; pullup button, so we need to invert
+  button_select_pin_value = ! digitalRead(button_select_pin); 
+
+  //button is down, cool; wait for rise
+  if (button_select_pin_value){
+
+    //wait for button to rise!
+    int button_select_pinDown = millis();
+    int button_select_pinUp = 0;
+
+    //turn LED on indicating at least one button is still held
+    digitalWrite(GPIOLEDPULSE, 1); 
+    while (button_select_pin_value){
+      //read values again
+      button_select_pin_value = ! digitalRead(button_select_pin); 
+
+      //set up timestamps to determine whether one or both was held
+      button_select_pinUp = millis();  
+
+      //are we still within a holdloopp from a presvious?
+      if (held) {return 0;}
+
+      //return on hold 
+      if (button_select_pinUp - button_select_pinDown > HOLD_TIMEOUT){
+        held = true;
+        return button_select_pinUp - button_select_pinDown;
+      }
+    }
+    //we're not holding
+    held = false;
+
+    //turn LED off
+    digitalWrite(GPIOLEDPULSE, 0); 
+    if (button_select_pinUp - button_select_pinDown > MIN_PRESSTIME){
+      return button_select_pinUp - button_select_pinDown;
+    }
+  }
+  held = false;
+  return 0;
+}
+
+void handle_secret_menu(){
+  //button handling? 
+  button_presstime = button_wait();
+  if (button_presstime) {
+    if (! secret_menu_active ){
+    
+      //rest menu index
+      secret_menu_index = 0;
+
+      //enable the secret menu!
+      cmd2jura("DT:  SECRET  ");
+      cmd2jura("DT:   MENU   ");
+      cmd2jura(secret_menu_script_names[secret_menu_index]);
+      
+      //secret menu
+      secret_menu_active = true;
+      secret_menu_init_time = millis();
+
+    } else if (button_presstime > HOLD_TIMEOUT){
+        
+      //if we're on the last one, we exit
+      if (secret_menu_index != current_secret_menu_size - 1 ){
+        mqttpub_long(secret_menu_index, "jurabridge/secret menu/execute");
+      }else{
+        set_display_bridge_ready();
+      }
+
+      //reset to zero, re-enable the looping 
+      secret_menu_active = false;
+      secret_menu_index = 0;
+
+      //ESP_LOGI(TAG,"HOLD: %i %s", secret_menu_index, secret_menu_script_names[secret_menu_index]);
+
+    } else{
+      //roll around to the next one!
+      if (secret_menu_index < current_secret_menu_size - 1 ){
+        secret_menu_index++;
+      }else{
+        secret_menu_index = 0;
+      }
+      secret_menu_init_time = millis();
+      //ESP_LOGI(TAG,"PRESS: %i %s", secret_menu_index, secret_menu_script_names[secret_menu_index]);
+      cmd2jura(secret_menu_script_names[secret_menu_index]);
+    }
+  }
+
+  //disable secret menu
+  if (secret_menu_active){
+    if (millis() - secret_menu_init_time > SECRET_MENU_TIMEOUT){
+      secret_menu_active = false;
+      secret_menu_index = 0;
+      //ESP_LOGI(TAG,"%i %s", secret_menu_index, secret_menu[secret_menu_index]);
+      set_display_bridge_ready();
+    }
+  }
 }

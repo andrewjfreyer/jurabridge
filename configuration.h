@@ -36,6 +36,7 @@
 
 //state expirations
 #define PUMP_TIMEOUT 1000
+#define FLOW_SENSOR_TIMEOUT 2500
 
 //Define pins for the board
 #define GPIORX        16
@@ -55,6 +56,7 @@
 #define ENUM_CLEAN      9
 #define ENUM_RINSE      10
 #define ENUM_CUSTOM     11
+#define ENUM_PREGROUND  12
 
 //cheater enum
 #define ENUM_SYSTEM_ERROR_TRAY  1
@@ -117,3 +119,4 @@
 #define PREF_HOPPER_VOLUME "PREF_27"
 #define PREF_NUM_DRAINAGE_SINCE_EMPTY "PREF_28"
 #define PREF_VOL_SINCE_RESERVOIR_FILL "PREF_29"
+#define PREF_NUM_PREGROUND "PREF_30"
