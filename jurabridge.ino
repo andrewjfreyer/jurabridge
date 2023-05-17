@@ -21,7 +21,7 @@ PubSubClient client(espClient);
 
 //wifi definintions
 #define TAG "jurabridge"
-#define VERSION "0.4.5"
+#define VERSION "0.4.61"
 
 //is the machine plumbed?
 #define IS_PLUMBED true
@@ -56,7 +56,7 @@ bool button_select_pin_value = false;
 int secret_menu_index = 0;
 int secret_menu_index_previous = 0;
 
-#define SECRET_MENU_MAX_SIZE 10
+#define SECRET_MENU_MAX_SIZE 50
 int current_secret_menu_size = 0;
 const char * secret_menu_script_names[SECRET_MENU_MAX_SIZE];
 
@@ -66,6 +66,7 @@ const char * secret_menu_script_names[SECRET_MENU_MAX_SIZE];
 //-----------------------------------------------------------------
 // version notes
 //
+// 0.4.61 - bugfixes
 // 0.4.6 - improve speed of flow sensor timeout; add grounds counter
 // 0.4.5 - secret menu dynamically loads from MQTT!
 // 0.4.4 - mqtt secret menu; major feature update
@@ -182,11 +183,7 @@ Something between MV and UU clears the display to blank.
 //hardware UART is significantly faster than software serial
 HardwareSerial JuraSerial ( 2 );
 
-//display 
-const char * jura_display [30];
-
 //for json crash detection? 
-long last_update = 0;
 long status_update = 0;
 bool first_publication;
 
@@ -575,27 +572,22 @@ void setup() {
   mqttpub_long(0, "jurabridge/secret menu/update");
 
   //fun shit 
-  cmd2jura("DT:         S");
-  cmd2jura("DT:        SE");
-  cmd2jura("DT:       SEC");
-  cmd2jura("DT:      SECR");
-  cmd2jura("DT:     SECRE");
-  cmd2jura("DT:    SECRET");
-  cmd2jura("DT:   SECRET ");
-  cmd2jura("DT:  SECRET M");
-  cmd2jura("DT: SECRET ME");
-  cmd2jura("DT:SECRET MEN");
-  cmd2jura("DT:ECRET MENU");
-  cmd2jura("DT:CRET MENU");
-  cmd2jura("DT:RET MENU");
-  cmd2jura("DT:ET MENU");
-  cmd2jura("DT:T MENU");
-  cmd2jura("DT: MENU");
-  cmd2jura("DT:MENU");
-  cmd2jura("DT:ENU");
-  cmd2jura("DT:NU");
-  cmd2jura("DT:U");
-  cmd2jura("DT: ");
+  cmd2jura("DT:         H");
+  cmd2jura("DT:        HE");
+  cmd2jura("DT:       HEL");
+  cmd2jura("DT:      HELL");
+  cmd2jura("DT:     HELLO");
+  cmd2jura("DT:    HELLO!");
+  cmd2jura("DT:   HELLO!");
+  cmd2jura("DT:  HELLO!");
+  cmd2jura("DT: HELLO!");
+  cmd2jura("DT:HELLO!");
+  cmd2jura("DT:ELLO!");
+  cmd2jura("DT:LLO!");
+  cmd2jura("DT:LO!");
+  cmd2jura("DT:O!");
+  cmd2jura("DT:!");
+  cmd2jura("DT:");
 
   //move jura uart stuffs to core 2
   xTaskCreatePinnedToCore(
@@ -761,25 +753,51 @@ bool wait_pump_start (int max_seconds = 15){
   return false;
 }
 
-bool wait_dispense_reset (){
+bool wait_dispense_reset () {
   int max_seconds = 15;
   int delay_const = 100;
   int max_iter = (max_seconds * 1000) /  delay_const;
 
+  //testying
+  int last_dispense_volume_previous = last_dispense_volume;
+
   for (int i = 0; i < max_iter; i++){
+
     //needs to be ready for at least...
-    //stop condition
     delay(delay_const);
     if (last_dispense_volume <= 10 ){
         return true;
-      }
+
+    }else if (last_dispense_volume_previous < last_dispense_volume) {
+      //welp, we already started!
+      return true;
+    }
+
+    //orevious dispense
+    last_dispense_volume_previous = last_dispense_volume;
   }
   return false;
 }
 
+//run the dial to the right as max as possible
+void maximize_volume(int max_ml = 40){
+  int max_iter = max_ml / 5; //5ml per dial turn
+  
+  //navigate to message 
+  for (int i = 0; i < max_iter; i++){
+    rotate_rotary_right();
+    delay(25);
+  }
+}
+
 bool wait_dispense_ml ( int max_ml = 40){
+  //maximize voluem first  
   //wait for dispense reset! 
   if (wait_dispense_reset()){
+
+    //max ml first!!
+    maximize_volume(max_ml);
+
     int max_seconds = 60;
     int delay_const = 100;
     int max_iter = (max_seconds * 1000) /  delay_const;
@@ -909,7 +927,6 @@ void jura_update(){
   if ((((loop_iterator % rt1_update_interval) == 0) || ! rt1_initialized ) && update_rt1()){
 
     //set last update
-    last_update = millis() / 1000;
     bool count_changed = false;
 
     //============================== extracted values EEPROM - 1
@@ -998,7 +1015,6 @@ void jura_update(){
   
   if ((((loop_iterator % rt2_update_interval) == 0) || ! rt2_initialized ) && update_rt2()){
     //set last update
-    last_update = millis() / 1000;
     bool count_changed = false;
 
     //============================== extracted values EEPROM - 2
@@ -1065,7 +1081,6 @@ void jura_update(){
   /*
   if ((((loop_iterator % rt3_update_interval) == 0)  || ! rt3_initialized ) && update_rt3()){
     //set last update
-    last_update = millis() / 1000;
 
     if (UNHANDLED_INVESTIGATION && EEPROM_INVESTIGATION){
       for (int i = 0; i< 16; i++){
@@ -1085,7 +1100,6 @@ void jura_update(){
   /*
   if ((((loop_iterator % as_update_interval) == 0)  || ! as_initialized ) && update_as()){
     //set last update
-    last_update = millis() / 1000;
 
     if (UNHANDLED_INVESTIGATION && AS_INVESTIGATION){
       for (int i = 0; i < 6; i++){
@@ -1105,8 +1119,6 @@ void jura_update(){
   
   if ((((loop_iterator % hz_update_interval) == 0) || ! hz_initialized ) && update_hz()){
     //set last update
-    last_update = millis() / 1000;
-
     //============================== extracted values HZ -- heiße Zubereitung (hot preparation)
     if ((update_thermoblock_temperature() && thermoblock_temperature > 0) || first_publication) {
       if (MQTT_ENABLED){ mqttpub_long(thermoblock_temperature, "jurabridge/parts/thermoblock/temp");}
@@ -1190,9 +1202,6 @@ void jura_update(){
   
   if ((((loop_iterator % cs_update_interval) == 0) || ! cs_initialized ) && update_cs()){
 
-    //set last update
-    last_update = millis() / 1000;
-
     //============================== extracted values CS
     if ((update_ceramic_valve_temperature() && ceramic_valve_temperature > 0) || first_publication) {
       if (MQTT_ENABLED){ mqttpub_long(ceramic_valve_temperature, "jurabridge/parts/ceramic valve/temp");}
@@ -1244,8 +1253,6 @@ void jura_update(){
 
   if ((((loop_iterator % ic_update_interval) == 0) || ! ic_initialized ) && update_ic()){
     //set last update
-    last_update = millis() / 1000;
-
     //============================== extracted values IC
     if (update_hopper_cover_error() || first_publication) { // hopper cover error needs to calculate first, else the timeouts will race
       if (MQTT_ENABLED){ 
@@ -3220,6 +3227,7 @@ void mqtt_reconnect() {
       client.subscribe("jurabridge/command");
       client.subscribe("jurabridge/menu");
       client.subscribe("jurabridge/secret menu");
+      client.subscribe("jurabridge/restart");
       client.subscribe("homeassistant/status");
 
       //first messages
@@ -3252,6 +3260,9 @@ void callback(char* topic, byte* message, unsigned int length) {
         ESP.restart();
       }
   //valid menu item
+  }else if (String(topic) == "jurabridge/restart") {
+        ESP.restart();
+
   }else if (String(topic) == "jurabridge/secret menu") {
     
     //try to serialize string 
@@ -3286,6 +3297,9 @@ void callback(char* topic, byte* message, unsigned int length) {
         }
         //add exit option as last menu item
         secret_menu_script_names[secret_menu_items.size()]  = "DT:   EXIT";
+
+        //how many recipes do we have??
+        mqttpub_long(secret_menu_items.size(), "jurabridge/counts/recipes");
 
         //we don't need thesmile shit here
         set_display_bridge_ready();
@@ -3336,7 +3350,7 @@ void callback(char* topic, byte* message, unsigned int length) {
     //how far into the menu do we go?
     int menu_item;
 
-    if (messageTemp ==  "mclean")       { menu_item = 0;}
+    if      (messageTemp ==  "mclean")  { menu_item = 0;}
     else if (messageTemp ==  "rinse")   { menu_item = 1;}
     else if (messageTemp ==  "mrinse")  { menu_item = 2;}
     else if (messageTemp ==  "clean")   { menu_item = 3;}
@@ -3523,8 +3537,6 @@ void handle_secret_menu(){
       secret_menu_index = 0;
 
       //enable the secret menu!
-      cmd2jura("DT:  SECRET  ");
-      cmd2jura("DT:   MENU   ");
       cmd2jura(secret_menu_script_names[secret_menu_index]);
       
       //secret menu
