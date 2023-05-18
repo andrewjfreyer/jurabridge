@@ -1,5 +1,12 @@
 # jurabridge ☕
 
+> <picture>
+>   <source media="(prefers-color-scheme: light)" srcset="https://github.com/Mqxx/GitHub-Markdown/blob/main/blockquotes/badge/light-theme/warning.svg">
+>   <img alt="Warning" src="https://github.com/Mqxx/GitHub-Markdown/blob/main/blockquotes/badge/dark-theme/warning.svg">
+> </picture><br>
+>
+> This project is in active MVP-ish development, and the current codebase is a procedural proof of concept that is not designed (at all) with proper C++ class structure. Refactoring is underway, but it'll take time. Please be patient.
+
 # Description
 
 This is an ESP32 Arduino project for bridging a [Jura ENA Micro 90](https://us.jura.com/en/customer-care/products-support/ENA-Micro-90-MicroSilver-UL-15116) to home automation platforms via MQTT. Main controller is an ESP32. A 3.3v to 5v level shifter is required between an available hardware UART of the ESP32 to the debug/service port of the Jura. Don't use `softwareserial`, as it's painfully slow. The ESP continually polls the Jura for status information, and reports changes in status information via MQTT. 

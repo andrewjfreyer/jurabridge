@@ -21,7 +21,7 @@ PubSubClient client(espClient);
 
 //wifi definintions
 #define TAG "jurabridge"
-#define VERSION "0.4.61"
+#define VERSION "0.4.62"
 
 //is the machine plumbed?
 #define IS_PLUMBED true
@@ -58,7 +58,10 @@ int secret_menu_index_previous = 0;
 
 #define SECRET_MENU_MAX_SIZE 50
 int current_secret_menu_size = 0;
-const char * secret_menu_script_names[SECRET_MENU_MAX_SIZE];
+
+//just for proof of concept; these will be dealloced later
+char secret_menu_json_str[SECRET_MENU_MAX_SIZE * 13];
+char last_custom_id[64];
 
 //receive secrete menu
 #define SECRET_MENU_ENABLE true
@@ -66,6 +69,7 @@ const char * secret_menu_script_names[SECRET_MENU_MAX_SIZE];
 //-----------------------------------------------------------------
 // version notes
 //
+// 0.4.62 - more clear recipe instructions
 // 0.4.61 - bugfixes
 // 0.4.6 - improve speed of flow sensor timeout; add grounds counter
 // 0.4.5 - secret menu dynamically loads from MQTT!
@@ -365,9 +369,6 @@ bool isCeramicValveHotWaterCircuit;
 bool isCeramicValveBlocking;
 bool isCeramicValveCoffeeProductCircuit;
 bool isCeramicValveUnknownPosition;
-
-//probably figure this out differently to use char arrays later
-String last_custom_id;
 
 //Secret menu stuffs
 bool secret_menu_active;
@@ -754,7 +755,7 @@ bool wait_pump_start (int max_seconds = 15){
 }
 
 bool wait_dispense_reset () {
-  int max_seconds = 15;
+  int max_seconds = 25;
   int delay_const = 100;
   int max_iter = (max_seconds * 1000) /  delay_const;
 
@@ -779,40 +780,32 @@ bool wait_dispense_reset () {
   return false;
 }
 
-//run the dial to the right as max as possible
-void maximize_volume(int max_ml = 40){
-  int max_iter = max_ml / 5; //5ml per dial turn
-  
-  //navigate to message 
-  for (int i = 0; i < max_iter; i++){
-    rotate_rotary_right();
-    delay(25);
-  }
-}
-
-bool wait_dispense_ml ( int max_ml = 40){
-  //maximize voluem first  
+bool wait_dispense_ml ( int max_water_ml = 40){
   //wait for dispense reset! 
   if (wait_dispense_reset()){
-
-    //max ml first!!
-    maximize_volume(max_ml);
 
     int max_seconds = 60;
     int delay_const = 100;
     int max_iter = (max_seconds * 1000) /  delay_const;
 
     for (int i = 0; i < max_iter; i++){
-      //needs to be ready for at least...
-      delay(delay_const);
+
       //stop condition
-      if (last_dispense_volume >= max_ml ){
+      if (last_dispense_volume >= max_water_ml ){
         return true;
       }
+      //needs to be ready for at least...
+      delay(delay_const);
     }
     return false;
   }
   return false;
+}
+
+//default of 0.23 for whole milk; will differ by product (oat will be different)
+bool wait_venturi_ml ( int max_venturi_ml = 60, float modifier = 0.23){
+  int converted_to_water_dispense_ml = max_venturi_ml * modifier;
+  return wait_dispense_ml(converted_to_water_dispense_ml);
 }
 
 //#############################################################
@@ -822,7 +815,7 @@ bool wait_dispense_ml ( int max_ml = 40){
 //#############################################################
 
 void custom_automation_start(){
-  last_custom_id = "";
+  strcpy(last_custom_id, "");
   custom_execution = true;
   custom_execution_started = millis();
 }
@@ -1334,7 +1327,7 @@ void jura_update(){
         if (last_custom_id == ""){
           mqttpub_str("CUSTOM AUTOMATION", "jurabridge/history");  
         }else{
-          mqttpub_str(last_custom_id.c_str(), "jurabridge/history");  
+          mqttpub_str(last_custom_id, "jurabridge/history");  
         } 
       }else if (last_task == ENUM_START){
         mqttpub_str("START AUTOMATION", "jurabridge/history");
@@ -3261,13 +3254,13 @@ void callback(char* topic, byte* message, unsigned int length) {
       }
   //valid menu item
   }else if (String(topic) == "jurabridge/restart") {
-        ESP.restart();
+    ESP.restart();
 
   }else if (String(topic) == "jurabridge/secret menu") {
     
     //try to serialize string 
-    StaticJsonDocument<512> secret_menu_json_string;
-    DeserializationError json_deserialization_error = deserializeJson(secret_menu_json_string, messageTemp.c_str());
+    StaticJsonDocument<512> received_secret_menu_json_string;
+    DeserializationError json_deserialization_error = deserializeJson(received_secret_menu_json_string, (const char*) messageTemp.c_str());
 
     // if we failed, then we have an old format command!
     if (json_deserialization_error) {
@@ -3277,26 +3270,18 @@ void callback(char* topic, byte* message, unsigned int length) {
     }else{
 
       //set the array
-      JsonArray secret_menu_items = secret_menu_json_string.as<JsonArray>();
+      JsonArray secret_menu_items = received_secret_menu_json_string.as<JsonArray>();
 
       //legit?
       if (secret_menu_items.size() > 0){
+        //mark successful new mqtt thing
         success = true;
-        //clear current menu
-        current_secret_menu_size = 0;
-        for (int i = 0 ;i < SECRET_MENU_MAX_SIZE; i++){
-          secret_menu_script_names[i] = "";
-        }
 
         //repopulate instruted menu
-        current_secret_menu_size = secret_menu_items.size() + 1;
-        for (int index = 0; index < secret_menu_items.size(); index ++){
-          if (index < SECRET_MENU_MAX_SIZE){
-            secret_menu_script_names[index] = secret_menu_items[index].as<const char*>();
-          }
-        }
-        //add exit option as last menu item
-        secret_menu_script_names[secret_menu_items.size()]  = "DT:   EXIT";
+        current_secret_menu_size = secret_menu_items.size();
+        
+        //copy to global 
+        strcpy(secret_menu_json_str, messageTemp.c_str());
 
         //how many recipes do we have??
         mqttpub_long(secret_menu_items.size(), "jurabridge/counts/recipes");
@@ -3403,16 +3388,16 @@ bool execute_custom_script(JsonArray array){
                           [
                             ["id", "DOUBLE RISTRETTO"],
                             ["msg", " MORNING!"],
-                            ["ready"],
+                            ["wait ready"],
                             ["delay", 1000],
                             ["msg", " PRE-WARM "],
                             ["delay", 1000],
-                            ["water"],
-                            ["pump"],
-                            ["dispense", 100],
+                            ["press water"],
+                            ["wait pump"],
+                            ["wait water", 100],
                             ["msg", "   WAIT"],
                             ["interrupt"],
-                            ["ready"],
+                            ["wait ready"],
                             ["delay", 4000],
                             ["msg", " EMPTY CUP"],
                             ["delay", 3000],
@@ -3428,19 +3413,20 @@ bool execute_custom_script(JsonArray array){
                             ["delay", 3000],
                             ["msg", " STEP 1"],
                             ["delay", 3000],
-                            ["ready"],
-                            ["espresso"],
-                            ["pump"],
-                            ["dispense", 30],
+                            ["wait ready"],
+                            ["press espresso"],
+                            ["wait pump"],
+                            ["wait water", 30],
                             ["interrupt"],
                             ["msg", "  STEP 2"],
                             ["delay", 2000],
-                            ["ready"],
-                            ["espresso"],
-                            ["pump"],
-                            ["dispense", 30],
+                            ["wait ready"],
+                            ["press espresso"],
+                            ["wait pump"],
+                            ["wait water", 30],
                             ["interrupt"],
                             ["msg", "    :)"],
+                            ["delay", 3000]
                           ]
 
       ************************************************************************************************
@@ -3457,26 +3443,31 @@ bool execute_custom_script(JsonArray array){
     } 
 
     // ------ WAIT READY OPERATION
-    if (strcmp(command, "ready") == 0 )     {if (wait_ready()){continue;}else{return false;}}
-    if (strcmp(command, "pump") == 0 )      {if (wait_pump_start()){continue;}else{return false;}}
-    if (strcmp(command, "heat") == 0 )      {if (wait_thermoblock_ready()){continue;}else{return false;}}
-    if (strcmp(command, "dispense") == 0 )  {if (wait_dispense_ml(instruction[1])){continue;}else{return false;}}
+    if (strcmp(command, "wait ready") == 0 )     {if (wait_ready()){continue;}else{return false;}}
+    if (strcmp(command, "wait pump") == 0 )      {if (wait_pump_start()){continue;}else{return false;}}
+    if (strcmp(command, "wait heat") == 0 )      {if (wait_thermoblock_ready()){continue;}else{return false;}}
+    if (strcmp(command, "wait water") == 0 )     {if (wait_dispense_ml(instruction[1])){continue;}else{return false;}}
+    if (strcmp(command, "wait foam") == 0 )      {if (wait_venturi_ml(instruction[1], instruction[2])){continue;}else{return false;}}
 
     // ------ PRESS BUTTONS
-    if (strcmp(command, "espresso") == 0 )  {press_button_espresso();}
-    if (strcmp(command, "cappucino") == 0 ) {press_button_cappuccino();}
-    if (strcmp(command, "coffee") == 0 )    {press_button_coffee();}
-    if (strcmp(command, "macchiato") == 0 ) {press_button_macchiato();}
-    if (strcmp(command, "water") == 0 )     {press_button_water();}
-    if (strcmp(command, "milk") == 0 )      {press_button_milk();}
+    if (strcmp(command, "press espresso") == 0 )  {press_button_espresso();}
+    if (strcmp(command, "press cappucino") == 0 ) {press_button_cappuccino();}
+    if (strcmp(command, "press coffee") == 0 )    {press_button_coffee();}
+    if (strcmp(command, "press macchiato") == 0 ) {press_button_macchiato();}
+    if (strcmp(command, "press water") == 0 )     {press_button_water();}
+    if (strcmp(command, "press milk") == 0 )      {press_button_milk();}
 
     // ------ NAME
-    if (strcmp(command, "id") == 0 )        {
-      last_custom_id = instruction[1].as<String>();
+    if (strcmp(command, "id") == 0 ) {
+      strcpy(last_custom_id, (const char*) instruction[1]);
     }
 
     // ------ INTERRUPT
-    if (strcmp(command, "interrupt") == 0 ) {press_button_water();}
+    if (strcmp(command, "interrupt") == 0 ) {
+      if (pump_active){
+        press_button_water();
+      }
+    }
     
     // ------ DELAY
     if (strcmp(command, "delay") == 0 )     {delay(instruction[1].as<unsigned int>());}
@@ -3530,14 +3521,32 @@ int button_wait() {
 void handle_secret_menu(){
   //button handling? 
   button_presstime = button_wait();
-  if (button_presstime) {
+  if (button_presstime > 0) {
+
+    //try to serialize string 
+    StaticJsonDocument<512> stored_secret_menu_as_json;
+
+    //cast as (const char*) here to not modify in place; stupid JSON library...
+    DeserializationError json_deserialization_error = deserializeJson(stored_secret_menu_as_json, (const char*) secret_menu_json_str);
+
+    // if we failed, then we have an old format command!
+    if (json_deserialization_error) {
+      Serial.print(F("Deserialize Error: "));
+      Serial.println(json_deserialization_error.f_str());
+
+      cmd2jura("DT:    :(");
+      return;
+    }
+      //set the array
+    JsonArray secret_menu_items = stored_secret_menu_as_json.as<JsonArray>();
+
     if (! secret_menu_active ){
     
       //rest menu index
       secret_menu_index = 0;
 
       //enable the secret menu!
-      cmd2jura(secret_menu_script_names[secret_menu_index]);
+      cmd2jura(secret_menu_items[0]);
       
       //secret menu
       secret_menu_active = true;
@@ -3546,7 +3555,13 @@ void handle_secret_menu(){
     } else if (button_presstime > HOLD_TIMEOUT){
         
       //if we're on the last one, we exit
-      if (secret_menu_index != current_secret_menu_size - 1 ){
+      if (secret_menu_index != current_secret_menu_size ){
+        ESP_LOGI(TAG,"EXECUTE: %i %i %s", secret_menu_index, current_secret_menu_size, secret_menu_items[secret_menu_index].as<String>());
+        cmd2jura("DT:    OK   ");
+        delay(1000);
+        cmd2jura("DT:   WAIT   ");
+
+        //mqtt echo command so that more controls, if necessary can be added externally
         mqttpub_long(secret_menu_index, "jurabridge/secret menu/execute");
       }else{
         set_display_bridge_ready();
@@ -3559,16 +3574,28 @@ void handle_secret_menu(){
       //ESP_LOGI(TAG,"HOLD: %i %s", secret_menu_index, secret_menu_script_names[secret_menu_index]);
 
     } else{
+
+
       //roll around to the next one!
       if (secret_menu_index < current_secret_menu_size - 1 ){
         secret_menu_index++;
+        secret_menu_init_time = millis();
+        cmd2jura(secret_menu_items[secret_menu_index]);
+
+      }else if (secret_menu_index == current_secret_menu_size - 1 ){
+        secret_menu_init_time = millis();
+        secret_menu_index = current_secret_menu_size;
+        cmd2jura("DT:   EXIT   ");
+
       }else{
         secret_menu_index = 0;
+        secret_menu_init_time = millis();
+        cmd2jura(secret_menu_items[secret_menu_index]);
       }
-      secret_menu_init_time = millis();
-      //ESP_LOGI(TAG,"PRESS: %i %s", secret_menu_index, secret_menu_script_names[secret_menu_index]);
-      cmd2jura(secret_menu_script_names[secret_menu_index]);
+      
+      ESP_LOGI(TAG,"SHOW: %i %i %s", secret_menu_index, current_secret_menu_size, secret_menu_items[secret_menu_index].as<String>());
     }
+
   }
 
   //disable secret menu
