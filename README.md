@@ -5,7 +5,7 @@
 >   <img alt="Warning" src="https://github.com/Mqxx/GitHub-Markdown/blob/main/blockquotes/badge/dark-theme/warning.svg">
 > </picture><br>
 >
-> This project is in active MVP-ish development, and the current codebase is a procedural proof of concept that is not designed (at all) with proper C++ class structure. Refactoring is underway, but it'll take time. Please be patient.
+> This project is in an active research and development phase. The current codebase is a procedural proof of concept that is not designed (at all) with proper C++ class structure. Refactoring is underway, but it'll take time. Please be patient.
 
 # Description
 
