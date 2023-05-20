@@ -3483,6 +3483,7 @@ bool execute_custom_script(JsonArray array){
 
     // ------ NAME
     if (strcmp(command, "id") == 0 ) {
+      ESP_LOGI(TAG, "Custom: %s", last_custom_id);
       strcpy(last_custom_id, (const char*) instruction[1]);
     }
 
