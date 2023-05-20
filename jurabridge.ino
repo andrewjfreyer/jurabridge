@@ -21,7 +21,7 @@ PubSubClient client(espClient);
 
 //wifi definintions
 #define TAG "jurabridge"
-#define VERSION "0.4.62"
+#define VERSION "0.4.63"
 
 //is the machine plumbed?
 #define IS_PLUMBED true
@@ -69,6 +69,7 @@ char last_custom_id[64];
 //-----------------------------------------------------------------
 // version notes
 //
+// 0.4.63 - wait for button option in custom scripts
 // 0.4.62 - more clear recipe instructions
 // 0.4.61 - bugfixes
 // 0.4.6 - improve speed of flow sensor timeout; add grounds counter
@@ -710,6 +711,24 @@ void empty_steam_valve()                  {String cmd; cmd.reserve(20); cmd="FN:
 //      CUSTOM AUTOMATION / RECIPE HELPER METHODS
 //
 //----------------------------------------------------------------------------
+
+bool wait_press (int max_seconds = 60){
+  int button_presstime = 0;
+  int max_seconds_default = max_seconds > 0 ? max_seconds : 60;
+  int max_miliseconds = max_seconds_default * 1000;
+  int starttime = millis();
+
+  //wait 
+  while ((button_presstime == 0 )&& ( millis() - starttime < max_miliseconds )){
+      button_presstime = button_wait();
+  }
+
+  if (button_presstime > 0){
+    return true;
+  }
+
+  return false;
+}
 
 bool wait_ready(int max_seconds = 60, int min_duration = 2){
   int delay_const = 500;
@@ -3259,7 +3278,7 @@ void callback(char* topic, byte* message, unsigned int length) {
   }else if (String(topic) == "jurabridge/secret menu") {
     
     //try to serialize string 
-    StaticJsonDocument<512> received_secret_menu_json_string;
+    StaticJsonDocument<2048> received_secret_menu_json_string;
     DeserializationError json_deserialization_error = deserializeJson(received_secret_menu_json_string, (const char*) messageTemp.c_str());
 
     // if we failed, then we have an old format command!
@@ -3285,6 +3304,10 @@ void callback(char* topic, byte* message, unsigned int length) {
 
         //how many recipes do we have??
         mqttpub_long(secret_menu_items.size(), "jurabridge/counts/recipes");
+
+        //update display 
+        cmd2jura("DT:    :)    ");
+        delay (500);
 
         //we don't need thesmile shit here
         set_display_bridge_ready();
@@ -3443,6 +3466,7 @@ bool execute_custom_script(JsonArray array){
     } 
 
     // ------ WAIT READY OPERATION
+    if (strcmp(command, "wait press") == 0 )     {if (wait_press(instruction[1])){continue;}else{return false;}}
     if (strcmp(command, "wait ready") == 0 )     {if (wait_ready()){continue;}else{return false;}}
     if (strcmp(command, "wait pump") == 0 )      {if (wait_pump_start()){continue;}else{return false;}}
     if (strcmp(command, "wait heat") == 0 )      {if (wait_thermoblock_ready()){continue;}else{return false;}}
@@ -3471,12 +3495,14 @@ bool execute_custom_script(JsonArray array){
     
     // ------ DELAY
     if (strcmp(command, "delay") == 0 )     {delay(instruction[1].as<unsigned int>());}
-
   }
+
+  return true;
 }
 
 bool held = false;
 int button_wait() {
+
   //read values; pullup button, so we need to invert
   button_select_pin_value = ! digitalRead(button_select_pin); 
 
@@ -3524,7 +3550,7 @@ void handle_secret_menu(){
   if (button_presstime > 0) {
 
     //try to serialize string 
-    StaticJsonDocument<512> stored_secret_menu_as_json;
+    StaticJsonDocument<2048> stored_secret_menu_as_json;
 
     //cast as (const char*) here to not modify in place; stupid JSON library...
     DeserializationError json_deserialization_error = deserializeJson(stored_secret_menu_as_json, (const char*) secret_menu_json_str);
