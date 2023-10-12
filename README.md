@@ -1,9 +1,5 @@
 # jurabridge ☕
 
-> <picture>
->   <source media="(prefers-color-scheme: light)" srcset="https://github.com/Mqxx/GitHub-Markdown/blob/main/blockquotes/badge/light-theme/warning.svg">
->   <img alt="Warning" src="https://github.com/Mqxx/GitHub-Markdown/blob/main/blockquotes/badge/dark-theme/warning.svg">
-> </picture>
 > 
 > ### **[Summer 2023]** *This project is in an active research and development phase. The current codebase is a procedural proof of concept that is not designed (at all) with proper C++ class structure. Refactoring is underway, but it'll take time. Please be patient.*
 
