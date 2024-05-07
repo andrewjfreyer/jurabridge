@@ -53,28 +53,28 @@ For fun, that's all. I saw [this](https://github.com/ryanalden/esphome-jura-comp
 The bridge automatically reports back to HA via MQTT Discovery, divided into a number of different devices for readability. Once `secrets.h` is configured with appropriate values, and device discovery finishes, size different devices will appear:
 
 <p align="center">
-<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/matt_device_discovery_main.png" alt="Jura Ena Micro 90"/>
+<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/mqtt_device_discovery_main.png" alt="Jura Ena Micro 90"/>
 </p>
 
 
 ## Main Controller
 <p align="center">
-<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/matt_device_discovery_controller.png" alt="Jura Ena Micro 90"/>
+<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/mqtt_device_discovery_controller.png" alt="Jura Ena Micro 90"/>
 </p>
 
 ## Brew Group
 <p align="center">
-<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/matt_device_discovery_bg.png" alt="Jura Ena Micro 90"/>
+<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/mqtt_device_discovery_bg.png" alt="Jura Ena Micro 90"/>
 </p>
 
 ## Dosing System
 <p align="center">
-<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/matt_device_discovery_dosing.png" alt="Jura Ena Micro 90"/>
+<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/mqtt_device_discovery_dosing.png" alt="Jura Ena Micro 90"/>
 </p>
 
 ## Milk System
 <p align="center">
-<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/matt_device_discovery_milk.png" alt="Jura Ena Micro 90"/>
+<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/mqtt_device_discovery_milk.png" alt="Jura Ena Micro 90"/>
 </p>
 
 ## Water System
