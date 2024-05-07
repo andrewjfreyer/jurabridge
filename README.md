@@ -116,103 +116,103 @@ The final operation will cause the secret menu to close. The menu will time out 
 The following lists what sensors are reportable to home assistant. By default, most are disabled as each additional sensor adds reporting time and cycle time. However, use cases may vary so the options exist in [JuraConfiguraton.h](https://github.com/andrewjfreyer/jurabridge/blob/main/JuraConfiguration.h)
 | State ID |  Description / Name | Enabled by Default |
 | --- | -  | - |
-|JuraMachineStateIdentifier::OperationalState|"Operational State"| Yes|
-|JuraMachineStateIdentifier::ReadyStateDetail|"Ready State Detail"| Yes|
-|JuraMachineStateIdentifier::NumEspresso|"Espresso"| Yes|
-|JuraMachineStateIdentifier::NumCoffee| "Coffee"| Yes|
-|JuraMachineStateIdentifier::NumCappuccino| "Cappuccino"| Yes|
-|JuraMachineStateIdentifier::NumMacchiato| "Macchiato"| Yes|
-|JuraMachineStateIdentifier::NumPreground| "Preground"| Yes|
-|JuraMachineStateIdentifier::NumDriveMotorOperations| "Drive Motor Operations"| Yes|
-|JuraMachineStateIdentifier::NumLowPressurePumpOperations| "Low Pressure"| Yes|
-|JuraMachineStateIdentifier::NumBrewGroupCleanOperations| "Cleanings of Brewgroup"| Yes|
-|JuraMachineStateIdentifier::NumSpentGrounds| "Spent Grounds"| Yes|
-|JuraMachineStateIdentifier::SpentGroundsLevel| "Knockbox Fill Level"| Yes| 
-|JuraMachineStateIdentifier::NumPreparationsSinceLastBrewGroupClean| "Since Clean"| Yes|
-|JuraMachineStateIdentifier::NumHighPressurePumpOperations| "High Pressure"| Yes|
-|JuraMachineStateIdentifier::NumMilkFoamPreparations| "Milk Foam"| Yes|
-|JuraMachineStateIdentifier::NumWaterPreparations| "Hot Water"| Yes|
-|JuraMachineStateIdentifier::NumGrinderOperations| "Grindings"| Yes|
-|JuraMachineStateIdentifier::NumCleanMilkSystemOperations| "Cleanings of Milk System"| Yes|
-|JuraMachineStateIdentifier::HasFilter| "Water Filter"| Yes|
-|JuraMachineStateIdentifier::BeanHopperEmpty| "Bean Hopper Empty"| Yes|
-|JuraMachineStateIdentifier::BeanHopperCoverOpen| "Bean Hopper Open"| Yes|
-|JuraMachineStateIdentifier::SpentBeansByWeight| "Beans Consumed"| Yes|
-|JuraMachineStateIdentifier::BeanHopperLevel| "Bean Hopper Fill Level"| Yes|
-|JuraMachineStateIdentifier::WaterReservoirNeedsFill| "Water Reservoir"| Yes|
-|JuraMachineStateIdentifier::BypassDoserCoverOpen| "Bypass Doser Open"| Yes|
-|JuraMachineStateIdentifier::DrainageTrayRemoved| "Drip Tray Removed"| Yes|
-|JuraMachineStateIdentifier::DrainageTrayFull| "Drip Tray Full"| Yes|
-|JuraMachineStateIdentifier::DrainageTrayLevel| "Drip Tray Level"| Yes|
-|JuraMachineStateIdentifier::DrainageSinceLastTrayEmpty| "Drainage Volume"| Yes|
-|JuraMachineStateIdentifier::FlowState| "Flow State"|No|
-|JuraMachineStateIdentifier::BrewGroupPosition| "Brew Group Position"|No|
-|JuraMachineStateIdentifier::BrewGroupDriveShaftPosition| "Brew Group Drive Shaft Position"|No|
-|JuraMachineStateIdentifier::BrewGroupEncoderState| "Brew Group Encoder State"|No|
-|JuraMachineStateIdentifier::OutputValveEncoderState| "Output Valve Encoder State"|No|
-|JuraMachineStateIdentifier::OutputValveNominalPosition| "Output ValveNo|minal"|No|
-|JuraMachineStateIdentifier::HasError| "Error"| Yes|
-|JuraMachineStateIdentifier::HasMaintenanceRecommendation| "Maintenance Recommendation"| Yes|
-|JuraMachineStateIdentifier::RinseBrewGroupRecommended| "Water Rinse Recommended"| Yes|
-|JuraMachineStateIdentifier::ThermoblockPreheated| "Thermoblock Preheated"|No|
-|JuraMachineStateIdentifier::ThermoblockReady| "Thermoblock Ready"|No|
-|JuraMachineStateIdentifier::OutputValvePosition| "Output Valve Position"|No|
-|JuraMachineStateIdentifier::OutputValveIsBrewing| "Output Valve Brewing Position"|No|
-|JuraMachineStateIdentifier::OutputValveIsFlushing| "Output Valve Flushing Position"|No|
-|JuraMachineStateIdentifier::OutputValveIsDraining| "Output Valve Draining Position"|No|
-|JuraMachineStateIdentifier::OutputValveIsBlocking| "Output Valve Blocking Position"|No|
-|JuraMachineStateIdentifier::WaterPumpFlowRate| "Flow Rate"| Yes|
-|JuraMachineStateIdentifier::LastDispensePumpedWaterVolume| "Last Dispense Pumped Water Volume"| Yes|
-|JuraMachineStateIdentifier::LastMilkDispenseVolume| "Last Milk Dispense Volume"| Yes|
-|JuraMachineStateIdentifier::LastWaterDispenseVolume| "Last Water Dispense Volume"| Yes|
-|JuraMachineStateIdentifier::LastBrewDispenseVolume| "Last Brew Dispense Volume"| Yes|
-|JuraMachineStateIdentifier::LastDispenseMaxTemperature| "Last Dispense Max Temperature"| Yes|
-|JuraMachineStateIdentifier::LastDispenseType| "Last Dispense Type"| Yes|
-|JuraMachineStateIdentifier::LastDispenseGrossTemperatureTrend| "Last Dispense Gross Temperature Trend"| Yes|
-|JuraMachineStateIdentifier::LastDispenseDuration| "Last Dispense Duration"| Yes|
-|JuraMachineStateIdentifier::LastDispenseMinTemperature| "Last Dispense Min Temperature"| Yes|
-|JuraMachineStateIdentifier::LastDispenseAvgTemperature| "Last Dispense Average Tempreature"| Yes|
-|JuraMachineStateIdentifier::ThermoblockTemperature| "Thermoblock Temperature"| Yes|
-|JuraMachineStateIdentifier::ThermoblockStatus| "Thermoblock Status"|No|
-|JuraMachineStateIdentifier::ThermoblockColdMode| "Cold Temperature"|No|
-|JuraMachineStateIdentifier::ThermoblockLowMode| "Low Temperature"|No|
-|JuraMachineStateIdentifier::ThermoblockHighMode| "High Temperature"|No|
-|JuraMachineStateIdentifier::ThermoblockOvertemperature| "Overtemperture"| Yes|
-|JuraMachineStateIdentifier::ThermoblockSanitationTemperature| "Sanitation"|No|
-|JuraMachineStateIdentifier::SystemWaterMode| "Hot Water Mode"|No|
-|JuraMachineStateIdentifier::SystemSteamMode| "Steam Mode"|No|
-|JuraMachineStateIdentifier::BrewGroupLastOperation|"Last Brew Group Operation"|No|
-|JuraMachineStateIdentifier::CeramicValvePosition| "Ceramic Valve Position"|No|
-|JuraMachineStateIdentifier::CeramicValveCondenserPosition| "Ceramic Valve Condenser Position"|No|
-|JuraMachineStateIdentifier::CeramicValveHotWaterPosition| "Ceramic Valve Hot Water Position"|No|
-|JuraMachineStateIdentifier::CeramicValvePressurizingPosition| "Ceramic Valve Pressurizing Position"|No|
-|JuraMachineStateIdentifier::CeramicValveBrewingPosition| "Ceramic Valve Brewing Position"|No|
-|JuraMachineStateIdentifier::CeramicValveSteamPosition| "Ceramic Valve Steam Position"|No|
-|JuraMachineStateIdentifier::CeramicValveVenturiPosition| "Ceramic Valve Venturi Position"|No|
-|JuraMachineStateIdentifier::CeramicValvePressureReliefPosition| "Ceramic Valve Pressure Relief Position"|No|
-|JuraMachineStateIdentifier::ThermoblockMilkDispenseMode| "Thermoblock Milk Dispense Mode"|No|
-|JuraMachineStateIdentifier::VenturiPumping| "Venturi Pumping"|No|
-|JuraMachineStateIdentifier::ThermoblockDutyCycle| "Thermoblock Duty Cycle"|No|
-|JuraMachineStateIdentifier::ThermoblockActive| "Thermoblock Active"| Yes|
-|JuraMachineStateIdentifier::PumpDutyCycle| "Pump Duty Cycle"|No|
-|JuraMachineStateIdentifier::PumpActive| "Pump Active"|No|
-|JuraMachineStateIdentifier::GrinderDutyCycle| "Grinder Duty Cycle"|No|
-|JuraMachineStateIdentifier::GrinderActive| "Grinder Active"|No|
-|JuraMachineStateIdentifier::BrewGroupDutyCycle| "Brew Group Duty Cycle"|No|
-|JuraMachineStateIdentifier::BrewGroupActive| "Brew Group Active"|No|
-|JuraMachineStateIdentifier::BrewGroupIsRinsing| "Brew Group Rinsing"|No|
-|JuraMachineStateIdentifier::BrewGroupIsReady| "Brew Group Ready"|No|
-|JuraMachineStateIdentifier::BrewGroupIsLocked| "Brew Group Locked"|No|
-|JuraMachineStateIdentifier::BrewGroupIsOpen| "Brew Group Open"|No|
-|JuraMachineStateIdentifier::BrewProgramIsReady| "Brew Program Ready"|No|
-|JuraMachineStateIdentifier::BrewProgramIsCleaning| "Tablet Cleaning"| Yes|
-|JuraMachineStateIdentifier::GroundsNeedsEmpty| "Grounds Needs Empty"| Yes|
-|JuraMachineStateIdentifier::SystemIsReady| "System Ready"| Yes|
-|JuraMachineStateIdentifier::RinseMilkSystemRecommended| "Milk Rinse Recommended"| Yes|
-|JuraMachineStateIdentifier::CleanMilkSystemRecommended| "Milk Clean Recommended"| Yes|
-|JuraMachineStateIdentifier::CleanBrewGroupRecommendedSoon| "System Clean Recommended"| Yes|
-|JuraMachineStateIdentifier::CleanBrewGroupRecommended| "System Clean Required"| Yes|
-|JuraMachineStateIdentifier::HasDoes| "Dose in Brew Group"|No|
+|JuraMachineStateIdentifier::OperationalState|Operational State| Yes|
+|JuraMachineStateIdentifier::ReadyStateDetail|Ready State Detail| Yes|
+|JuraMachineStateIdentifier::NumEspresso|Espresso| Yes|
+|JuraMachineStateIdentifier::NumCoffee| Coffee| Yes|
+|JuraMachineStateIdentifier::NumCappuccino| Cappuccino| Yes|
+|JuraMachineStateIdentifier::NumMacchiato| Macchiato| Yes|
+|JuraMachineStateIdentifier::NumPreground| Preground| Yes|
+|JuraMachineStateIdentifier::NumDriveMotorOperations| Drive Motor Operations| Yes|
+|JuraMachineStateIdentifier::NumLowPressurePumpOperations| Low Pressure| Yes|
+|JuraMachineStateIdentifier::NumBrewGroupCleanOperations| Cleanings of Brewgroup| Yes|
+|JuraMachineStateIdentifier::NumSpentGrounds| Spent Grounds| Yes|
+|JuraMachineStateIdentifier::SpentGroundsLevel| Knockbox Fill Level| Yes| 
+|JuraMachineStateIdentifier::NumPreparationsSinceLastBrewGroupClean| Since Clean| Yes|
+|JuraMachineStateIdentifier::NumHighPressurePumpOperations| High Pressure| Yes|
+|JuraMachineStateIdentifier::NumMilkFoamPreparations| Milk Foam| Yes|
+|JuraMachineStateIdentifier::NumWaterPreparations| Hot Water| Yes|
+|JuraMachineStateIdentifier::NumGrinderOperations| Grindings| Yes|
+|JuraMachineStateIdentifier::NumCleanMilkSystemOperations| Cleanings of Milk System| Yes|
+|JuraMachineStateIdentifier::HasFilter| Water Filter| Yes|
+|JuraMachineStateIdentifier::BeanHopperEmpty| Bean Hopper Empty| Yes|
+|JuraMachineStateIdentifier::BeanHopperCoverOpen| Bean Hopper Open| Yes|
+|JuraMachineStateIdentifier::SpentBeansByWeight| Beans Consumed| Yes|
+|JuraMachineStateIdentifier::BeanHopperLevel| Bean Hopper Fill Level| Yes|
+|JuraMachineStateIdentifier::WaterReservoirNeedsFill| Water Reservoir| Yes|
+|JuraMachineStateIdentifier::BypassDoserCoverOpen| Bypass Doser Open| Yes|
+|JuraMachineStateIdentifier::DrainageTrayRemoved| Drip Tray Removed| Yes|
+|JuraMachineStateIdentifier::DrainageTrayFull| Drip Tray Full| Yes|
+|JuraMachineStateIdentifier::DrainageTrayLevel| Drip Tray Level| Yes|
+|JuraMachineStateIdentifier::DrainageSinceLastTrayEmpty| Drainage Volume| Yes|
+|JuraMachineStateIdentifier::FlowState| Flow State|No|
+|JuraMachineStateIdentifier::BrewGroupPosition| Brew Group Position|No|
+|JuraMachineStateIdentifier::BrewGroupDriveShaftPosition| Brew Group Drive Shaft Position|No|
+|JuraMachineStateIdentifier::BrewGroupEncoderState| Brew Group Encoder State|No|
+|JuraMachineStateIdentifier::OutputValveEncoderState| Output Valve Encoder State|No|
+|JuraMachineStateIdentifier::OutputValveNominalPosition| Output ValveNo|No|
+|JuraMachineStateIdentifier::HasError| Error| Yes|
+|JuraMachineStateIdentifier::HasMaintenanceRecommendation| Maintenance Recommendation| Yes|
+|JuraMachineStateIdentifier::RinseBrewGroupRecommended| Water Rinse Recommended| Yes|
+|JuraMachineStateIdentifier::ThermoblockPreheated| Thermoblock Preheated|No|
+|JuraMachineStateIdentifier::ThermoblockReady| Thermoblock Ready|No|
+|JuraMachineStateIdentifier::OutputValvePosition| Output Valve Position|No|
+|JuraMachineStateIdentifier::OutputValveIsBrewing| Output Valve Brewing Position|No|
+|JuraMachineStateIdentifier::OutputValveIsFlushing| Output Valve Flushing Position|No|
+|JuraMachineStateIdentifier::OutputValveIsDraining| Output Valve Draining Position|No|
+|JuraMachineStateIdentifier::OutputValveIsBlocking| Output Valve Blocking Position|No|
+|JuraMachineStateIdentifier::WaterPumpFlowRate| Flow Rate| Yes|
+|JuraMachineStateIdentifier::LastDispensePumpedWaterVolume| Last Dispense Pumped Water Volume| Yes|
+|JuraMachineStateIdentifier::LastMilkDispenseVolume| Last Milk Dispense Volume| Yes|
+|JuraMachineStateIdentifier::LastWaterDispenseVolume| Last Water Dispense Volume| Yes|
+|JuraMachineStateIdentifier::LastBrewDispenseVolume| Last Brew Dispense Volume| Yes|
+|JuraMachineStateIdentifier::LastDispenseMaxTemperature| Last Dispense Max Temperature| Yes|
+|JuraMachineStateIdentifier::LastDispenseType| Last Dispense Type| Yes|
+|JuraMachineStateIdentifier::LastDispenseGrossTemperatureTrend| Last Dispense Gross Temperature Trend| Yes|
+|JuraMachineStateIdentifier::LastDispenseDuration| Last Dispense Duration| Yes|
+|JuraMachineStateIdentifier::LastDispenseMinTemperature| Last Dispense Min Temperature| Yes|
+|JuraMachineStateIdentifier::LastDispenseAvgTemperature| Last Dispense Average Tempreature| Yes|
+|JuraMachineStateIdentifier::ThermoblockTemperature| Thermoblock Temperature| Yes|
+|JuraMachineStateIdentifier::ThermoblockStatus| Thermoblock Status|No|
+|JuraMachineStateIdentifier::ThermoblockColdMode| Cold Temperature|No|
+|JuraMachineStateIdentifier::ThermoblockLowMode| Low Temperature|No|
+|JuraMachineStateIdentifier::ThermoblockHighMode| High Temperature|No|
+|JuraMachineStateIdentifier::ThermoblockOvertemperature| Overtemperture| Yes|
+|JuraMachineStateIdentifier::ThermoblockSanitationTemperature| Sanitation|No|
+|JuraMachineStateIdentifier::SystemWaterMode| Hot Water Mode|No|
+|JuraMachineStateIdentifier::SystemSteamMode| Steam Mode|No|
+|JuraMachineStateIdentifier::BrewGroupLastOperation|Last Brew Group Operation|No|
+|JuraMachineStateIdentifier::CeramicValvePosition| Ceramic Valve Position|No|
+|JuraMachineStateIdentifier::CeramicValveCondenserPosition| Ceramic Valve Condenser Position|No|
+|JuraMachineStateIdentifier::CeramicValveHotWaterPosition| Ceramic Valve Hot Water Position|No|
+|JuraMachineStateIdentifier::CeramicValvePressurizingPosition| Ceramic Valve Pressurizing Position|No|
+|JuraMachineStateIdentifier::CeramicValveBrewingPosition| Ceramic Valve Brewing Position|No|
+|JuraMachineStateIdentifier::CeramicValveSteamPosition| Ceramic Valve Steam Position|No|
+|JuraMachineStateIdentifier::CeramicValveVenturiPosition| Ceramic Valve Venturi Position|No|
+|JuraMachineStateIdentifier::CeramicValvePressureReliefPosition| Ceramic Valve Pressure Relief Position|No|
+|JuraMachineStateIdentifier::ThermoblockMilkDispenseMode| Thermoblock Milk Dispense Mode|No|
+|JuraMachineStateIdentifier::VenturiPumping| Venturi Pumping|No|
+|JuraMachineStateIdentifier::ThermoblockDutyCycle| Thermoblock Duty Cycle|No|
+|JuraMachineStateIdentifier::ThermoblockActive| Thermoblock Active| Yes|
+|JuraMachineStateIdentifier::PumpDutyCycle| Pump Duty Cycle|No|
+|JuraMachineStateIdentifier::PumpActive| Pump Active|No|
+|JuraMachineStateIdentifier::GrinderDutyCycle| Grinder Duty Cycle|No|
+|JuraMachineStateIdentifier::GrinderActive| Grinder Active|No|
+|JuraMachineStateIdentifier::BrewGroupDutyCycle| Brew Group Duty Cycle|No|
+|JuraMachineStateIdentifier::BrewGroupActive| Brew Group Active|No|
+|JuraMachineStateIdentifier::BrewGroupIsRinsing| Brew Group Rinsing|No|
+|JuraMachineStateIdentifier::BrewGroupIsReady| Brew Group Ready|No|
+|JuraMachineStateIdentifier::BrewGroupIsLocked| Brew Group Locked|No|
+|JuraMachineStateIdentifier::BrewGroupIsOpen| Brew Group Open|No|
+|JuraMachineStateIdentifier::BrewProgramIsReady| Brew Program Ready|No|
+|JuraMachineStateIdentifier::BrewProgramIsCleaning| Tablet Cleaning| Yes|
+|JuraMachineStateIdentifier::GroundsNeedsEmpty| Grounds Needs Empty| Yes|
+|JuraMachineStateIdentifier::SystemIsReady| System Ready| Yes|
+|JuraMachineStateIdentifier::RinseMilkSystemRecommended| Milk Rinse Recommended| Yes|
+|JuraMachineStateIdentifier::CleanMilkSystemRecommended| Milk Clean Recommended| Yes|
+|JuraMachineStateIdentifier::CleanBrewGroupRecommendedSoon| System Clean Recommended| Yes|
+|JuraMachineStateIdentifier::CleanBrewGroupRecommended| System Clean Required| Yes|
+|JuraMachineStateIdentifier::HasDoes| Dose in Brew Group|No|
 
 
 ## Disclaimer
