@@ -68,9 +68,46 @@ The data output from the machine is received and presented by [Home Assistant pr
 I've found out that the default programming dramatically undersells the machine's capabilities. The Jura produces good enough shots as is. All that to say, since I bought the machine, my expectation was set that "this is the best it can do, and that's just fine." It is, after all, a superauto and sacrifies are made over a manual process. We're sacrificing some quality for pushbutton convenience. However, surprising to me was that the ENA Micro 90 only uses ***7-10g of coffee per perparation*** - with 30 some-odd ml of water. That's less coffee and more water than I presumed, without giving it much thought. Plus, pump pressure dropps pretty dramatically due to channeling so, the first parts of our shots are the best parts anyway. 
 
 It's of course easy to pull two short shots back to back to get to a more traditional 15 - 20g "single" shot, but why not automate it? 
-Lets just automate it. 
+Lets just automate it. Here, because `jurabridge` obtains (and/or infers) accurate machine status information, any number of custom recipes or custom instruction sequences can be excuted, without needing to modify EEPROM or to orchestrate a valid sequence of `FN:` commands, or without waiting for unnecessary long delays to presuming machine state. This command+interrupt+statuswait technique ensures that the machine excutes its own in-built sequences, and there's no risk of incidentally damaging the brewgroup with custom instructions or custom brew sequences. 
 
-Here, because `jurabridge` obtains (and/or infers) accurate machine status information, any number of custom recipes or custom instruction sequences can be excuted, without needing to modify EEPROM or to orchestrate a valid sequence of `FN:` commands, or without waiting for unnecessary long delays to presuming machine state. This command+interrupt+statuswait technique ensures that the machine excutes its own in-built sequences, and there's no risk of incidentally damaging the brewgroup with custom instructions or custom brew sequences. 
+In this project there's a header above that defines custom functions that are accessible via a pushbutton. As an example, there are three custom operations defined. This can be modified to include as many custom functions as needed:
+
+```
+static const JuraCustomMenuItemConfiguration JuraCustomMenuItemConfigurations[] {
+  {
+    " RISTR x2",
+    MQTT_ROOT MQTT_SUBTOPIC_FUNCTION "make_espresso",
+    "{'add':1,'brew':17}",
+  },
+  {
+    "  CAP +1",
+    MQTT_ROOT MQTT_SUBTOPIC_FUNCTION "make_cappuccino",
+    "{'milk':60,'brew':17,'add':1}",
+  },
+  {
+    "CORTADO +1",
+    MQTT_ROOT MQTT_SUBTOPIC_FUNCTION "make_cappuccino",
+    "{'milk':30,'brew':17',add':1}",
+  },
+  { /* the last element will always be treated as an exit, regardless the command phrase here */
+    "   EXIT",
+    "",
+    "",
+  }
+};
+```
+
+<p align="center">
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/menu_demo.mov" alt="Jura Ena Micro 90"/>
+</p>
+
+The first index prepares a double ristretto in which two espresso shots are pulled back to back, each limited to 17ml of espresso output (that's about 2x the grounds volume of 8g). 
+
+The second index here prepares a cappuccino with 60ml of milk, 17ml of espresso, plus a second added shot of 17ml of espresso. 
+
+The third index here prepares a "cortado" with 30ml of milk, 17ml of espresso, plus a second added shot of 17ml of espresso.
+
+The final operation will cause the secret menu to close. The menu will time out after a short period of time as well. 15 seconds by default. 
 
 <hr/>
 
