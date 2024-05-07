@@ -43,7 +43,7 @@ For fun, that's all. I saw [this](https://github.com/ryanalden/esphome-jura-comp
 
 # Home Assistant
 
-Here's my Home Assistant [configuration (YAML package)](https://github.com/andrewjfreyer/jurabridge/wiki/Home-Assistant-Configuration-v2). Here is what the bridge looks like, attached to the machine after a few destructive [modifications](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Modifications) to feed a ribbon cable through the housing to the debug port. 
+The bridge automatically reports back to HA via MQTT Discovery. Here is what the `jurabridge` looks like, attached to the machine after a few destructive [modifications](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Modifications) to feed a ribbon cable through the housing to the debug port. 
 
 <p align="center">
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_housed.png" alt="Jura Ena Micro 90"/>
