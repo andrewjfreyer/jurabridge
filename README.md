@@ -4,13 +4,6 @@
 
 (v2) ESP32 Arduino project for bridging a [Jura ENA Micro 90](https://us.jura.com/en/customer-care/products-support/ENA-Micro-90-MicroSilver-UL-15116) to home automation platforms via MQTT. A 3.3v to 5v level shifter is required between hardware UART of the ESP32 to the service port of the Jura. The ESP32 polls the Jura for status information via reverse-engineered Jura Service Port calls, calculates/determines device state and meta statuses and reports changes to an MQTT broker. Added custom preparation functionality via a separate input button.
 
-With exposed sensors, a UI can be built for Home Assistant that provides tons of information about the machine and its preparations. For example, with [button-card](https://github.com/custom-cards/button-card) and others: 
-
-<p align="center">
-  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/ui_walkthrough.gif" alt="Jura Ena Micro 90"/>
-</p>
-
-
 See here for [hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware) and [software](https://github.com/andrewjfreyer/jurabridge/wiki/software) requirements. [Connections are straightforward.](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware#connection-diagram)
 
 <p align="center">
@@ -86,6 +79,15 @@ The bridge automatically reports back to HA via MQTT Discovery, divided into a n
 <p align="center">
 <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/mqtt_device_discovery_thermoblock.png" alt="Jura Ena Micro 90"/>
 </p>
+
+## User Interface Example
+
+With all the automatically-exposed sensors, a UI can be built for Home Assistant that provides tons of information about the machine and its preparations. For example, with [button-card](https://github.com/custom-cards/button-card) and others: 
+
+<p align="center">
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/ui_walkthrough.gif" alt="Jura Ena Micro 90"/>
+</p>
+
 
 # `jurabridge` Hardware
 
