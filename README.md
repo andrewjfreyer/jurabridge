@@ -16,7 +16,7 @@ See here for [hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardwar
 For fun, that's all. I saw [this](https://github.com/ryanalden/esphome-jura-component/) and other projects and thought I'd begin investigating whether some or all of the functionality would extend to the Jura ENA Micro 90. Many did, many did not. Turns out, I needed to investigate and characterize a lot of the output from the machine. One thing led to another, and now we're here.
 
 
-# Table of Wiki Contents
+# Table of Contents
 
 ### Reverse Engineering 
 
