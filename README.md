@@ -64,7 +64,7 @@ The bridge automatically reports back to HA via MQTT Discovery, divided into a n
 
 ## Brew Group
 <p align="center">
-<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/mqtt_device_discovery_bg.png" alt="Jura Ena Micro 90"/>
+<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/mqtt_device_discovery_brewgroup.png" alt="Jura Ena Micro 90"/>
 </p>
 
 ## Dosing System
