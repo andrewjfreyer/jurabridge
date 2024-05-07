@@ -114,6 +114,13 @@ The data output from the machine is received and presented by [Home Assistant pr
 
 <hr/>
 
+# Maintenance Automation
+
+With machine status accurately known by the `jurabridge`, we can schedule maintenance operations automatically. This will increase output quality and sanitation to an extent. All this means is that a few minutes after a milk preparation has been completed and the machine has been idle, milk rinse is automatically performed. Similarly, after sitting idle for a time period, a water rinse is automaticaly performed. 
+
+<hr/>
+
+
 # Custom Preparations & Actions
 
 I've found out that the default programming dramatically undersells the machine's capabilities. The Jura produces good enough shots as is. All that to say, since I bought the machine, my expectation was set that "this is the best it can do, and that's just fine." It is, after all, a superauto and sacrifies are made over a manual process. We're sacrificing some quality for pushbutton convenience. However, surprising to me was that the ENA Micro 90 only uses ***7-10g of coffee per perparation*** - with 30 some-odd ml of water. That's less coffee and more water than I presumed, without giving it much thought. Plus, pump pressure drops pretty dramatically due to channeling so, the first parts of our shots are the best parts anyway. 
