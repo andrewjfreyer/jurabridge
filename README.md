@@ -11,7 +11,7 @@ See here for [hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardwar
 </p>
 
 
-# Why? Why do you do this? It's a discontinued machine...
+# Why? It's a discontinued machine...
 
 For fun, that's all. I saw [this](https://github.com/ryanalden/esphome-jura-component/) and other projects and thought I'd begin investigating whether some or all of the functionality would extend to the Jura ENA Micro 90. Many did, many did not. Turns out, I needed to investigate and characterize a lot of the output from the machine. One thing led to another, and now we're here.
 
