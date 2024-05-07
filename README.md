@@ -1,4 +1,4 @@
-# jurabridge ☕
+# jurabridge (v2) ☕
 
 # TL;DR
 
