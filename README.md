@@ -53,6 +53,8 @@ Here's my Home Assistant [configuration (YAML package)](https://github.com/andre
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_unhoused.png" alt="Jura Ena Micro 90"/>
 </p>
 
+In v2, I added a momentary pushbutton to Pin 21 that allows for custom menus that leverage the machine's own display:
+
 <p align="center">
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_with_button.png" alt="Jura Ena Micro 90"/>
 </p>
