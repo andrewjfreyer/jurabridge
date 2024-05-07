@@ -177,10 +177,6 @@ static const JuraCustomMenuItemConfiguration JuraCustomMenuItemConfigurations[] 
 
 4. The final operation will cause the secret menu to close. The menu will time out after a short period of time as well. 15 seconds by default. 
 
-<p align="center">
-  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/menu_demo.mov" alt="Jura Ena Micro 90"/>
-</p>
-
 To add other options, simply insert a new array item. For example, a two-shot americano: 
 
 ```
