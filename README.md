@@ -113,7 +113,7 @@ The final operation will cause the secret menu to close. The menu will time out 
 
 # Sensors Reportable to Home Assistant
 
-The following lists what sensors are reportable to home assistant. By default, most are disabled as each additional sensor adds reporting time and cycle time. However, use cases may vary so the options exist in [JuraConfiguraton.h](https://github.com/andrewjfreyer/jurabridge/blob/main/JuraConfiguration.h)
+The following lists what sensors are reportable to home assistant. By default, most are disabled as each additional sensor adds reporting time and cycle time. However, use cases may vary so the options exist in [JuraConfiguraton.h](https://github.com/andrewjfreyer/jurabridge/blob/main/v2/JuraConfiguration.h)
 | State ID |  Description / Name | Enabled by Default |
 | --- | -  | - |
 |JuraMachineStateIdentifier::OperationalState|Operational State| Yes|
