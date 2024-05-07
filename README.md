@@ -15,6 +15,8 @@ See here for [hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardwar
 
 For fun, that's all. I saw [this](https://github.com/ryanalden/esphome-jura-component/) and other projects and thought I'd begin investigating whether some or all of the functionality would extend to the Jura ENA Micro 90. Many did, many did not. Turns out, I needed to investigate and characterize a lot of the output from the machine. One thing led to another, and now we're here.
 
+Plus, although many of the Jura serivce commands are not exactly the same between devices, it's likely that this project will provide insights on other Jura machines. 
+
 
 # Table of Contents
 
@@ -114,12 +116,26 @@ The data output from the machine is received and presented by [Home Assistant pr
 
 # Custom Preparations & Actions
 
-I've found out that the default programming dramatically undersells the machine's capabilities. The Jura produces good enough shots as is. All that to say, since I bought the machine, my expectation was set that "this is the best it can do, and that's just fine." It is, after all, a superauto and sacrifies are made over a manual process. We're sacrificing some quality for pushbutton convenience. However, surprising to me was that the ENA Micro 90 only uses ***7-10g of coffee per perparation*** - with 30 some-odd ml of water. That's less coffee and more water than I presumed, without giving it much thought. Plus, pump pressure dropps pretty dramatically due to channeling so, the first parts of our shots are the best parts anyway. 
+I've found out that the default programming dramatically undersells the machine's capabilities. The Jura produces good enough shots as is. All that to say, since I bought the machine, my expectation was set that "this is the best it can do, and that's just fine." It is, after all, a superauto and sacrifies are made over a manual process. We're sacrificing some quality for pushbutton convenience. However, surprising to me was that the ENA Micro 90 only uses ***7-10g of coffee per perparation*** - with 30 some-odd ml of water. That's less coffee and more water than I presumed, without giving it much thought. Plus, pump pressure drops pretty dramatically due to channeling so, the first parts of our shots are the best parts anyway. 
 
 It's of course easy to pull two short shots back to back to get to a more traditional 15 - 20g "single" shot, but why not automate it? 
 Lets just automate it. Here, because `jurabridge` obtains (and/or infers) accurate machine status information, any number of custom recipes or custom instruction sequences can be excuted, without needing to modify EEPROM or to orchestrate a valid sequence of `FN:` commands, or without waiting for unnecessary long delays to presuming machine state. This command+interrupt+statuswait technique ensures that the machine excutes its own in-built sequences, and there's no risk of incidentally damaging the brewgroup with custom instructions or custom brew sequences. 
 
-In this project there's a header above that defines custom functions that are accessible via a pushbutton. As an example, there are three custom operations defined. This can be modified to include as many custom functions as needed:
+In this project there's a header above that defines custom functions that are accessible via a pushbutton. As an example, there are three custom operations defined. 
+
+Each of the menu array entires conform to a struct: 
+
+```
+
+struct JuraCustomMenuItemConfiguration {
+  const char name[255];
+  const char topic[255];
+  const char payload[255];
+};
+
+```
+
+The name field of this struct should be ten ASCII characters or less, as this will be displayed on the machine's display. The array itself can be modified to include as many custom functions as needed:
 
 ```
 static const JuraCustomMenuItemConfiguration JuraCustomMenuItemConfigurations[] {
@@ -146,17 +162,48 @@ static const JuraCustomMenuItemConfiguration JuraCustomMenuItemConfigurations[] 
 };
 ```
 
+1. The first index prepares a double ristretto in which two espresso shots are pulled back to back, each limited to 17ml of espresso output (that's about 2x the grounds volume of 8g). 
+
+2. The second index here prepares a cappuccino with 60ml of milk, 17ml of espresso, plus a second added shot of 17ml of espresso. 
+
+3. The third index here prepares a "cortado" with 30ml of milk, 17ml of espresso, plus a second added shot of 17ml of espresso.
+
+4. The final operation will cause the secret menu to close. The menu will time out after a short period of time as well. 15 seconds by default. 
+
 <p align="center">
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/menu_demo.mov" alt="Jura Ena Micro 90"/>
 </p>
 
-The first index prepares a double ristretto in which two espresso shots are pulled back to back, each limited to 17ml of espresso output (that's about 2x the grounds volume of 8g). 
+To add other options, simply insert a new array item. For example, a two-shot americano: 
 
-The second index here prepares a cappuccino with 60ml of milk, 17ml of espresso, plus a second added shot of 17ml of espresso. 
+```
+{
+  " AMERI x2",
+  MQTT_ROOT MQTT_SUBTOPIC_FUNCTION "make_hot_water",
+  "{'add':2,'brew':17}",
+}
+```
 
-The third index here prepares a "cortado" with 30ml of milk, 17ml of espresso, plus a second added shot of 17ml of espresso.
+Or a longhi expresso:
 
-The final operation will cause the secret menu to close. The menu will time out after a short period of time as well. 15 seconds by default. 
+```
+{
+  "  LUNGO",
+  MQTT_ROOT MQTT_SUBTOPIC_FUNCTION "make_espresso",
+  "{'brew':40}",
+}
+```
+
+In other cases, you can define your own personal brew preferences that will apply to the next physical button press of the machine. In the following example, pressing any of the program buttons will cause the next button press to limit brew output volume to 17 ml.
+
+```
+{
+  "ANDREW ESP",
+  MQTT_ROOT MQTT_DISPENSE_CONFIG "make_espresso",
+  "{'brew':17}",
+}
+```
+
 
 <hr/>
 
