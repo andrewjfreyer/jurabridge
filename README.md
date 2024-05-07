@@ -7,7 +7,7 @@
 With exposed sensors, a UI can be built for Home Assistant that provides tons of information about the machine and its preparations. For example, with [button-card](https://github.com/custom-cards/button-card) and others: 
 
 <p align="center">
-  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/jura_ui_main.png" alt="Jura Ena Micro 90"/>
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/ui_walkthrough.mov" alt="Jura Ena Micro 90"/>
 </p>
 
 
