@@ -1,8 +1,15 @@
-# jurabridge (v2) ☕
+# jurabridge ☕
 
 # TL;DR
 
-ESP32 Arduino project for bridging a [Jura ENA Micro 90](https://us.jura.com/en/customer-care/products-support/ENA-Micro-90-MicroSilver-UL-15116) to home automation platforms via MQTT. A 3.3v to 5v level shifter is required between hardware UART of the ESP32 to the service port of the Jura. The ESP32 polls the Jura for status information via reverse-engineered Jura Service Port calls, calculates/determines device state and meta statuses and reports changes to an MQTT broker. Added custom preparation functionality via a separate input button. Neat!
+(v2) ESP32 Arduino project for bridging a [Jura ENA Micro 90](https://us.jura.com/en/customer-care/products-support/ENA-Micro-90-MicroSilver-UL-15116) to home automation platforms via MQTT. A 3.3v to 5v level shifter is required between hardware UART of the ESP32 to the service port of the Jura. The ESP32 polls the Jura for status information via reverse-engineered Jura Service Port calls, calculates/determines device state and meta statuses and reports changes to an MQTT broker. Added custom preparation functionality via a separate input button.
+
+With exposed sensors, a UI can be built for Home Assistant that provides tons of information about the machine and its preparations. For example, with [button-card](https://github.com/custom-cards/button-card) and others: 
+
+<p align="center">
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/jura_ui_main.png" alt="Jura Ena Micro 90"/>
+</p>
+
 
 See here for [hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware) and [software](https://github.com/andrewjfreyer/jurabridge/wiki/software) requirements. [Connections are straightforward.](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware#connection-diagram)
 
@@ -16,7 +23,7 @@ See here for [hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardwar
 For fun, that's all. I saw [this](https://github.com/ryanalden/esphome-jura-component/) and other projects and thought I'd begin investigating whether some or all of the functionality would extend to the Jura ENA Micro 90. Many did, many did not. Turns out, I needed to investigate and characterize a lot of the output from the machine. One thing led to another, and now we're here.
 
 
-# Table of Contents
+# Table of Wiki Contents
 
 ### Reverse Engineering 
 
@@ -43,7 +50,47 @@ For fun, that's all. I saw [this](https://github.com/ryanalden/esphome-jura-comp
 
 # Home Assistant
 
-The bridge automatically reports back to HA via MQTT Discovery. Here is what the `jurabridge` looks like, attached to the machine after a few destructive [modifications](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Modifications) to feed a ribbon cable through the housing to the debug port. 
+The bridge automatically reports back to HA via MQTT Discovery, divided into a number of different devices for readability. Once `secrets.h` is configured with appropriate values, and device discovery finishes, size different devices will appear:
+
+<p align="center">
+<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/matt_device_discovery_main.png" alt="Jura Ena Micro 90"/>
+</p>
+
+
+## Main Controller
+<p align="center">
+<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/matt_device_discovery_controller.png" alt="Jura Ena Micro 90"/>
+</p>
+
+## Brew Group
+<p align="center">
+<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/matt_device_discovery_bg.png" alt="Jura Ena Micro 90"/>
+</p>
+
+## Dosing System
+<p align="center">
+<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/matt_device_discovery_dosing.png" alt="Jura Ena Micro 90"/>
+</p>
+
+## Milk System
+<p align="center">
+<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/matt_device_discovery_milk.png" alt="Jura Ena Micro 90"/>
+</p>
+
+## Water System
+<p align="center">
+<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/mqtt_device_discovery_water.png" alt="Jura Ena Micro 90"/>
+</p>
+
+## Thermoblock
+<p align="center">
+<img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/mqtt_device_discovery_thermoblock.png" alt="Jura Ena Micro 90"/>
+</p>
+
+# `jurabridge` Hardware
+
+Here is what the `jurabridge` looks like, attached to the machine after a few destructive [modifications](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Modifications) to feed a ribbon cable through the housing to the debug port. 
+
 
 <p align="center">
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/bridge_housed.png" alt="Jura Ena Micro 90"/>
