@@ -169,6 +169,10 @@ static const JuraCustomMenuItemConfiguration JuraCustomMenuItemConfigurations[] 
 };
 ```
 
+<p align="center">
+  <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/menu_demo.gif" alt="Jura Ena Micro 90"/>
+</p>
+
 1. The first index prepares a double ristretto in which two espresso shots are pulled back to back, each limited to 17ml of espresso output (that's about 2:1 ratio in respect of the grounds volume of 8g). 
 
 2. The second index here prepares a cappuccino with 60ml of milk, 17ml of espresso, plus a second added shot of 17ml of espresso. 
