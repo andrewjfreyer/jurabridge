@@ -6,6 +6,8 @@ ESP32 Arduino project for bridging a [Jura ENA Micro 90](https://us.jura.com/en/
 
 See here for [hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware) and [software](https://github.com/andrewjfreyer/jurabridge/wiki/software) requirements. [Connections are straightforward.](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware#connection-diagram)
 
+[Home Assistant Forum Link](https://community.home-assistant.io/t/jura-ena-micro-90-to-mqtt-bridge)
+
 <p align="center">
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/ena90.png" alt="Jura ENA Micro 90"/>
 </p>
@@ -18,7 +20,7 @@ I saw [this](https://github.com/ryanalden/esphome-jura-component/) and other pro
 
 # So what? 
 
-With 'jurabridge' we can: 
+With 'jurabridge' we can/have: 
 
 * ✅ **Power control.** Automatically turn the machine on and off in response to whatever triggers I want (via Home Assistant). Personally, mine is triggered from a motion sensor nearby the kitchen in the mornings. 
 
@@ -36,7 +38,7 @@ With 'jurabridge' we can:
 
 * ✅ **Alerts.** iOS alerts when a coffee product is ready.
   
-* ✅ **Improved safety.** Ensure the machine turns off at an appropriate time, or in response to certain conditions. (⚠️ NOTE: if a milk clean operation is not completed and the machine is waiting for "water for milk clean," the thermoblock is held around 150 degrees celcius for sanitation purposes. There *DOES NOT* appear to be a timeout apart from the machine's power off timer, which may be on the order of hours. If the machine is left in this state, it'll consume signifiant power and pose a minor fire risk.)
+* ✅ **Improved safety.** Ensure the machine turns off at an appropriate time, or in response to certain conditions. *⚠️ NOTE: If a milk clean operation is not completed and the machine is waiting for "water for milk clean," the thermoblock is held around 150 degrees celcius for sanitation purposes. There *DOES NOT* appear to be a timeout apart from the machine's power off timer, which may be on the order of hours. If the machine is left in this state, it'll consume signifiant power and pose a minor fire risk.*
   
 * ✅ **Ridiculousness.** Due to the connection to Home Assisant, we have connection to voice assistants too: "Alexa, make me a short espresso." 
 
