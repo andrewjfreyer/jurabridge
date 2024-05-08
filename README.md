@@ -217,7 +217,7 @@ To add other options, simply insert a new array item. For example, a two-shot am
 }
 ```
 
-Or a longhi expresso:
+Or a lungo:
 
 ```
 {
@@ -236,7 +236,31 @@ In other cases, you can define your own personal brew preferences that will appl
   "{'brew':17}",
 }
 ```
+<hr/>
 
+# Function Buttons in Home Assistant
+
+The following lists what buttons are reportable to home assistant. By default, most are disabled as each additional sensor adds reporting time and cycle time. However, use cases may vary so the options exist in [JuraConfiguraton.h](https://github.com/andrewjfreyer/jurabridge/blob/main/v2/JuraConfiguration.h)
+
+| Function ID |  Description / Name | Enabled by Default |
+| --- | -  | - |
+|JuraFunctionIdentifier::PowerOff| "Power Off"|No|
+|JuraFunctionIdentifier::ConfirmDisplayPrompt| "Confirm Display Prompt"|No|
+|JuraFunctionIdentifier::SettingsMenu| "Settings Menu"|Yes|
+|JuraFunctionIdentifier::SelectMenuItem| "Select Menu Item"|No|
+|JuraFunctionIdentifier::RotaryRight| "Rotary Right"|No|
+|JuraFunctionIdentifier::RotaryLeft| "Rotary Left"|No|
+|JuraFunctionIdentifier::MakeEspresso| "Make Espresso"|Yes|
+|JuraFunctionIdentifier::MakeCappuccino| "Make Cappuccino"|Yes|
+|JuraFunctionIdentifier::MakeCoffee| "Make Coffee"|Yes|
+|JuraFunctionIdentifier::MakeMacchiato| "Make Macchiato"|No|
+|JuraFunctionIdentifier::MakeHotWater| "Make Hot Water"|Yes|
+|JuraFunctionIdentifier::MakeMilkFoam| "Make Milk Foam"|Yes|
+|JuraFunctionIdentifier::MenuSelectRinseBrewGroup| "Rinse Brew Group"|Yes|
+|JuraFunctionIdentifier::MenuSelectRinseMilkSystem| "Rinse Milk System"|Yes|
+|JuraFunctionIdentifier::MenuSelectCleanMilkSystem| "Clean Milk System"|Yes|
+|JuraFunctionIdentifier::MenuSelectCleanBrewGroup| "Clean Brew Group"|Yes|
+|JuraFunctionIdentifier::RefreshMQTTConfiguration| "Refresh MQTT Configuration"|Yes|
 
 <hr/>
 
