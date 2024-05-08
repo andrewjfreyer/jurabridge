@@ -10,13 +10,11 @@ See here for [hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardwar
   <img src="https://github.com/andrewjfreyer/jurabridge/raw/main/images/ena90.png" alt="Jura ENA Micro 90"/>
 </p>
 
-
 # Why? It's a discontinued machine...
 
 For fun, that's all. I saw [this](https://github.com/ryanalden/esphome-jura-component/) and other projects and thought I'd begin investigating whether some or all of the functionality would extend to the Jura ENA Micro 90. Many did, many did not. Turns out, I needed to investigate and characterize a lot of the output from the machine. One thing led to another, and now we're here.
 
-Plus, although many of the Jura serivce commands are not exactly the same between devices, it's likely that this project will provide insights on other Jura machines. 
-
+Plus, it'd be nice to have [the machine turn on automatically or on a schedule (like every other machine out there...).](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Modifications#power-control-board) 
 
 # Table of Contents
 
