@@ -12,9 +12,35 @@ See here for [hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardwar
 
 # Why? It's a discontinued machine...
 
-For fun, that's all. I saw [this](https://github.com/ryanalden/esphome-jura-component/) and other projects and thought I'd begin investigating whether some or all of the functionality would extend to the Jura ENA Micro 90. Many did, many did not. Turns out, I needed to investigate and characterize a lot of the output from the machine. One thing led to another, and now we're here.
+For fun, that's all. The machine is *awesome* and still available as a refurb. 
 
-Plus, it'd be nice to have [the machine turn on automatically or on a schedule (like every other machine out there...).](https://github.com/andrewjfreyer/jurabridge/wiki/Jura-Ena-Micro-90-Modifications#power-control-board) 
+I saw [this](https://github.com/ryanalden/esphome-jura-component/) and other projects for other Jura models and thought I'd begin investigating the ENA Micro 90. Some existing comands worked, most did not. I needed to investigate and characterize a lot of the output from the machine and iterate through hundreds of commands to determine which ones the machine responded to, note what the response was, and then set about decoding/understanding what the data meant. One thing led to another, and now we're here. 
+
+# So what? 
+
+With 'jurabridge' we can: 
+
+* ✅ **Power control.** Automatically turn the machine on and off in response to whatever triggers I want (via Home Assistant). Personally, mine is triggered from a motion sensor nearby the kitchen in the mornings. 
+
+* ✅ **Custom coffee drinks.** Automatically create custom coffee or milk drinks with an arbitrary number of shots, arbitrary milk quantity, arbitrary water quantity (e.g., cortado, americano, lungo, ristretto, short cap, and so on). 
+
+* ✅ **Tuning.** Fine-tune shots to improve quality. By default, the machine doses 8 - 9g of coffee (it seems) and pushes through it 30ml of water, which ends up being a 3:1 grounds to water dosing ratio. That's about half-strenth compared to a traditional pull. Also, after extraction starts, channeling is almost guaranteed to take over and extraction will suffer even before we consider how much water is being forced through. To improve shot quality then, we need to reduce water and/or increase coffee. We can't increase coffee because of torque limitations of the brew group drive motor during tamping. So our best option to improve our shot is to pull 15 - 17ml through a standard 8g puck twice, back-to-back. This would give about 30ml of espresso pulled through 16g of coffee, in aggregate. The shots are *much* better to my palate using this technique.
+
+* ✅ **Quality control.** The thermoblock does not have fine temperture control, so there is quite a large range of possible extraction temperatures for different shots. The system can warn if the thermoblock is too high (meaning overextraction is likely), or if the thermoblock is too low (meaning underextraction is likely). In either case, running water through the machine can serve three purposes: (1) pre-warm a mug, (2) normalize thermoblock temperature below or around 100°C by purging heat or forcing the thermoblock on, and (3) clean the mug. This is not necessary in all cases, but is a good idea for best shot performance. 
+
+* ✅ **Automation.** Automate our fine-tunings and/or temperature purge so that a perfect pull (sequence) executes without supervision.
+
+* ✅ **Convenience & sanitation.** Automate maintenance operations such as brew group rinse and milk system rinse when the machine is idle. This will save internal silicon tubing from absorbing and accumulating burned coffee flavors, and it'll improve the sanitation of the milksystem.
+
+* ✅ **Reminders.** Create maintence reminders or alerts via Home Assistant (e.g., iOS notifications, Alexa notifications, UI alerts or badges)
+
+* ✅ **Alerts.** iOS alerts when a coffee product is ready.
+  
+* ✅ **Improved safety.** Ensure the machine turns off at an appropriate time, or in response to certain conditions. (⚠️ NOTE: if a milk clean operation is not completed and the machine is waiting for "water for milk clean," the thermoblock is held around 150 degrees celcius for sanitation purposes. There *DOES NOT* appear to be a timeout apart from the machine's power off timer, which may be on the order of hours. If the machine is left in this state, it'll consume signifiant power and pose a minor fire risk.)
+  
+* ✅ **Ridiculousness.** Due to the connection to Home Assisant, we have connection to voice assistants too: "Alexa, make me a short espresso." 
+
+* ✅ **Overwhelming data.** We retreive all meters from the machine, including service life of the grinder, the drive motor of the brew group, and others. Can inform when other maintenance is necessary. 
 
 # Table of Contents
 
