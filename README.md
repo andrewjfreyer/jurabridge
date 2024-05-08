@@ -313,7 +313,7 @@ The following lists what sensors are reportable to home assistant. By default, m
 |JuraMachineStateIdentifier::CleanMilkSystemRecommended| Milk Clean Recommended| Yes|
 |JuraMachineStateIdentifier::CleanBrewGroupRecommendedSoon| System Clean Recommended| Yes|
 |JuraMachineStateIdentifier::CleanBrewGroupRecommended| System Clean Required| Yes|
-|JuraMachineStateIdentifier::HasDoes| Dose in Brew Group|No|
+|JuraMachineStateIdentifier::HasDose| Dose in Brew Group|No|
 
 
 ## Disclaimer
