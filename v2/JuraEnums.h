@@ -187,13 +187,16 @@ enum class JuraMachineStateIdentifier {
   BrewProgramIsCleaning,
   GroundsNeedsEmpty,
   SystemIsReady,
+  OverextractionLikely, 
+  UnderextractionLikely,
 
   /* INFERRED STATES */
+  PurgeWaterOperationRecommended,
   RinseMilkSystemRecommended, 
   CleanMilkSystemRecommended,
   CleanBrewGroupRecommendedSoon,
   CleanBrewGroupRecommended,
-  HasDoes,
+  HasDose,
 
   /* Limits */
   BrewLimit, 
@@ -246,7 +249,7 @@ enum class JuraMachineReadyState {
                                 };
 
 /* structures & enums*/
-enum class JuraMachineSubsystem                     { Controller, Thermoblock, Brewgroup, Water, Dosing, Milksystem, Bridge };
+enum class JuraMachineSubsystem                     { Controller, Thermoblock, BrewGroup, Water, Dosing, Milksystem, Bridge };
 enum class JuraMachineSubsystemAttributeType        { Error, Function, MeterValue, DataValue, StateValue, ServiceRecommendation};
 enum class JuraMachineDispenseLimitType             { Water, Milk, Brew, None};
 enum class JuraMachineStateDataType                 { Boolean, Integer, String };

@@ -25,6 +25,11 @@ static const JuraCustomMenuItemConfiguration JuraCustomMenuItemConfigurations[] 
     MQTT_ROOT MQTT_SUBTOPIC_FUNCTION "make_cappuccino",
     "{'milk':30,'brew':17}",
   },
+  {
+    " AMERI x2",
+    MQTT_ROOT MQTT_SUBTOPIC_FUNCTION "make_hot_water",
+    "{'add':2,'brew':17}",
+  },
   { /* the last element will always be treated as an exit, regardless the command phrase here */
     "   EXIT",
     "",

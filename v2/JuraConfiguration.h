@@ -10,7 +10,7 @@
 #define BRIDGE_NAME       "Jura Bridge"
 #define CONTROLLER_NAME   "Jura Controller"
 #define THERMOBLOCK_NAME  "Jura Thermoblock"
-#define BREW_GROUP_NAME   "Jura Brewgroup"
+#define BREW_GROUP_NAME   "Jura Brew Group"
 #define WATER_NAME        "Jura Water System"
 #define DOSING_NAME       "Jura Dosing System"
 #define MILKSYSTEM_NAME   "Jura Milk System"
@@ -53,8 +53,8 @@
 
 /* temperature thresholds */
 #define COLD_MODE_THRESHOLD                     60
-#define LOW_MODE_THRESHOLD                      95
-#define HIGH_MODE_THRESHOLD                     108
+#define LOW_MODE_THRESHOLD                      96
+#define HIGH_MODE_THRESHOLD                     104
 #define OVERTEMP_THRESHOLD                      115
 #define SANITATION_TEMP_THRESHOLD               148 /* for milk clean; required temperature is 150, so 2deg buffer*/
 
@@ -228,7 +228,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::MeterValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::Yes,
     0 /* default value */
   },
@@ -251,7 +251,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
   },
   {
     JuraMachineStateIdentifier::NumBrewGroupCleanOperations,
-    NAME_PREFIX "Cleanings of Brewgroup",
+    NAME_PREFIX "Cleanings of Brew Group",
     ENTITY_PREFIX "cleans_brew_group",
     JuraMachineStateDataType::Integer,
     JuraMachineStateCategory::Diagnostic,
@@ -262,7 +262,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::MeterValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::Yes,
     0 /* default value */
   },
@@ -619,7 +619,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     0 /* default value */
   },
@@ -636,7 +636,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     0 /* default value */
   },
@@ -653,7 +653,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     0 /* default value */
   },
@@ -670,7 +670,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     0 /* default value */
   },
@@ -687,7 +687,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     0 /* default value */
   },
@@ -738,7 +738,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::ServiceRecommendation,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     0 /* default value */
   },
@@ -789,7 +789,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     0 /* default value */
   },
@@ -806,7 +806,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     0 /* default value */
   },
@@ -823,7 +823,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     0 /* default value */
   },
@@ -840,7 +840,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     0 /* default value */
   },
@@ -857,7 +857,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     0 /* default value */
   },
@@ -942,7 +942,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::Yes,
     0 /* default value */
   }, 
@@ -1214,7 +1214,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::DataValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     0 /* default value */
   },
@@ -1503,7 +1503,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     0 /* default value */
   },
@@ -1520,7 +1520,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     0 /* default value */
   },
@@ -1537,7 +1537,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     0 /* default value */
   },
@@ -1554,7 +1554,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     1 /* default value */
   },
@@ -1571,7 +1571,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     0 /* default value */
   },
@@ -1588,7 +1588,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraEntityNonvolatile::No,
     0 /* default value */
   },
@@ -1729,9 +1729,9 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     0 /* default value */
   },
   {
-    JuraMachineStateIdentifier::HasDoes,
+    JuraMachineStateIdentifier::HasDose,
     NAME_PREFIX "Dose in Brew Group",
-    ENTITY_PREFIX "service_port_active",
+    ENTITY_PREFIX "dose_in_brew_group",
     JuraMachineStateDataType::Boolean,
     JuraMachineStateCategory::Config,
     JuraMachineDeviceClass::None,
@@ -1742,6 +1742,57 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
     JuraMachineSubsystem::Dosing,
+    JuraEntityNonvolatile::No,
+    0 /* default value */
+  },
+  {
+    JuraMachineStateIdentifier::PurgeWaterOperationRecommended,
+    NAME_PREFIX "Normalize Thermoblock Temperature Recommended",
+    ENTITY_PREFIX "normalize_thermoblock_temperature_recommended",
+    JuraMachineStateDataType::Boolean,
+    JuraMachineStateCategory::Config,
+    JuraMachineDeviceClass::None,
+    JuraMachineStateIcon::Check,
+    JuraMachineStateUnit::None,
+    JuraEntityEnabled::Yes,
+    JuraEntitySerialPrintable::Yes,
+    JuraEntityAvailabilityFollowsReadyState::No,
+    JuraMachineSubsystemAttributeType::ServiceRecommendation,
+    JuraMachineSubsystem::Thermoblock,
+    JuraEntityNonvolatile::No,
+    0 /* default value */
+  },
+  {
+    JuraMachineStateIdentifier::OverextractionLikely,
+    NAME_PREFIX "Overextraction Risk",
+    ENTITY_PREFIX "overextraction_risk",
+    JuraMachineStateDataType::Boolean,
+    JuraMachineStateCategory::Config,
+    JuraMachineDeviceClass::None,
+    JuraMachineStateIcon::Check,
+    JuraMachineStateUnit::None,
+    JuraEntityEnabled::Yes,
+    JuraEntitySerialPrintable::Yes,
+    JuraEntityAvailabilityFollowsReadyState::No,
+    JuraMachineSubsystemAttributeType::ServiceRecommendation,
+    JuraMachineSubsystem::Thermoblock,
+    JuraEntityNonvolatile::No,
+    0 /* default value */
+  },
+  {
+    JuraMachineStateIdentifier::UnderextractionLikely,
+    NAME_PREFIX "Underextraction Risk",
+    ENTITY_PREFIX "underextraction_risk",
+    JuraMachineStateDataType::Boolean,
+    JuraMachineStateCategory::Config,
+    JuraMachineDeviceClass::None,
+    JuraMachineStateIcon::Check,
+    JuraMachineStateUnit::None,
+    JuraEntityEnabled::Yes,
+    JuraEntitySerialPrintable::Yes,
+    JuraEntityAvailabilityFollowsReadyState::No,
+    JuraMachineSubsystemAttributeType::ServiceRecommendation,
+    JuraMachineSubsystem::Thermoblock,
     JuraEntityNonvolatile::No,
     0 /* default value */
   }
@@ -1948,7 +1999,7 @@ static const JuraMachineFunctionEntityConfiguration JuraMachineFunctionEntityCon
     JuraServicePortCommand::None,
     JuraMachineMenuCommand::Rinse,
     JuraMachineSubsystemAttributeType::Function,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraMachineReadyState::RinseBrewGroupComplete,
   },
   {
@@ -1993,7 +2044,7 @@ static const JuraMachineFunctionEntityConfiguration JuraMachineFunctionEntityCon
     JuraServicePortCommand::None,
     JuraMachineMenuCommand::Clean,
     JuraMachineSubsystemAttributeType::Function,
-    JuraMachineSubsystem::Brewgroup,
+    JuraMachineSubsystem::BrewGroup,
     JuraMachineReadyState::CleanBrewGroupComplete,
   },
   {

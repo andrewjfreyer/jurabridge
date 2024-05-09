@@ -378,8 +378,8 @@ void connectToBroker(){
     mqttClient.connect(TAG, MQTT_USER, MQTT_PASS, operational_state_topic, 0, false, "OFF" , true);
     vTaskDelayMilliseconds(2500);
   }
+
   mqttClient.setCallback( mqttCallback );
-  ESP_LOGI(TAG, "%s", MQTTBROKER);
 
   /* subscriptions and mqtt first stuffs refreshing goes here */
   xSemaphoreWrappedSetBoolean(xMQTTStatusSemaphore, connectedToBroker, true);   
@@ -604,6 +604,12 @@ void customMenuHandler(void * parameter){
           customMenu.item = 1;
           customMenu.active = true;
           customMenu.time = millis();
+
+          /* cancel button press right here to show the first menu item */
+          menuButton.endat = 0;
+          menuButton.startat = 0;
+          menuButton.pressed = false;
+          menuButton.isBeingHeld = false;
           continue; 
         }
 
@@ -634,6 +640,7 @@ void customMenuHandler(void * parameter){
         if (millis() - menuButton.startat > 500 && !menuButton.isBeingHeld){
           menuButton.isBeingHeld = true; 
           bridge.instructServicePortToDisplayString("    OK");
+          vTaskDelay(750 / portTICK_PERIOD_MS);
         }
       }
     }
@@ -715,7 +722,7 @@ void setup() {
   xTaskCreate(
     customMenuHandler,   
     "customMenuHandler",  
-    5000,           
+    10000,           
     NULL,      
     2,
     NULL
@@ -748,7 +755,7 @@ void setup() {
   xTaskCreate(
     machineStatePollingHandler,        
     "machineStatePollingHandler",      
-    8192,            
+    10000,            
     NULL,            
     4,               
     &xUART

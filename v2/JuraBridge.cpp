@@ -17,13 +17,11 @@ JuraBridge::JuraBridge(
   xUARTSemaphore(xUARTSemaphoreRef), 
   servicePort(xUARTSemaphoreRef) {
   
-  /* init reported states to high array */
-  for (int i = 0; i < 100; i++) { _reportableNumericStates[i] = DEFAULT_NUMERIC_STATE;}
-
   /* set index association table */
   int stateAttributeArraySize = sizeof(JuraEntityConfigurations) / sizeof(JuraEntityConfigurations[0]) ; 
   for (int i = 0; i < stateAttributeArraySize ; i++){
     _stateIndexToConfigurationIndex[(int)JuraEntityConfigurations[i].state] = i; 
+    _reportableNumericStates[i] = DEFAULT_NUMERIC_STATE;
   }
 }
 
@@ -211,7 +209,7 @@ JuraBridge::JuraBridge(
         mqttJsonConfigurationBody["device"]["identifiers"][0] =   THERMOBLOCK_NAME;
         mqttJsonConfigurationBody["device"]["name"] =             THERMOBLOCK_NAME;
         break;
-      case JuraMachineSubsystem::Brewgroup:
+      case JuraMachineSubsystem::BrewGroup:
         mqttJsonConfigurationBody["device"]["identifiers"][0] =   BREW_GROUP_NAME;
         mqttJsonConfigurationBody["device"]["name"] =             BREW_GROUP_NAME;
         break;
@@ -360,7 +358,7 @@ void JuraBridge::publishMachineFunctionConfiguration(){
         mqttJsonConfigurationBody["device"]["identifiers"][0] =   THERMOBLOCK_NAME;
         mqttJsonConfigurationBody["device"]["name"] =             THERMOBLOCK_NAME;
         break;
-      case JuraMachineSubsystem::Brewgroup:
+      case JuraMachineSubsystem::BrewGroup:
         mqttJsonConfigurationBody["device"]["identifiers"][0] =   BREW_GROUP_NAME;
         mqttJsonConfigurationBody["device"]["name"] =             BREW_GROUP_NAME;
         break;

@@ -8,6 +8,8 @@
 class Preferences; 
 class PubSubClient; 
 
+#define JURA_ENTITY_CONFIGURATION_SIZE 200
+
 class JuraBridge {
   public: 
     /* reminder: need to keep preferences init'd in main *.ino; pass reference here */
@@ -45,8 +47,8 @@ class JuraBridge {
     char* substr(char*, int, int );
   
     /* machine states; not set precisely */
-    int _reportableNumericStates[100]; 
-    int _stateIndexToConfigurationIndex[100]; 
+    int _reportableNumericStates[JURA_ENTITY_CONFIGURATION_SIZE]; 
+    int _stateIndexToConfigurationIndex[JURA_ENTITY_CONFIGURATION_SIZE]; 
 
 };
 

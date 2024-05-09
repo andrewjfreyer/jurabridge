@@ -19,7 +19,7 @@
 #define SUBSTR_INDEX_NUM_LOW_PRESSURE_PUMP_OPERATIONS   7
 #define SUBSTR_INDEX_NUM_CLEAN_SYSTEM_OPERATIONS        8
 //                                                      9 // num descaling? 
-#define SUBSTR_INDEX_NUM_DRIVE_MOTOR_OPERATIONS         10 //huge number; 16901 ??? 17630 ??? (goes up by three for each brew?)
+#define SUBSTR_INDEX_NUM_DRIVE_MOTOR_OPERATIONS         10 
 //                                                      11
 //                                                      12 
 //                                                      13 // water operations since descaling??
@@ -28,6 +28,7 @@
 /* ----------------------- RT1 ----------------------- */
 #define SUBSTR_INDEX_NUM_HIGH_PRESSURE_PUMP_OPERATIONS  0 
 //                                                      1 //changed from 83 to 0 after cleaning started; 19 -> 20 after rinse/turn on ???; 44 - 45 after turn on??
+//                                                      2
 #define SUBSTR_INDEX_NUM_MILK_FOAM_PREPARATIONS         3
 #define SUBSTR_INDEX_NUM_WATER_PREPARATIONS             4
 #define SUBSTR_INDEX_NUM_GRINDER_OPERATIONS             5
