@@ -231,9 +231,19 @@ In other cases, you can define your own personal brew preferences that will appl
 
 ```
 {
-  "ANDREW ESP",
-  MQTT_ROOT MQTT_DISPENSE_CONFIG "make_espresso",
+  "ESPRESSO 1",
+  MQTT_ROOT MQTT_DISPENSE_CONFIG,
   "{'brew':17}",
+}
+```
+
+Or, simply add a shot to any other preparation. In this case, we can automatically add a 17ml espresso pull after any other machine button. After enabling this option, the display will update to "PRODUCT?", encouraging selection of one of the six prefab buttons (espresso, cappuccino, macchiato, water, milk foam, coffee). Once the use makes a selection and the selected program completes, a shot will be pulled:
+
+```
+{
+  " ADD SHOT",
+  MQTT_ROOT MQTT_DISPENSE_CONFIG,
+  "{'add':1,m 'brew':17}",
 }
 ```
 <hr/>
