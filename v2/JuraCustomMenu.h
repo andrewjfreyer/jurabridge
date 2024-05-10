@@ -16,6 +16,11 @@ static const JuraCustomMenuItemConfiguration JuraCustomMenuItemConfigurations[] 
     "{'add':1,'brew':17}",
   },
   {
+    " ADD SHOT ",
+    MQTT_ROOT MQTT_DISPENSE_CONFIG,
+    "{'add':1,'brew':17}",
+  },
+  {
     "  CAP +1",
     MQTT_ROOT MQTT_SUBTOPIC_FUNCTION "make_cappuccino",
     "{'milk':60,'brew':17,'add':1}",

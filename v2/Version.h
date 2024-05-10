@@ -2,12 +2,15 @@
 #define VERSION_H
 
 /* current version */
-#define VERSION_STR         "0.7.2" /* reported via mqtt device discovery as version number*/
-#define VERSION_INT         2       /* iteration of this value will trigger an automatic mqtt configuration update on boot*/
+#define VERSION_STR         "0.7.5" /* reported via mqtt device discovery as version number*/
+#define VERSION_INT         4       /* iteration of this value will trigger an automatic mqtt configuration update on boot*/
 #define VERSION_MAJOR_STR   "7"     /* needs to be string type; displayed in the display*/
 
 /*
-0.7.2 - overextraction/underextraction warnings;fix logic error in error handler
+0.7.5 - bugfixes relating to overextraction warning temperatures
+0.7.4 - addshot support for preparation agnostic usemode
+0.7.3 - fix logic error in error handler
+0.7.2 - overextraction/underextraction warnings
 0.7.1 - typoswatting
 0.7.0 - version up; bug checking and feature adding 
 ---

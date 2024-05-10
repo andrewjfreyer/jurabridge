@@ -53,8 +53,8 @@
 
 /* temperature thresholds */
 #define COLD_MODE_THRESHOLD                     60
-#define LOW_MODE_THRESHOLD                      96
-#define HIGH_MODE_THRESHOLD                     104
+#define LOW_MODE_THRESHOLD                      94
+#define HIGH_MODE_THRESHOLD                     105
 #define OVERTEMP_THRESHOLD                      115
 #define SANITATION_TEMP_THRESHOLD               148 /* for milk clean; required temperature is 150, so 2deg buffer*/
 
@@ -77,7 +77,7 @@ be dumped to the drainage tray (e.g., condenser, drainage valve, etc). the follo
 #define DISPENSED_ML_CALIBRATION_COEFFICIENT_MILK      2.17543860  /* dispensed 124 ml when 57 was reported */
 #define DISPENSED_ML_CALIBRATION_COEFFICIENT_OATMILK   2.08196721  /* dispensed 127 ml when 61 was reported */
 
-#define BUTTON_HOLD_DURATION_MS                 750
+#define BUTTON_HOLD_DURATION_MS                        750
 /*
 
   name:         JuraEntityConfigurations
@@ -1746,9 +1746,9 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     0 /* default value */
   },
   {
-    JuraMachineStateIdentifier::PurgeWaterOperationRecommended,
-    NAME_PREFIX "Normalize Thermoblock Temperature Recommended",
-    ENTITY_PREFIX "normalize_thermoblock_temperature_recommended",
+    JuraMachineStateIdentifier::RegulateThermoblockTemperatureRecommended,
+    NAME_PREFIX "Regulate Thermoblock Temperature Recommended",
+    ENTITY_PREFIX "regulate_thermoblock_temperature_recommended",
     JuraMachineStateDataType::Boolean,
     JuraMachineStateCategory::Config,
     JuraMachineDeviceClass::None,

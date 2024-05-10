@@ -53,7 +53,7 @@ volatile bool connectedToNetwork;
 
 /* button */
 struct Button {
-	bool pressed;
+	bool released;
   bool isBeingHeld;
   unsigned long startat;
   unsigned long endat;
@@ -97,6 +97,47 @@ void machineStatePollingHandler (void * pvParameters){
     }else{
       vTaskDelayMilliseconds(100);
     }
+  }
+}
+
+void awaitDispenseCompletionToAddShots( int addShot, int brewLimit = 17 ){
+
+  /* precharge the wait display for between elements */
+  bridge.instructServicePortToDisplayString("   WAIT   ");
+
+  /* iterating over two shots */
+  for( int shot = 0; shot < addShot; shot ++){
+
+    /* define a non-ready state that is not processed in the machine poller; protect  */
+    xSemaphoreTake( xMachineReadyStateVariableSemaphore, portMAX_DELAY );
+    machine.startAddShotPreparation();
+
+    /* 
+      NOTE TO READER: intentionally leave the semaphore taken here to prevent a ready state from happen
+      until we get into the while loop below 
+    */
+
+    /* entire the loop before returning the semaphore */
+    bool canGiveSemaphore = true;
+    while (machine.states[(int) JuraMachineStateIdentifier::SystemIsReady] == false){
+      vTaskDelayMilliseconds(500);
+      if (canGiveSemaphore){
+        xSemaphoreGive( xMachineReadyStateVariableSemaphore);
+        canGiveSemaphore = false;
+      }
+    }
+
+    /* between different shots - resting period */              
+    vTaskDelayMilliseconds(750);
+
+    /* set brew limit here */
+    machine.setDispenseLimit(brewLimit, JuraMachineDispenseLimitType::Brew) ;
+
+    /* send the command for this repetition */
+    bridge.instructServicePortWithJuraFunctionIdentifier(JuraFunctionIdentifier::MakeEspresso);
+
+    /* resting period */              
+    vTaskDelayMilliseconds(750);
   }
 }
 
@@ -156,8 +197,32 @@ void receivedMQTTMessageQueueWorker( void *pvParameters ){
           /* is this a straigh up dispense config? */
           if (topic == MQTT_ROOT MQTT_DISPENSE_CONFIG) {
             bridge.instructServicePortToDisplayString(" PRODUCT?");
-            ESP_LOGI(TAG,"Custom limits set: Water: %i ml Milk: %i ml Brew: %i ml Add: %i shots", waterLimit, milkLimit, brewLimit, addShot );
-            continue;
+            
+            /* if addshot is set, we need to wait for non-*/
+            if (addShot > 0){
+
+              /* entire the loop before returning the semaphore */
+              bool canGiveSemaphore = true;
+              while (machine.states[(int) JuraMachineStateIdentifier::SystemIsReady] == true){
+                vTaskDelayMilliseconds(500);
+                if (canGiveSemaphore){
+                  canGiveSemaphore = false;
+                }
+              }
+
+              /* define a non-ready state that is not processed in the machine poller; protect  */
+              machine.startAddShotPreparation();
+
+              /* instruct add shots */
+              awaitDispenseCompletionToAddShots(addShot, brewLimit);
+
+              /* return to ready*/
+              bridge.instructServicePortToSetReady();
+
+            }else{
+              ESP_LOGI(TAG,"Custom limits set: Water: %i ml Milk: %i ml Brew: %i ml", waterLimit, milkLimit, brewLimit);
+              continue;
+            }
           }
         }
       }
@@ -178,44 +243,7 @@ void receivedMQTTMessageQueueWorker( void *pvParameters ){
             
             /* debug */
             ESP_LOGI(TAG,"--> Machine Add Shot Function: %s", JuraMachineFunctionEntityConfigurations[i].name);
-
-            /* precharge the wait display for between elements */
-            bridge.instructServicePortToDisplayString("   WAIT   ");
-
-            /* iterating over two shots */
-            for( int shot = 0; shot < addShot; shot ++){
-
-              /* define a non-ready state that is not processed in the machine poller; protect  */
-              xSemaphoreTake( xMachineReadyStateVariableSemaphore, portMAX_DELAY );
-              machine.startAddShotPreparation();
-
-              /* 
-                NOTE TO READER: intentionally leave the semaphore taken here to prevent a ready state from happen
-                until we get into the while loop below 
-              */
-
-              /* entire the loop before returning the semaphore */
-              bool canGiveSemaphore = true;
-              while (machine.states[(int) JuraMachineStateIdentifier::SystemIsReady] == false){
-                vTaskDelayMilliseconds(500);
-                if (canGiveSemaphore){
-                  xSemaphoreGive( xMachineReadyStateVariableSemaphore);
-                  canGiveSemaphore = false;
-                }
-              }
-
-              /* between different shots - resting period */              
-              vTaskDelayMilliseconds(750);
-
-              /* set brew limit here */
-              machine.setDispenseLimit(brewLimit, JuraMachineDispenseLimitType::Brew) ;
-
-              /* send the command for this repetition */
-              bridge.instructServicePortWithJuraFunctionIdentifier(JuraFunctionIdentifier::MakeEspresso);
-
-              /* resting period */              
-              vTaskDelayMilliseconds(750);
-            }
+            awaitDispenseCompletionToAddShots(addShot, brewLimit);
           }
 
           /* set ready */
@@ -550,10 +578,10 @@ void statusLEDBlinker(void * parameter){
 volatile int buttonChangeTime;
 #define DEBOUNCE 300
 void IRAM_ATTR buttonInterruptSwitchPressRoutine() {
-  if (digitalRead(DEV_BOARD_BUTTON_PIN) == HIGH && menuButton.pressed == false){
+  if (digitalRead(DEV_BOARD_BUTTON_PIN) == HIGH && menuButton.released == false){
     buttonChangeTime = millis();
     if (buttonChangeTime - menuButton.endat > DEBOUNCE){
-      menuButton.pressed = true;
+      menuButton.released = true;
       menuButton.endat = buttonChangeTime;
     }
   }else if (menuButton.startat == 0){
@@ -572,12 +600,16 @@ void IRAM_ATTR buttonInterruptSwitchPressRoutine() {
  ******************************************************************************/
 void customMenuHandler(void * parameter){
   int menuItems = sizeof(JuraCustomMenuItemConfigurations) / sizeof(JuraCustomMenuItemConfigurations[0]) ; 
+  bool canceled = false; 
+
   for(;;){
     /* menu active or not? */
-    bool selectionMade = false;
-    if (menuButton.pressed) {
+    bool userMadeSelectionByHoldingButton = false;
+
+    /* has the hardware button been pressed ?? */
+    if (menuButton.released) {
       /* reset button immediately */
-      menuButton.pressed = false;
+      menuButton.released = false;
       menuButton.isBeingHeld = false;
 
       /* how long was it pressed ?*/
@@ -585,12 +617,13 @@ void customMenuHandler(void * parameter){
       menuButton.startat = 0;
 
       /* button held */
-      if (duration > BUTTON_HOLD_DURATION_MS){selectionMade = true;}
+      if (duration > BUTTON_HOLD_DURATION_MS && !canceled ){
+        userMadeSelectionByHoldingButton = true;
+      }
+      canceled = false; 
 
       /* menu is active, lets change the menu item!*/
-      if (!selectionMade){
-        /* display the menu item */
-        if (customMenu.active){
+      if (!userMadeSelectionByHoldingButton && customMenu.active){
           /* iterate the selected menu */
           customMenu.item = (customMenu.item % menuItems) + 1; 
           customMenu.time = millis();
@@ -598,64 +631,80 @@ void customMenuHandler(void * parameter){
           /* set menu name; zero indexed but iterator is 1 indexed */
           bridge.instructServicePortToDisplayString(JuraCustomMenuItemConfigurations[customMenu.item - 1].name);
 
+      /* menu active, and user held button*/
+      }else if (userMadeSelectionByHoldingButton && customMenu.active){
+
+        /* if the currently-selected item is less than the last item, trigger the appropriate menu item mqtt */
+        if (customMenu.item < menuItems){
+          bridge.instructServicePortToDisplayString("   WAIT");
+
+          ESP_LOGI(TAG, "%s, ", JuraCustomMenuItemConfigurations[customMenu.item - 1].topic);
+          /* send mqtt message corresponding to selected emnu item */
+          xSemaphoreTake( xMQTTSemaphore, portMAX_DELAY );
+          mqttClient.publish(
+            JuraCustomMenuItemConfigurations[customMenu.item - 1].topic,
+            JuraCustomMenuItemConfigurations[customMenu.item - 1].payload 
+          );  
+          xSemaphoreGive(xMQTTSemaphore);
         }else{
+          /* so the ready prompt doesn't show immediately */
+          vTaskDelay(750 / portTICK_PERIOD_MS);
 
-          bridge.instructServicePortToDisplayString(JuraCustomMenuItemConfigurations[0].name);
-          customMenu.item = 1;
-          customMenu.active = true;
-          customMenu.time = millis();
-
-          /* cancel button press right here to show the first menu item */
-          menuButton.endat = 0;
-          menuButton.startat = 0;
-          menuButton.pressed = false;
-          menuButton.isBeingHeld = false;
-          continue; 
+          /* if we are at the last item, set ready */
+          bridge.instructServicePortToSetReady();
         }
 
-      }else{
-        if (customMenu.active){
-          if (customMenu.item < menuItems){
-              bridge.instructServicePortToDisplayString("   WAIT");
+      /* menu is not avtive, but user pressed the button */
+      } else if (! customMenu.active ){
+        /* start the menu off regardless whether it's being held or not */
+        bridge.instructServicePortToDisplayString(JuraCustomMenuItemConfigurations[0].name);
+        customMenu.item = 1;
+        customMenu.active = true;
+        customMenu.time = millis();
 
-              ESP_LOGI(TAG, "%s, ", JuraCustomMenuItemConfigurations[customMenu.item - 1].topic);
-              /* send mqtt message corresponding to selected emnu item */
-              xSemaphoreTake( xMQTTSemaphore, portMAX_DELAY );
-              mqttClient.publish(
-                JuraCustomMenuItemConfigurations[customMenu.item - 1].topic,
-                JuraCustomMenuItemConfigurations[customMenu.item - 1].payload 
-              );  
-              xSemaphoreGive(xMQTTSemaphore);
-            }else{
-              /* exit item!*/
-              bridge.instructServicePortToSetReady();
-            }
-          }
-        }
+        /* cancel button press right here to show the first menu item */
+        menuButton.endat = 0;
+        menuButton.startat = 0;
+        menuButton.released = false;
+        menuButton.isBeingHeld = false;
+        canceled = false; 
 
-       
+        /* prevent button from being immediately pressed again */
+        vTaskDelay(500 / portTICK_PERIOD_MS);
+        continue; 
+      }  
+    
+    /* if the hardware button has not been released yet, is it currently being pressed while the menu is open? */
     }else if (customMenu.active) {
       /* if startat is nonzero, then the button is currently being pressed*/
       if (menuButton.startat != 0){
-        if (millis() - menuButton.startat > 500 && !menuButton.isBeingHeld){
+        if (millis() - menuButton.startat > 800 && !menuButton.isBeingHeld){
           menuButton.isBeingHeld = true; 
           bridge.instructServicePortToDisplayString("    OK");
-          vTaskDelay(750 / portTICK_PERIOD_MS);
+          vTaskDelay(250 / portTICK_PERIOD_MS);
+        
+        }else if (millis() - menuButton.startat > 2500 && menuButton.isBeingHeld && !canceled){
+          canceled = true;
+          bridge.instructServicePortToDisplayString("  CANCEL");
+          customMenu.item = (customMenu.item % menuItems) - 1; 
+          vTaskDelay(500 / portTICK_PERIOD_MS);
         }
       }
     }
 
-    /* is the menu timed out ? */
-    if ((customMenu.active && (millis() - customMenu.time > 15000)) || (selectionMade && customMenu.active)){
-      if (!selectionMade){bridge.instructServicePortToSetReady();}
-      customMenu.active = false; 
-      customMenu.item = 0;
+    /* is the menu timed out while the button isn't being engaged by the user ? */
+    if (!menuButton.isBeingHeld){
+      if ((customMenu.active && (millis() - customMenu.time > 15000)) || (userMadeSelectionByHoldingButton && customMenu.active)){
+        if (!userMadeSelectionByHoldingButton){bridge.instructServicePortToSetReady();}
+        customMenu.active = false; 
+        customMenu.item = 0;
 
-      /* restart */
-      menuButton.endat = 0;
-      menuButton.startat = 0;
-      menuButton.pressed = false;
-      menuButton.isBeingHeld = false;
+        /* restart */
+        menuButton.endat = 0;
+        menuButton.startat = 0;
+        menuButton.released = false;
+        menuButton.isBeingHeld = false;
+      }
     }
   }
 }

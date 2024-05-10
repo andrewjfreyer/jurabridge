@@ -191,7 +191,7 @@ enum class JuraMachineStateIdentifier {
   UnderextractionLikely,
 
   /* INFERRED STATES */
-  PurgeWaterOperationRecommended,
+  RegulateThermoblockTemperatureRecommended,
   RinseMilkSystemRecommended, 
   CleanMilkSystemRecommended,
   CleanBrewGroupRecommendedSoon,
