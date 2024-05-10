@@ -1,7 +1,6 @@
-# jurabridge v1 ☕
-
-> 
 > ⚠️ **DEPRECATION WARNING:** This entry relates to v1 of this project and has been deprecated/updated as of [v2](https://github.com/andrewjfreyer/jurabridge/tree/main/v2). 
+
+# jurabridge v1 ☕
 
 # Description
 
