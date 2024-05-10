@@ -2,7 +2,7 @@
 
 # TL;DR
 
-An [ESP32 dev board](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware) coupled to the service port of a Jura ENA Micro 90 can (1) poll machine data (e.g., sensors, memory, settings) via UART and (2) issue commands to the machine so as to act as a bridge between the machine and Home Assistant. See here for [hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware) and [software](https://github.com/andrewjfreyer/jurabridge/wiki/software) requirements. [Connections are straightforward.](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware#connection-diagram)
+An [ESP32 dev board](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware) coupled to the service port of a [Jura ENA Micro 90](https://us.jura.com/en/customer-care/products-support/ENA-Micro-90-MicroSilver-UL-15116) can (1) poll machine data (e.g., sensors, memory, settings) via UART and (2) issue commands to the machine so as to act as a bridge between the machine and Home Assistant. See here for [hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware) and [software](https://github.com/andrewjfreyer/jurabridge/wiki/software) requirements. [Connections are straightforward.](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware#connection-diagram)
 
 # Summary
 
