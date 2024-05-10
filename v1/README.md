@@ -1,7 +1,7 @@
 # jurabridge v1 ☕
 
 > 
-> ### **[Summer 2023]** *This project is in an active research and development phase. The current codebase is a procedural proof of concept that is not designed (at all) with proper C++ class structure. Refactoring is underway, but it'll take time. Please be patient.*
+> ⚠️ **DEPRECATION WARNING:** This entry relates to v1 of this project and has been deprecated/updated as of [v2](https://github.com/andrewjfreyer/jurabridge/tree/main/v2). 
 
 # Description
 
