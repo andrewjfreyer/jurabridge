@@ -2,9 +2,11 @@
 
 # TL;DR
 
-ESP32 Arduino project for bridging a [Jura ENA Micro 90](https://us.jura.com/en/customer-care/products-support/ENA-Micro-90-MicroSilver-UL-15116) to home automation platforms via MQTT. A 3.3v to 5v level shifter is required between hardware UART of the ESP32 to the service port of the Jura. The ESP32 polls the Jura for status information via reverse-engineered Jura Service Port calls, calculates/determines device state and meta statuses and reports changes to an MQTT broker. Added custom preparation functionality via a separate input button.
+An [ESP32 dev board](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware) coupled to the service port of a Jura ENA Micro 90 can (1) poll machine data (e.g., sensors, memory, settings) via UART and (2) issue commands to the machine so as to act as a bridge between the machine and Home Assistant. See here for [hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware) and [software](https://github.com/andrewjfreyer/jurabridge/wiki/software) requirements. [Connections are straightforward.](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware#connection-diagram)
 
-See here for [hardware](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware) and [software](https://github.com/andrewjfreyer/jurabridge/wiki/software) requirements. [Connections are straightforward.](https://github.com/andrewjfreyer/jurabridge/wiki/Hardware#connection-diagram)
+# Summary
+
+ESP32 Arduino project for bridging a [Jura ENA Micro 90](https://us.jura.com/en/customer-care/products-support/ENA-Micro-90-MicroSilver-UL-15116) to home automation platforms via MQTT. A 3.3v to 5v level shifter is required between hardware UART of the ESP32 to the service port of the Jura. The ESP32 polls the Jura for status information via reverse-engineered Jura Service Port calls, calculates/determines device state and meta statuses and reports changes to an MQTT broker. Added custom preparation functionality via a separate input button.
 
 [Home Assistant Forum Link](https://community.home-assistant.io/t/jura-ena-micro-90-to-mqtt-bridge)
 
