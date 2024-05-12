@@ -22,7 +22,42 @@ String JuraServicePort::transferEncodeCommand(JuraServicePortCommand command) {
     case JuraServicePortCommand::RT3:
       return this->transferEncode(STATIC_CMD_RT3);
       break;
-    
+    case JuraServicePortCommand::RT4:
+      return this->transferEncode(STATIC_CMD_RT4);
+      break;
+    case JuraServicePortCommand::RT5:
+      return this->transferEncode(STATIC_CMD_RT5);
+      break;
+    case JuraServicePortCommand::RT6:
+      return this->transferEncode(STATIC_CMD_RT6);
+      break;
+    case JuraServicePortCommand::RT7:
+      return this->transferEncode(STATIC_CMD_RT7);
+      break;
+    case JuraServicePortCommand::RT8:
+      return this->transferEncode(STATIC_CMD_RT8);
+      break;
+    case JuraServicePortCommand::RT9:
+      return this->transferEncode(STATIC_CMD_RT9);
+      break;
+    case JuraServicePortCommand::RTA:
+      return this->transferEncode(STATIC_CMD_RTA);
+      break;
+    case JuraServicePortCommand::RTB:
+      return this->transferEncode(STATIC_CMD_RTB);
+      break;
+    case JuraServicePortCommand::RTC:
+      return this->transferEncode(STATIC_CMD_RTC);
+      break;
+    case JuraServicePortCommand::RTD:
+      return this->transferEncode(STATIC_CMD_RTD);
+      break;
+    case JuraServicePortCommand::RTE:
+      return this->transferEncode(STATIC_CMD_RTE);
+      break;
+    case JuraServicePortCommand::RTF:
+      return this->transferEncode(STATIC_CMD_RTF);
+      break;
     /* real-time data */
     case JuraServicePortCommand::IC:
       return this->transferEncode(STATIC_CMD_IC);

@@ -82,7 +82,7 @@ void machineStatePollingHandler (void * pvParameters){
 
   /* await broker connection */
   while (!connectedToBroker){
-    vTaskDelayMilliseconds(250);
+    vTaskDelayMilliseconds(500);
   }
   
   /* get innitial properties before polling starts y! */
@@ -93,14 +93,25 @@ void machineStatePollingHandler (void * pvParameters){
     if (!customMenu.active){
       machine.handlePoll(loopIterator);
       loopIterator = (loopIterator % 100) + 1; 
-      vTaskDelayMilliseconds(250);
+      //vTaskDelayMilliseconds(250);
     }else{
-      vTaskDelayMilliseconds(100);
+      vTaskDelayMilliseconds(500);
     }
   }
 }
 
-void awaitDispenseCompletionToAddShots( int addShot, int brewLimit = 17 ){
+
+/***************************************************************************//**
+ * Await the machine ready state then add a shot 
+ *
+ * @param[out] null 
+ *     
+ * @param[in] addShot int number of shots
+ * @param[in] brewLimt int limit for brew out
+ ******************************************************************************/
+void awaitDispenseCompletionToAddShots( int addShot = 1, int brewLimit = 17 ){
+
+  ESP_LOGI(TAG,"Waiting to add shot...");
 
   /* precharge the wait display for between elements */
   bridge.instructServicePortToDisplayString("   WAIT   ");
@@ -114,7 +125,7 @@ void awaitDispenseCompletionToAddShots( int addShot, int brewLimit = 17 ){
 
     /* 
       NOTE TO READER: intentionally leave the semaphore taken here to prevent a ready state from happen
-      until we get into the while loop below 
+      until we get into the while loop below; 
     */
 
     /* entire the loop before returning the semaphore */
@@ -137,7 +148,7 @@ void awaitDispenseCompletionToAddShots( int addShot, int brewLimit = 17 ){
     bridge.instructServicePortWithJuraFunctionIdentifier(JuraFunctionIdentifier::MakeEspresso);
 
     /* resting period */              
-    vTaskDelayMilliseconds(750);
+    vTaskDelayMilliseconds(2500);
   }
 }
 
@@ -237,6 +248,9 @@ void receivedMQTTMessageQueueWorker( void *pvParameters ){
 
           /* instruct the custom command */          
           bridge.instructServicePortWithCommand(JuraMachineFunctionEntityConfigurations[i].command);
+
+          /* dealy */
+          vTaskDelay(500 / portTICK_PERIOD_MS);
 
           /* add shot ? */
           if (addShot > 0) {
@@ -494,6 +508,9 @@ void communicationsKeepAliveTask( void *pvParameters ){
  * @param[in] none
  ******************************************************************************/
 void initJuraEntityStatesFromNonVolatileStorage() {
+  
+  /* for debugging states */
+  if (DISABLE_NONVOLATILE_LOAD){return;}
 
   /* iterate through state attributes */
   int stateAttributeArraySize = sizeof(JuraEntityConfigurations) / sizeof(JuraEntityConfigurations[0]) ; 
@@ -638,7 +655,6 @@ void customMenuHandler(void * parameter){
         if (customMenu.item < menuItems){
           bridge.instructServicePortToDisplayString("   WAIT");
 
-          ESP_LOGI(TAG, "%s, ", JuraCustomMenuItemConfigurations[customMenu.item - 1].topic);
           /* send mqtt message corresponding to selected emnu item */
           xSemaphoreTake( xMQTTSemaphore, portMAX_DELAY );
           mqttClient.publish(
@@ -646,6 +662,7 @@ void customMenuHandler(void * parameter){
             JuraCustomMenuItemConfigurations[customMenu.item - 1].payload 
           );  
           xSemaphoreGive(xMQTTSemaphore);
+
         }else{
           /* so the ready prompt doesn't show immediately */
           vTaskDelay(750 / portTICK_PERIOD_MS);

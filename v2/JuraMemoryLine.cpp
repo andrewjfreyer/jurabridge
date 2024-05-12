@@ -34,7 +34,7 @@ void JuraMemoryLine::printUnhandledUpdate(){
   bool unhandled = false; 
   for (int i = 0; i< RT_BIN_SIZE; i++){
     if ((val_dec_new_available[i] && val_dec_prev[i] > 0) && (val_dec_prev[i] != val_dec[i])){
-      ESP_LOGI(TAG,"UKN: [cmd:RT%d] [i:%d] = %d -> %d", _default_command, i, val_dec_prev[i], val_dec[i]);
+      ESP_LOGI(TAG,"UKN: [cmd:RT%d] [i:%d] = %d -> %d", (int) _default_command - 1, i, val_dec_prev[i], val_dec[i]);
       val_dec_new_available[i] = false;
     }
   }
@@ -74,9 +74,6 @@ bool JuraMemoryLine::didUpdate(int iterator, JuraServicePort &servicePort) {
     //decompose string to integer array
     long value = strtol(comparator_string.substring(start, end).c_str(), NULL, 16);  
 
-    //reset change
-    val_dec_prev[i] = val_dec[i];
-
     //set hasChanged flag if we've timed out 
     bool hasExpired = false; 
     if ((millis() - val_dec_last_changed[i]) > JURA_MACHINE_EEPROM_TIMEOUT){
@@ -88,7 +85,10 @@ bool JuraMemoryLine::didUpdate(int iterator, JuraServicePort &servicePort) {
       hasChanged = true;
       val_dec_prev_last_changed[i] = val_dec_last_changed[i];
       val_dec_last_changed[i] = millis();
+      
+      val_dec_prev[i] = val_dec[i];
       val_dec_new_available[i] = true;
+
       val_dec[i] = value;
     }
   }

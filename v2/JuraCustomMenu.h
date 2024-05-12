@@ -16,6 +16,11 @@ static const JuraCustomMenuItemConfiguration JuraCustomMenuItemConfigurations[] 
     "{'add':1,'brew':17}",
   },
   {
+    "HEAT PUMP!",
+    MQTT_ROOT MQTT_DISPENSE_CONFIG,
+    "{'water':25}",
+  },
+  {
     " ADD SHOT ",
     MQTT_ROOT MQTT_DISPENSE_CONFIG,
     "{'add':1,'brew':17}",
@@ -28,7 +33,7 @@ static const JuraCustomMenuItemConfiguration JuraCustomMenuItemConfigurations[] 
   {
     "CORTADO +1",
     MQTT_ROOT MQTT_SUBTOPIC_FUNCTION "make_cappuccino",
-    "{'milk':30,'brew':17}",
+    "{'milk':30,'brew':17,'add':1}",
   },
   {
     " AMERI x2",

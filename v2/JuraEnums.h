@@ -38,10 +38,27 @@ enum class JuraMachineMenuCommand {
 
 enum class JuraServicePortCommand {
   None = 0, 
+  /* known memory locations */
   RT0, 
   RT1, 
-  RT2,  // all historical dump commands and eeprom values for words 0 - 15
-  RT3,  // investigation??
+  RT2, 
+  
+  /* EEPROM investigations */
+  RT3,
+  RT4,
+  RT5,
+  RT6,
+  RT7,
+  RT8,
+  RT9,
+  RTA,
+  RTB,
+  RTC,
+  RTD,
+  RTE,
+  RTF,
+
+  /* knonwn hardware responses */
   HZ,   // dump real-time values related to hot drink preparation
   CS,   // dump real-time hardware data related to circuitry and systems
   IC,   // dump real-time status of input board
@@ -96,6 +113,48 @@ enum class JuraMachineStateIdentifier {
 
   /* RT2 */
   HasFilter,                       
+
+  /* RT5*/
+  MachineSettingDispenseUnits,
+  MachineSettingOffAfter,
+  MachineSettingNumFilters,
+
+  /* RT7*/
+  MachineSettingWaterSettings,
+  MachineSettingWaterDispenseVolume,
+
+  /* RT 8*/
+  MachineSettingMilkSettings,
+  MachineSettingMilkDispenseTime,
+
+  /* RTA*/
+  MachineSettingEspressoSettings,
+  MachineSettingEspressoTemperature, 
+  MachineSettingEspressoDispenseVolume, 
+  MachineSettingEspressoFlavor,
+
+  MachineSettingCoffeeSettings,
+  MachineSettingCoffeeTemperature, 
+  MachineSettingCoffeeDispenseVolume, 
+  MachineSettingCoffeeFlavor,
+
+  MachineSettingCappuccinoSettings,
+  MachineSettingCappuccinoTemperature, 
+  MachineSettingCappuccinoDispenseVolume, 
+  MachineSettingCappuccinoFlavor,
+
+  MachineSettingCappuccinoExtendedSettings,
+  MachineSettingCappuccinoMilkTime,
+  MachineSettingCappuccinoMilkPause,
+
+  MachineSettingMacchiatoSettings,
+  MachineSettingMacchiatoTemperature, 
+  MachineSettingMacchiatoDispenseVolume, 
+  MachineSettingMacchiatoFlavor,
+  
+  MachineSettingMacchiatoExtendedSettings,
+  MachineSettingMacchiatoMilkTime,
+  MachineSettingMacchiatoMilkPause,
 
   /* IC  */
   BeanHopperCoverOpen, 
@@ -207,8 +266,9 @@ enum class JuraMachineStateIdentifier {
 /* meta states */
 enum class JuraMachineOperationalState { 
                                   Starting = 0,     /* */
-                                  AddShotCommand, /* custom command */
+                                  AddShotCommand,   /* custom command */
                                   Disconnected,     /* disconnected from the machine */
+                                  Idle,             /* idle for some time */
                                   Ready,            /* ready to brew */
                                   Finishing,        /* finishing before marking as ready */
                                   BlockingError,    /* not ready to brew until an error is cleared */
@@ -227,6 +287,7 @@ enum class JuraMachineOperationalState {
 /* these states describe what the machine most recently did; finished a product? cleaned? rinsed? */
 enum class JuraMachineReadyState { 
                                   ExecutingOperation = 0,
+                                  BridgeStarted, 
                                   ReadyForNext,
                                   ErrorCorrected ,
                                   EspressoReady,
@@ -255,7 +316,7 @@ enum class JuraMachineDispenseLimitType             { Water, Milk, Brew, None};
 enum class JuraMachineStateDataType                 { Boolean, Integer, String };
 enum class JuraMachineStateCategory                 { Config, Diagnostic };
 enum class JuraMachineDeviceClass                   { Opening, Problem, Door, Moving, Power, Running, None };
-enum class JuraMachineStateUnit                     { Preparation, Operation, Celcius, Milliliters, MicrolitersPerSecond, Grams, Seconds, Percent, Dose, Cycle, None};
+enum class JuraMachineStateUnit                     { Preparation, Operation, Celcius, Milliliters, MicrolitersPerSecond, Grams, Seconds, Hours, Percent, Dose, Cycle, None};
 enum class JuraMachineStateIcon                     { Info, Coffee, Counter, Water, Alert, Check, Thermometer, Valve, Speedometer, Function};
 enum class JuraEntityEnabled                        { Yes, No };
 enum class JuraEntitySerialPrintable                { Yes, No };

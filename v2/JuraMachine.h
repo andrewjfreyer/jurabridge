@@ -52,13 +52,219 @@
 //                                                      6
 //                                                      7
 //                                                      8
-#define SUBSTR_INDEX_HAS_FILTER                         9
+#define SUBSTR_INDEX_HAS_FILTER                         9 // has a filter
 //                                                      10 39-> when filter is inserted and flushed?? 
 //                                                      11
-//                                                      12 increased on water serve? from 317 to 318...? related to filter? 
+//                                                      12 increased on water serve? from 317 to 318...? related to filter? , 340 5o 341 after 70ml dispensed;
 //                                                      13
 //                                                      14
 //                                                      15
+/* ----------------------- RT 3 ----------------------- */
+//                                                      0
+//                                                      1
+//                                                      2 
+//                                                      3
+//                                                      4
+//                                                      5
+//                                                      6
+//                                                      7
+//                                                      8 
+//                                                      9
+//                                                      10
+//                                                      11
+//                                                      12
+//                                                      13
+//                                                      14
+//                                                      15
+/* ----------------------- RT 4 ----------------------- */
+//                                                      0
+//                                                      1
+//                                                      2 
+//                                                      3
+//                                                      4
+//                                                      5
+//                                                      6
+//                                                      7
+//                                                      8 
+//                                                      9
+#define SUBSTR_INDEX_ML_OR_OZ                           10 // Oz or ML setting 
+//                                                      11
+//                                                      12
+//                                                      13
+//                                                      14
+//                                                      15
+/* ----------------------- RT 5 ----------------------- */
+//                                                      0
+//                                                      1
+#define SUBSTR_INDEX_NUM_FILTERS                        2 // number of filters used? 
+#define SUBSTR_INDEX_OFF_AFTER                          3 // off after min = 0.25hr 3073; 0.5hr 3074; 9 hours = 3108
+//                                                      4
+//                                                      5
+//                                                      6
+//                                                      7
+//                                                      8 
+//                                                      9
+//                                                      10
+//                                                      11
+//                                                      12
+//                                                      13
+//                                                      14
+//                                                      15
+/* ----------------------- RT 6 ----------------------- */
+//                                                      0
+//                                                      1
+//                                                      2 
+//                                                      3
+//                                                      4
+//                                                      5
+//                                                      6
+//                                                      7
+//                                                      8 
+//                                                      9
+//                                                      10
+//                                                      11
+//                                                      12
+//                                                      13
+//                                                      14
+#define SUBSTR_INDEX_FILTER_USECOUNT                    15 //decreased from 69 to 0 when new filter was applied; filter life? 
+/* ----------------------- RT 7 ----------------------- */
+//                                                      0
+//                                                      1
+//                                                      2 
+//                                                      3
+//                                                      4
+//                                                      5
+//                                                      6
+//                                                      7
+#define SUBSTR_INDEX_WATER_DISPENSE_CONFIGURATION       8 // water diespnse configuration *5 = ml <--- NEEDS ADD
+//                                                      9
+//                                                      10
+//                                                      11
+//                                                      12 //incremented one when filter was changed; iterates after 15 minutes of being on? turn ons?
+//                                                      13
+//                                                      14
+//                                                      15
+/* ----------------------- RT 8 ----------------------- */
+//                                                      0
+//                                                      1
+//                                                      2 
+//                                                      3
+//                                                      4
+//                                                      5
+//                                                      6
+//                                                      7
+#define SUBSTR_INDEX_MILK_DISPENSE_CONFIGURATION        8 // milk diespnse configuration *5 = ml 
+//                                                      9
+//                                                      10
+//                                                      11
+//                                                      12
+//                                                      13
+//                                                      14
+//                                                      15
+/* ----------------------- RT 9     ------------------- */
+//                                                      0
+//                                                      1
+//                                                      2 
+//                                                      3
+//                                                      4
+//                                                      5
+//                                                      6
+//                                                      7
+//                                                      8 
+//                                                      9
+//                                                      10
+//                                                      11
+//                                                      12
+//                                                      13
+//                                                      14
+//                                                      15
+/* ----------------------- RTA/10 ------------------- */
+//                                                      0
+//                                                      1
+//                                                      2 
+//                                                      3
+//                                                      4
+//                                                      5
+//                                                      6
+//                                                      7
+#define SUBSTR_INDEX_ESPRESSO_BREW_SETTINGS             8 // Espresso preparation settings 0b0000 0000 00000011 [strength 0-9] [1 = high; 0 = normal] [5x = ml dispense]
+#define SUBSTR_INDEX_COFFEE_BREW_SETTINGS               9 // coffee  preparation settings  0b0000 0000 00000011 [strength 0-9] [1 = high; 0 = normal] [5x = ml dispense]
+//                                                      10
+//                                                      11
+#define SUBSTR_INDEX_CAPPUCCINO_BREW_SETTINGS           12 // cappucino preparation settings  0b0000 0000 00000011 [strength 0-9] [1 = high; 0 = normal] [5x = ml dispense]
+#define SUBSTR_INDEX_CAPPUCCINO_MILK_SETTINGS           13 // cappucino milk time & pause time0b0010 0000 0001 1110 = [delay/pause 0000 0000] [milk volume by time]
+#define SUBSTR_INDEX_MACCHIATO_BREW_SETTINGS            14 // latte macchiato 0b0111 0001 00010010 [strength 0-9] [1 = high; 0 = normal] [5x = ml dispense]
+#define SUBSTR_INDEX_MACCHIATO_MILK_SETTINGS            15 // latte macchiato milk time & pause time 0b0010 0000 0001 1110 = [delay/pause 0000 0000] [milk volume by time]
+/* ----------------------- RTB/11 ------------------- */
+//                                                      0
+//                                                      1
+//                                                      2 
+//                                                      3
+//                                                      4
+//                                                      5
+//                                                      6
+//                                                      7
+//                                                      8 
+//                                                      9
+//                                                      10
+//                                                      11
+//                                                      12
+//                                                      13
+//                                                      14
+//                                                      15
+
+/* ----------------------- RTC/12 ------------------- */
+//                                                      0
+//                                                      1
+//                                                      2 
+//                                                      3
+//                                                      4
+//                                                      5
+//                                                      6
+//                                                      7
+//                                                      8 
+//                                                      9
+//                                                      10
+//                                                      11 // changes to 0 when rinse selected from 32768
+//                                                      12
+//                                                      13 
+//                                                      14 // changes after rinse from 50246 -> 19606; after tinse to 40052 -> 39993
+//                                                      15
+/* ----------------------- RTD/12 ------------------- */
+//                                                      0 // filter off, turns from 332 to 2313; changes from 1558 to 1190 when unneeded rinse starts; returns to 1138; flush turns to  829 -> 1422
+//                                                      1 // changes to 0 when rinse selected from 222; changes from 221 to 0 when unneeded rinse starts
+//                                                      2 
+//                                                      3
+//                                                      4
+//                                                      5
+//                                                      6
+//                                                      7
+//                                                      8 
+//                                                      9
+//                                                      10
+//                                                      11 
+//                                                      12
+#define SUBSTR_INDEX_DRAINAGE_TRAY_VOLUME               13 // drainage tray volume! iterates by exactly "lastDispenseVolume" for rinse 
+//                                                      14 
+//                                                      15
+/* ----------------------- RTE/13 ------------------- */
+//                                                      0 // goes down by 55 or 56, then down by 20 (=5s?) during milk rinse??
+//                                                      1
+//                                                      2 
+//                                                      3
+//                                                      4
+//                                                      5
+//                                                      6
+//                                                      7
+//                                                      8 
+//                                                      9
+//                                                      10
+//                                                      11
+//                                                      12
+//                                                      13 
+//                                                      14
+//                                                      15
+
 /* ----------------------- IC ----------------------- */
 /* IC: leftmost hex string index 0, results in 4 bits */
 #define SUBSTR_INDEX_DRAINAGE_TRAY_REMOVED_IC           0 
@@ -194,7 +400,21 @@ private:
   JuraMemoryLine _rt0;
   JuraMemoryLine _rt1;
   JuraMemoryLine _rt2;
+
+  /* Memory Line Research */
   JuraMemoryLine _rt3;
+  JuraMemoryLine _rt4;
+  JuraMemoryLine _rt5;
+  JuraMemoryLine _rt6;
+  JuraMemoryLine _rt7;
+  JuraMemoryLine _rt8;
+  JuraMemoryLine _rt9;
+  JuraMemoryLine _rtA;
+  JuraMemoryLine _rtB;
+  JuraMemoryLine _rtC;
+  JuraMemoryLine _rtD;
+  JuraMemoryLine _rtE;
+  JuraMemoryLine _rtF;
 
   JuraInputControlBoard _ic;
   JuraHeatedBeverage _hz;
@@ -206,7 +426,7 @@ private:
 
   /*calculated value */
   bool recommendationStateHasChanged(int, int);
-  bool errorStateHasChanged(int, int);
+  bool handleErrorStateChange(int, int);
   bool handleMachineState(int, int);
   bool flowStateHasChanged(int, int);
   void determineReadyStateType();
@@ -223,6 +443,7 @@ private:
   void handleThermoblockTemperature         (int);
   void handleBrewGroupOutput                ();
   void handleCeramicValve                   ();
+  void handleDrainageTrayRemoved            ();
 
 };
 

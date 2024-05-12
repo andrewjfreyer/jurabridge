@@ -2,11 +2,18 @@
 #define VERSION_H
 
 /* current version */
-#define VERSION_STR         "0.7.5" /* reported via mqtt device discovery as version number*/
-#define VERSION_INT         4       /* iteration of this value will trigger an automatic mqtt configuration update on boot*/
+#define VERSION_STR         "0.7.8" /* reported via mqtt device discovery as version number*/
+#define VERSION_INT         8       /* iteration of this value will trigger an automatic mqtt configuration update on boot*/
 #define VERSION_MAJOR_STR   "7"     /* needs to be string type; displayed in the display*/
 
+/* useful for debugging unusual errors; usually related to EEPROM states getting improperly set*/
+#define DISABLE_NONVOLATILE_LOAD false
+
 /*
+0.7.9 - bugfixes
+0.7.8 - memory dump research; add drainage tray tracker
+0.7.7 - memory dump research; add sensors for memory words; saved settings for each preprogrammed option (esp, cap, mac, water, milk, cof)
+0.7.6 - bugfixes relating to tray drainage tracker
 0.7.5 - bugfixes relating to overextraction warning temperatures
 0.7.4 - addshot support for preparation agnostic usemode
 0.7.3 - fix logic error in error handler

@@ -27,6 +27,19 @@ private:
   inline static const String STATIC_CMD_RT1  =  "RT:0010";
   inline static const String STATIC_CMD_RT2  =  "RT:0020";
   inline static const String STATIC_CMD_RT3  =  "RT:0030";
+  inline static const String STATIC_CMD_RT4  =  "RT:0040";
+  inline static const String STATIC_CMD_RT5  =  "RT:0050";
+  inline static const String STATIC_CMD_RT6  =  "RT:0060";
+  inline static const String STATIC_CMD_RT7  =  "RT:0070";
+  inline static const String STATIC_CMD_RT8  =  "RT:0080";
+  inline static const String STATIC_CMD_RT9  =  "RT:0090";
+  inline static const String STATIC_CMD_RTA  =  "RT:00A0";
+  inline static const String STATIC_CMD_RTB  =  "RT:00B0";
+  inline static const String STATIC_CMD_RTC  =  "RT:00C0";
+  inline static const String STATIC_CMD_RTD  =  "RT:00D0";
+  inline static const String STATIC_CMD_RTE  =  "RT:00E0";
+  inline static const String STATIC_CMD_RTF  =  "RT:00F0";
+
 
   inline static const String STATIC_CMD_IC  =  "IC:";
   inline static const String STATIC_CMD_HZ  =  "HZ:";

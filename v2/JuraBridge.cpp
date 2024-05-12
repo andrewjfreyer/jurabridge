@@ -133,6 +133,9 @@ JuraBridge::JuraBridge(
       case JuraMachineStateUnit::Seconds:
         mqttJsonConfigurationBody["unit_of_measurement"] = "s";
         break;
+      case JuraMachineStateUnit::Hours:
+        mqttJsonConfigurationBody["unit_of_measurement"] = "hr";
+        break;
       case JuraMachineStateUnit::None:
         mqttJsonConfigurationBody["unit_of_measurement"] = "";
         break;
