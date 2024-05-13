@@ -250,7 +250,7 @@ Or, simply add a shot to any other preparation. In this case, we can automatical
 ```
 <hr/>
 
-# Function Buttons in Home Assistant
+# Functions & Buttons in Home Assistant
 
 The [JuraConfiguraton.h](https://github.com/andrewjfreyer/jurabridge/blob/main/v2/JuraConfiguration.h) header lists what buttons are reportable to home assistant. By default, most are disabled as each additional sensor adds reporting time and cycle time. 
 
