@@ -156,12 +156,16 @@ enum class JuraMachineStateIdentifier {
   MachineSettingMacchiatoMilkTime,
   MachineSettingMacchiatoMilkPause,
 
+  /* RTD */
+  DrainageTrayMeter,
+  DrainageTrayLevel,
+  DrainageTrayFull,          
+
   /* IC  */
   BeanHopperCoverOpen, 
   WaterReservoirNeedsFill,       
   BypassDoserCoverOpen,          
   DrainageTrayRemoved,  
-  DrainageTrayFull,          
   FlowState,                
   BrewGroupEncoderState,             
   OutputValveEncoderState,     
@@ -221,8 +225,6 @@ enum class JuraMachineStateIdentifier {
   SpentBeansByWeight,
   BeanHopperLevel,
   SpentGroundsLevel,
-  DrainageSinceLastTrayEmpty,
-  DrainageTrayLevel,
 
   /* CS */
   ThermoblockDutyCycle,

@@ -16,8 +16,8 @@ static const JuraCustomMenuItemConfiguration JuraCustomMenuItemConfigurations[] 
     "{'add':1,'brew':17}",
   },
   {
-    "HEAT PUMP!",
-    MQTT_ROOT MQTT_DISPENSE_CONFIG,
+    "FLUSH HEAT",
+    MQTT_ROOT MQTT_SUBTOPIC_FUNCTION "make_hot_water",
     "{'water':25}",
   },
   {

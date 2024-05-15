@@ -443,7 +443,6 @@ private:
   void handleThermoblockTemperature         (int);
   void handleBrewGroupOutput                ();
   void handleCeramicValve                   ();
-  void handleDrainageTrayRemoved            ();
 
 };
 

@@ -64,7 +64,7 @@
 
 /* constants */
 #define JURA_MACHINE_BEAN_HOPPER_CAPACITY_G      200
-#define JURA_MACHINE_DRIP_TRAY_CAPACITY_ML       900 /* actual drip tray capacity measured at 500ml (which is half this value), but it appears warnings trigger at 900 raw value*/
+#define JURA_MACHINE_DRAINAGE_TRAY_CAPACITY_ML   900 /* actual Drainage Tray capacity measured at 500ml (which is half this value), but it appears warnings trigger at 900 raw value*/
 #define JURA_MACHINE_WATER_RESERVOIR_CAPACITY_ML 1000
 #define BREW_GROUP_CLEAN_THRESHOLD               130
 #define BREW_GROUP_CLEAN_RECOMMEND_THRESHOLD     100
@@ -524,8 +524,8 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
   },
   {
     JuraMachineStateIdentifier::DrainageTrayRemoved,
-    NAME_PREFIX "Drip Tray Removed",
-    ENTITY_PREFIX "drip_tray_removed",
+    NAME_PREFIX "Drainage Tray Removed",
+    ENTITY_PREFIX "drainage_tray_removed",
     JuraMachineStateDataType::Boolean,
     JuraMachineStateCategory::Config,
     JuraMachineDeviceClass::Opening,
@@ -541,8 +541,8 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
   },
   {
     JuraMachineStateIdentifier::DrainageTrayFull,
-    NAME_PREFIX "Drip Tray Full",
-    ENTITY_PREFIX "drip_tray_full",
+    NAME_PREFIX "Drainage Tray Full",
+    ENTITY_PREFIX "drainage_tray_full",
     JuraMachineStateDataType::Boolean,
     JuraMachineStateCategory::Config,
     JuraMachineDeviceClass::Problem,
@@ -558,8 +558,8 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
   },
   {
     JuraMachineStateIdentifier::DrainageTrayLevel,
-    NAME_PREFIX "Drip Tray Level",
-    ENTITY_PREFIX "drip_tray_level",
+    NAME_PREFIX "Drainage Tray Level",
+    ENTITY_PREFIX "drainage_tray_level",
     JuraMachineStateDataType::Integer,
     JuraMachineStateCategory::Config,
     JuraMachineDeviceClass::None,
@@ -570,18 +570,18 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
     JuraMachineSubsystem::Water,
-    JuraEntityNonvolatile::Yes,
+    JuraEntityNonvolatile::No,
     0 /* default value */
   },
   {
-    JuraMachineStateIdentifier::DrainageSinceLastTrayEmpty,
-    NAME_PREFIX "Drainage Volume",
-    ENTITY_PREFIX "drainage_volume",
-    JuraMachineStateDataType::Integer,
+    JuraMachineStateIdentifier::DrainageTrayMeter,
+    NAME_PREFIX "Drainage Tray Meter",
+    ENTITY_PREFIX "drainage_tray_meter",
+    JuraMachineStateDataType::Boolean,
     JuraMachineStateCategory::Config,
-    JuraMachineDeviceClass::None,
+    JuraMachineDeviceClass::Opening,
     JuraMachineStateIcon::Alert,
-    JuraMachineStateUnit::Milliliters,
+    JuraMachineStateUnit::None,
     JuraEntityEnabled::Yes,
     JuraEntitySerialPrintable::Yes,
     JuraEntityAvailabilityFollowsReadyState::No,

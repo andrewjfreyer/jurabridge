@@ -59,7 +59,7 @@ struct Button {
   unsigned long endat;
 };
 
-/* button */
+/* custom menu object */
 struct JuraCustomMenu {
 	unsigned int item;
 	bool active;
@@ -111,8 +111,6 @@ void machineStatePollingHandler (void * pvParameters){
  ******************************************************************************/
 void awaitDispenseCompletionToAddShots( int addShot = 1, int brewLimit = 17 ){
 
-  ESP_LOGI(TAG,"Waiting to add shot...");
-
   /* precharge the wait display for between elements */
   bridge.instructServicePortToDisplayString("   WAIT   ");
 
@@ -120,15 +118,15 @@ void awaitDispenseCompletionToAddShots( int addShot = 1, int brewLimit = 17 ){
   for( int shot = 0; shot < addShot; shot ++){
 
     /* define a non-ready state that is not processed in the machine poller; protect  */
-    xSemaphoreTake( xMachineReadyStateVariableSemaphore, portMAX_DELAY );
     machine.startAddShotPreparation();
-
     /* 
       NOTE TO READER: intentionally leave the semaphore taken here to prevent a ready state from happen
       until we get into the while loop below; 
     */
 
     /* entire the loop before returning the semaphore */
+    xSemaphoreTake( xMachineReadyStateVariableSemaphore, portMAX_DELAY );
+    
     bool canGiveSemaphore = true;
     while (machine.states[(int) JuraMachineStateIdentifier::SystemIsReady] == false){
       vTaskDelayMilliseconds(500);
@@ -139,7 +137,7 @@ void awaitDispenseCompletionToAddShots( int addShot = 1, int brewLimit = 17 ){
     }
 
     /* between different shots - resting period */              
-    vTaskDelayMilliseconds(750);
+    vTaskDelayMilliseconds(2500);
 
     /* set brew limit here */
     machine.setDispenseLimit(brewLimit, JuraMachineDispenseLimitType::Brew) ;
