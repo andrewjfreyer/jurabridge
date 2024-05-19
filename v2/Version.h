@@ -2,14 +2,15 @@
 #define VERSION_H
 
 /* current version */
-#define VERSION_STR         "0.7.11" /* reported via mqtt device discovery as version number*/
-#define VERSION_INT         11       /* iteration of this value will trigger an automatic mqtt configuration update on boot*/
+#define VERSION_STR         "0.7.12" /* reported via mqtt device discovery as version number*/
+#define VERSION_INT         12       /* iteration of this value will trigger an automatic mqtt configuration update on boot*/
 #define VERSION_MAJOR_STR   "7"     /* needs to be string type; displayed in the display*/
 
 /* useful for debugging unusual errors; usually related to EEPROM states getting improperly set*/
 #define DISABLE_NONVOLATILE_LOAD false
 
 /*
+0.7.12 - bypass broker for custom menu
 0.7.11 - fix race condition for add shot; remove drip tray language == drainage tray 
 0.7.10 - fix polling error skipping over error correction
 0.7.9 - bugfixes

@@ -587,7 +587,7 @@ static const JuraEntityConfiguration JuraEntityConfigurations[] = {
     JuraEntityAvailabilityFollowsReadyState::No,
     JuraMachineSubsystemAttributeType::StateValue,
     JuraMachineSubsystem::Water,
-    JuraEntityNonvolatile::No,
+    JuraEntityNonvolatile::Yes,
     0 /* default value */
   },
   {

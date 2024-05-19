@@ -2,6 +2,7 @@
 #define JURAMACHINE_H
 #include "JuraConfiguration.h"
 #include "JuraMemoryLine.h"
+#include "JuraWorkingMemory.h"
 #include "JuraInputControlBoard.h"
 #include "JuraHeatedBeverage.h"
 #include "JuraSystemCircuitry.h"
@@ -419,6 +420,9 @@ private:
   JuraInputControlBoard _ic;
   JuraHeatedBeverage _hz;
   JuraSystemCircuitry _cs;
+
+  /*ram locations*/
+  JuraWorkingMemory _rm00;
 
   /* ensuring values fall in ranges*/
   int filteredLong(int, int, int);

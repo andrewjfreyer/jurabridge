@@ -48,6 +48,9 @@ JuraMachine::JuraMachine(JuraBridge& bridge, SemaphoreHandle_t &xMachineReadySta
   /* system circuitry  */
   _cs.setCommand(JuraServicePortCommand::CS);
   
+  /* system memory locations  */
+  //_rm00.setCommand(JuraServicePortCommand::RM00);
+
   /* known ignores */
   _cs.setBinIndexIgnore(SUBSTR_BIN_INDEX_UNKNOWN_MACHINE_CONFIGURATION_GROUP_1, 10);
   _cs.setBinIndexIgnore(SUBSTR_BIN_INDEX_UNKNOWN_MACHINE_CONFIGURATION_GROUP_2, 10);
@@ -580,7 +583,7 @@ bool JuraMachine::recommendationStateHasChanged(int iterator, int duty_cycle){
             (timenow - last_changed[(int) JuraMachineStateIdentifier::OperationalState] > (1000 * JURA_MACHINE_AWAIT_NEXT_INSTRUCTION_TIMEOUT_S)) && 
             (states[(int) JuraMachineStateIdentifier::ReadyStateDetail] != (int) JuraMachineReadyState::ReadyForNext)
             ){
-            ESP_LOGI(TAG,"----> Machine Operation:AWAITING NEXT INSTRUCTION");      
+            //ESP_LOGI(TAG,"----> Machine Operation:AWAITING NEXT INSTRUCTION");      
             states[(int) JuraMachineStateIdentifier::ReadyStateDetail] = (int) JuraMachineReadyState::ReadyForNext;
             _bridge->machineStateStringChanged(JuraMachineStateIdentifier::ReadyStateDetail, "AWAITING NEXT INSTRUCTION", (int) JuraMachineReadyState::ReadyForNext);
           
@@ -749,7 +752,7 @@ JuraMachineOperationalStateDispenseQuantityType JuraMachine::characterizeDispens
 }
 
 /***************************************************************************//**
- * Set private vars 
+ * Set private vars for add
  *
  * @param[out] null 
  *     
@@ -936,32 +939,32 @@ JuraMachineOperationalStateDispenseQuantityType JuraMachine::characterizeDispens
 
   /* determine what happened the last dispense */
   if (startupOccurred){
-    ESP_LOGI(TAG,"----> Machine Operation: BRIDGE STARTED");
+    //ESP_LOGI(TAG,"----> Machine Operation: BRIDGE STARTED");
     states[(int) JuraMachineStateIdentifier::ReadyStateDetail] = (int) JuraMachineReadyState::BridgeStarted;
     _bridge->machineStateStringChanged(JuraMachineStateIdentifier::ReadyStateDetail, "BRIDGE STARTED", (int) JuraMachineReadyState::BridgeStarted); didSetDetail = true;
 
   } else if (blockingErrorOccurred){
 
     if (beanHopperEmptyErrorFixed || beanHopperCoverOpenErrorFixed){
-      ESP_LOGI(TAG,"----> Machine Operation: FILLED BEANS");
+      //ESP_LOGI(TAG,"----> Machine Operation: FILLED BEANS");
       states[(int) JuraMachineStateIdentifier::ReadyStateDetail] = (int) JuraMachineReadyState::FilledBeans;
       _bridge->machineStateStringChanged(JuraMachineStateIdentifier::ReadyStateDetail, "FILLED BEANS", (int) JuraMachineReadyState::FilledBeans); didSetDetail = true;
     }
     
     if (waterReservoirNeedsFillErrorFixed){
-      ESP_LOGI(TAG,"----> Machine Operation: FILLED WATER");
+      //ESP_LOGI(TAG,"----> Machine Operation: FILLED WATER");
       states[(int) JuraMachineStateIdentifier::ReadyStateDetail] = (int) JuraMachineReadyState::FilledWater ;
       _bridge->machineStateStringChanged(JuraMachineStateIdentifier::ReadyStateDetail, "FILLED WATER", (int) JuraMachineReadyState::FilledWater); didSetDetail = true;
     }
 
     if (bypassDoserDoorOpenErrorFixed){
-      ESP_LOGI(TAG,"----> Machine Operation: CLOSED BYPASS DOSER DOOR");
-      states[(int) JuraMachineStateIdentifier::ReadyStateDetail] = (int) JuraMachineReadyState::ClosedBypassDoserDoor ;
+      //ESP_LOGI(TAG,"----> Machine Operation: CLOSED BYPASS DOSER DOOR");
+      states[(int) JuraMachineStateIdentifier::ReadyStateDetail] = (int) JuraMachineReadyState::ClosedBypassDoserDoor;
       _bridge->machineStateStringChanged(JuraMachineStateIdentifier::ReadyStateDetail, "CLOSED BYPASS DOSER DOOR", (int) JuraMachineReadyState::ClosedBypassDoserDoor); didSetDetail = true;
     }
     /* specific corrected error */
     if (drainageTrayFullErrorFixed || drainageTrayRemovedErrorFixed){
-      ESP_LOGI(TAG,"----> Machine Operation: REPLACED EMPTY TRAY AND KNOCKBOX");
+      //ESP_LOGI(TAG,"----> Machine Operation: REPLACED EMPTY TRAY AND KNOCKBOX");
       states[(int) JuraMachineStateIdentifier::ReadyStateDetail] = (int) JuraMachineReadyState::ReplacedDrainageTrayAndEmptyKnockbox;
       _bridge->machineStateStringChanged(JuraMachineStateIdentifier::ReadyStateDetail, "REPLACED DRAINAGE TRAY AND EMPTIED KNOCKBOX", (int) JuraMachineReadyState::ReplacedDrainageTrayAndEmptyKnockbox); didSetDetail = true;
     }
@@ -981,7 +984,7 @@ JuraMachineOperationalStateDispenseQuantityType JuraMachine::characterizeDispens
 
   } else if (didUpdateNumEspresso){ 
     
-    ESP_LOGI(TAG,"----> Machine Operation: ESPRESSO READY");  
+    //ESP_LOGI(TAG,"----> Machine Operation: ESPRESSO READY");  
     doserIsEmpty = true; 
 
     /* quantity */
@@ -997,7 +1000,7 @@ JuraMachineOperationalStateDispenseQuantityType JuraMachine::characterizeDispens
     }
     
   } else if (didUpdateNumCoffee){ 
-    ESP_LOGI(TAG,"----> Machine Operation: COFFEE READY"); 
+    //ESP_LOGI(TAG,"----> Machine Operation: COFFEE READY"); 
     doserIsEmpty = true; 
     states[(int) JuraMachineStateIdentifier::ReadyStateDetail] = (int) JuraMachineReadyState::CoffeeReady ;
 
@@ -1013,7 +1016,7 @@ JuraMachineOperationalStateDispenseQuantityType JuraMachine::characterizeDispens
 
   } else if (didUpdateNumCappuccino){ 
     
-    ESP_LOGI(TAG,"----> Machine Operation: CAPPUCCINO READY"); 
+    //ESP_LOGI(TAG,"----> Machine Operation: CAPPUCCINO READY"); 
     doserIsEmpty = true; 
     triggersMilkRinse = true;
     states[(int) JuraMachineStateIdentifier::ReadyStateDetail] = (int) JuraMachineReadyState::CappuccinoReady ;
@@ -1026,7 +1029,7 @@ JuraMachineOperationalStateDispenseQuantityType JuraMachine::characterizeDispens
 
   } else if (didUpdateNumMacchiato){ 
     
-    ESP_LOGI(TAG,"----> Machine Operation: MACCIATTO READY"); 
+    //ESP_LOGI(TAG,"----> Machine Operation: MACCIATTO READY"); 
     doserIsEmpty = true; 
     triggersMilkRinse = true;
     states[(int) JuraMachineStateIdentifier::ReadyStateDetail] = (int) JuraMachineReadyState::MacciattoReady ;
@@ -1037,7 +1040,7 @@ JuraMachineOperationalStateDispenseQuantityType JuraMachine::characterizeDispens
     }
 
   } else if (didUpdateNumMilkFoamPreparations){
-    ESP_LOGI(TAG,"----> Machine Operation: MILK FOAM READY");  
+    //ESP_LOGI(TAG,"----> Machine Operation: MILK FOAM READY");  
     doserIsEmpty = true; 
     triggersMilkRinse = true;
     states[(int) JuraMachineStateIdentifier::ReadyStateDetail] = (int) JuraMachineReadyState::MilkFoamReady ;
@@ -1052,7 +1055,7 @@ JuraMachineOperationalStateDispenseQuantityType JuraMachine::characterizeDispens
     }
 
   } else if (didUpdateNumWaterPreparations){
-    ESP_LOGI(TAG,"----> Machine Operation: HOT WATER READY"); 
+    //ESP_LOGI(TAG,"----> Machine Operation: HOT WATER READY"); 
     states[(int) JuraMachineStateIdentifier::ReadyStateDetail] = (int) JuraMachineReadyState::HotWaterReady ;
     if (addShotCommand){
       _bridge->machineStateStringChanged(JuraMachineStateIdentifier::ReadyStateDetail, "PREPARING NEXT SHOT", (int) JuraMachineReadyState::HotWaterReady); didSetDetail = true;
@@ -1062,14 +1065,14 @@ JuraMachineOperationalStateDispenseQuantityType JuraMachine::characterizeDispens
 
   } else if (didUpdateNumBrewGroupCleanSystemOperations){
     /* brew group clean operation performed */
-    ESP_LOGI(TAG,"----> Machine Operation: CLEAN BREW GROUP COMPLETE"); 
+    //ESP_LOGI(TAG,"----> Machine Operation: CLEAN BREW GROUP COMPLETE"); 
     doserIsEmpty = true; 
     states[(int) JuraMachineStateIdentifier::ReadyStateDetail] = (int) JuraMachineReadyState::CleanBrewGroupComplete ;
     _bridge->machineStateStringChanged(JuraMachineStateIdentifier::ReadyStateDetail, "CLEAN BREW GROUP COMPLETE", (int) JuraMachineReadyState::CleanBrewGroupComplete); didSetDetail = true;
 
   } else if (rinseOperationOccurred && brewGroupOperationOccurred && !grindOperationOccurred) { 
     /* rinse operation  */
-    ESP_LOGI(TAG,"----> Machine Operation: RINSE BREW GROUP COMPLETE");  
+    //ESP_LOGI(TAG,"----> Machine Operation: RINSE BREW GROUP COMPLETE");  
     doserIsEmpty = true; 
     states[(int) JuraMachineStateIdentifier::ReadyStateDetail] = (int) JuraMachineReadyState::RinseBrewGroupComplete ;
     _bridge->machineStateStringChanged(JuraMachineStateIdentifier::ReadyStateDetail, "RINSE BREW GROUP COMPLETE", (int) JuraMachineReadyState::RinseBrewGroupComplete); didSetDetail = true;
@@ -1081,14 +1084,14 @@ JuraMachineOperationalStateDispenseQuantityType JuraMachine::characterizeDispens
       
     /* milk clean operation here! */
     if (userWaitOperationOccurred || didUpdateNumCleanMilkSystemOperations){
-      ESP_LOGI(TAG,"----> Machine Operation: CLEAN MILK SYSTEM COMPLETE");
+      //ESP_LOGI(TAG,"----> Machine Operation: CLEAN MILK SYSTEM COMPLETE");
       states[(int) JuraMachineStateIdentifier::ReadyStateDetail] = (int) JuraMachineReadyState::CleanMilkSystemComplete ;
       _bridge->machineStateStringChanged(JuraMachineStateIdentifier::ReadyStateDetail, "CLEAN MILK SYSTEM COMPLETE", (int) JuraMachineReadyState::CleanMilkSystemComplete); didSetDetail = true;
       clearMilkClean = true; 
       clearMilkRinse = true; 
 
     }else{
-      ESP_LOGI(TAG,"----> Machine Operation: RINSE MILK SYSTEM COMPLETE");
+      //ESP_LOGI(TAG,"----> Machine Operation: RINSE MILK SYSTEM COMPLETE");
       states[(int) JuraMachineStateIdentifier::ReadyStateDetail] = (int) JuraMachineReadyState::RinseMilkSystemComplete ;
       _bridge->machineStateStringChanged(JuraMachineStateIdentifier::ReadyStateDetail, "RINSE MILK SYSTEM COMPLETE", (int) JuraMachineReadyState::RinseMilkSystemComplete); didSetDetail = true;
       clearMilkRinse = true;
@@ -1135,6 +1138,8 @@ JuraMachineOperationalStateDispenseQuantityType JuraMachine::characterizeDispens
 
   /* reset history array */
   for (int op_i = 0 ; op_i < MAX_STATE_EVENT_HISTORY; op_i++){
+      /* if this was a custom perparation, add custom preparation to last element */
+
       operationalStateHistory[op_i] = (int) JuraMachineOperationalState::Unknown;
       dispenseHistory[op_i] = 0;
       flowRateHistory[op_i] = 0;
@@ -2748,7 +2753,7 @@ void JuraMachine::handleBeanHopperCoverOpen(){
 
     /* reset */
     if (!isReady){
-       ESP_LOGI(TAG,"----> Machine Operation: WAITING READY");
+       //ESP_LOGI(TAG,"----> Machine Operation: WAITING READY");
       _bridge->machineStateStringChanged(JuraMachineStateIdentifier::ReadyStateDetail, "WAITING READY", (int) JuraMachineReadyState::ExecutingOperation);
     }
 

@@ -18,7 +18,7 @@ static const JuraCustomMenuItemConfiguration JuraCustomMenuItemConfigurations[] 
   {
     "FLUSH HEAT",
     MQTT_ROOT MQTT_SUBTOPIC_FUNCTION "make_hot_water",
-    "{'water':25}",
+    "{'water':30}",
   },
   {
     " ADD SHOT ",

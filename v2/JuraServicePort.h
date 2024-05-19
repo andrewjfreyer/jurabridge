@@ -59,6 +59,7 @@ private:
   inline static const String STATIC_CMD_FA_0B	=	"FA:0B";
   inline static const String STATIC_CMD_FA_0C	=	"FA:0C";
 
+  /* memory locations */
 };
 
 #endif

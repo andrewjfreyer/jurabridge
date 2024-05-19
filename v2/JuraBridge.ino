@@ -88,12 +88,37 @@ void machineStatePollingHandler (void * pvParameters){
   /* get innitial properties before polling starts y! */
   initJuraEntityStatesFromNonVolatileStorage();
 
+
   int loopIterator = 1; 
   for(;;){ 
+    /*
+
+      00-0F :   8400 0023 D4D4 487C 0103 0000 0011 0000 0A3A 259B 064F D09D 719F 2DCF 01FF 3BB6
+      10-1F :   E2E2 E2E2 E2E2 D5D5 D5D5 D5D5 D5D5 D5D5 D5D5 D5D5 D5D5 D5D5 D5D5 D5D5 D5D5 D5D5 <- last D5D5s all appear to change for button presses on the rotary
+        Center Button: N - 4
+        Right: N - 1?
+        Left:  N + 1?
+
+      20-2F :   0000 0000 0000 0000 40EB 7224 000A 0C72 7218 C2F5 74F3 FFFF 0000 0000 0000 0000
+      30-3F :   0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 
+      40-4F :   0000 0707 0200 0023 9201 9C00 07D9 00CA 0408 0001 0001 1600 EB7C 0450 C272 2C6A
+      50-5F :   B70E 0752 C1C2 FD00 FB0F AB72 046E 0AFE F908 730D CF75 012C 0080 0404 F2FE D108
+      60-6F :   126E 821A 030C 0906 04F2 F500 3558 00AD 73FA 245D FFC0 1FC9 6A10 0072 2308 0FB0
+      70-7F :   FD07 4A02 0642 FF05 4042 5A15 00AF 0008 2CB5 D800 6E29 FD00 4764 00EB D800 5BBE
+      80-8F :   6E48 7505 03FF E314 7504 D923 45A1 0762 0020 F5FE 01F9 47B5 FEFD 0BFF FFFF 6A02
+      90-9F :   FD00 7EE4 045A AEFE 0173 9F7E CF75 FF0A C2E2 6A1A CB75 F7E2 7306 FDDD 0020 7303
+      A0-AF :   B23C FEC1 73F3 400B 7309 046E 046A 6E73 00E2 066E 0AE7 B708 F272 03D8 507D FFBE
+      B0-BF :   D84E 7C00 4B75 C175 2746 086C 0BBF 6E04 F500 3273 75E5 C900 BF7E 7D00 FE8B FFFF
+      C0-CF :   40EB 0053 3C50 2CF2 5D00 F502 4CEA FDB1 FD0B 76F2 FD00 0BF3 0173 F507 F500 F36E
+      D0-DF :   4003 03F5 ACCE 4CF8 5909 07C8 7300 B0A1 00AA 00DD 0564 7407 0B1D 7E24 3A5C C1F2
+      E0-EF :   68FF FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF
+      F0-FF :   FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF FFFF
+    */
+
     if (!customMenu.active){
       machine.handlePoll(loopIterator);
       loopIterator = (loopIterator % 100) + 1; 
-      //vTaskDelayMilliseconds(250);
+      vTaskDelayMilliseconds(10);
     }else{
       vTaskDelayMilliseconds(500);
     }
@@ -347,6 +372,29 @@ void IRAM_ATTR mqttCallback(char* topic, byte * payload, unsigned int length){
   rx_message.topic = ""; //clear topic string buffer
   rx_message.topic = topic; //store new topic
   int i = 0; // extract payload
+  for ( i; i < length; i++)
+  {
+    rx_message.payload[i] = (char)payload[i];
+  }
+  rx_message.payload[i] = '\0';
+  xQueueOverwrite( xQ_SubscriptionMessage, (void *) &rx_message );// send data to queue
+} 
+
+/***************************************************************************//**
+ * Second function for processing menu items with MQTT handler, but without 
+ * requireing a bounce-0ff of the broker ( wifi disconnect is a problem... )
+ *
+ * @param[out] null 
+ *     
+ * @param[in] topic const char array pointer to topic of the rx message
+ * @param[in] payload const char array pointer to payload of the rx message 
+ * @param[in] length unsigned int length of the payload
+ ******************************************************************************/
+void IRAM_ATTR mqttCallbackBypassBroker(const char* topic, const char* payload, unsigned int length){
+  memset( rx_message.payload, '\0', payloadSize ); 
+  rx_message.topic = ""; 
+  rx_message.topic = topic; 
+  int i = 0; 
   for ( i; i < length; i++)
   {
     rx_message.payload[i] = (char)payload[i];
@@ -655,10 +703,19 @@ void customMenuHandler(void * parameter){
 
           /* send mqtt message corresponding to selected emnu item */
           xSemaphoreTake( xMQTTSemaphore, portMAX_DELAY );
+
+          /* trigger internal mqtt processor for consistently; do not need to bounce from broker */
+          mqttCallbackBypassBroker(
+            JuraCustomMenuItemConfigurations[customMenu.item - 1].topic,
+            JuraCustomMenuItemConfigurations[customMenu.item - 1].payload, 
+            strlen(JuraCustomMenuItemConfigurations[customMenu.item - 1].payload) + 1
+          );
+
+          /*
           mqttClient.publish(
             JuraCustomMenuItemConfigurations[customMenu.item - 1].topic,
             JuraCustomMenuItemConfigurations[customMenu.item - 1].payload 
-          );  
+          );*/  
           xSemaphoreGive(xMQTTSemaphore);
 
         }else{
@@ -772,13 +829,7 @@ void setup() {
   bridge.instructServicePortToDisplayString(" STARTING ");
 
   /* print hardware information */
-  //ESP_LOGI(TAG,"jurabridge v" VERSION_STR);
-  ESP_LOGI(TAG,"--------------------------------------------------");
-  ESP_LOGI(TAG,"  Internal Total heap %d, internal Free Heap %d", ESP.getHeapSize(), ESP.getFreeHeap());
-  ESP_LOGI(TAG,"  SPIRam Total heap %d, SPIRam Free Heap %d", ESP.getPsramSize(), ESP.getFreePsram());
-  ESP_LOGI(TAG,"  ChipRevision %d, Cpu Freq %d, SDK Version %s", ESP.getChipRevision(), ESP.getCpuFreqMHz(), ESP.getSdkVersion());
-  ESP_LOGI(TAG,"  Flash Size %d, Flash Speed %d", ESP.getFlashChipSize(), ESP.getFlashChipSpeed());
-  ESP_LOGI(TAG,"--------------------------------------------------");
+  ESP_LOGI(TAG,"jurabridge v" VERSION_STR);
 
   //set output pin modes
   pinMode(DEV_BOARD_BUTTON_PIN, INPUT_PULLUP);
